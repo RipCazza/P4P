@@ -1,0 +1,16 @@
+﻿@{
+    WebSecurity.InitializeDatabaseConnection("authenticationData", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+
+    App.Name = "Vakkencarrousel";
+
+    App.Thumbnail = "/Photos/Thumbnail/";
+    App.ViewFull = "/Photos/ViewFull/";
+
+    App.DataBase = "ComeniusCarrousel";
+    App.AuthDataBase = "authenticationData";
+
+    //Emergency Measures
+
+    /*var db = Database.Open(App.DataBase);
+    db.Execute("DELETE FROM .. WHERE ..")*/;
+}
