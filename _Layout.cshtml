@@ -1,6 +1,4 @@
 ﻿@{
-    var db = Database.Open(App.DataBase);
-    db.Close();
 }
 
 <!DOCTYPE html>
@@ -16,6 +14,14 @@
 	    <link href="~/css/mainstyle.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
+        @if(WebSecurity.IsAuthenticated)
+        {  
+            <ul class="nav navbar-nav" id="navLeft">
+                <li><a href="~/User_Management/Login"><span class="glyphicon glyphicon-log-out"></span> Log in</a></li> 
+                <li><a href="~/User_Management/Register"><span class="glyphicon glyphicon-log-out"></span> Register</a></li>
+                <li><a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+            </ul>
+        }
         <div class="container">
             @RenderBody()
         </div>

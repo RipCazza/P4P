@@ -1,0 +1,74 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Login";
+    
+    var userName = "";
+    var password = "";
+    bool rememberMe = false;
+
+    Validation.RequireField("userName", "You must enter a UserName");
+    Validation.Add("userName",
+        Validator.StringLength(
+            maxLength: 400,
+            minLength: 1,
+            errorMessage: "Username can not contain more than 400 characters"));
+
+    Validation.RequireField("password", "You must enter a password");
+    Validation.Add("password", 
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Password must contain at least 6 characters"));
+
+    if(IsPost)
+    {
+        AntiForgery.Validate();
+
+        userName = Request.Form["userName"];
+        password = Request.Form["password"];
+        rememberMe = Request.Form["rememberMe"].AsBool();
+
+        if(Validation.IsValid())
+        {
+            if(WebSecurity.Login(userName, password, rememberMe))
+            {
+                //Redirect to new page
+                Context.RedirectLocal("~/");
+                return;
+            }
+            else
+            {
+                ModelState.AddFormError("The provided username or password is invalid");
+            }
+        }
+    }
+}
+<div class="col-md-12">
+    <h2>Login</h2>
+    <form method="post">
+        @AntiForgery.GetHtml()
+        @Html.ValidationSummary("Login was unsuccessful. Please correct the errors and try again.", excludeFieldErrors: true, htmlAttributes: null)
+        <fieldset>
+            <div class="form-group">
+                <label for="userName"><span class="glyphicon glyphicon-user"></span>&nbsp; User Name</label>
+                <input type="text" id="userName" name="userName" value="@userName" class="form-control">
+                @Html.ValidationMessage("userName")
+            </div>
+            <div class="form-group">
+                <label for="password"><span class="glyphicon glyphicon-check"></span>&nbsp; Password</label>
+                <input type="password" id="password" name="password" value="@password" class="form-control">
+                @Html.ValidationMessage("password")
+            </div>
+            <div class="form-group">
+                <label for=" rememberMe">Remember Me</label>
+                <input type="checkbox" id="rememberMe" name="rememberMe" value="true" checked="@rememberMe"/>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-log-in"></span>&nbsp; login
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+

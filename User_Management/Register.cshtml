@@ -1,0 +1,96 @@
+﻿@{
+    if(!Roles.IsUserInRole("God"))
+    {
+        Response.Redirect("~/");
+    }
+    WebSecurity.RequireRoles(new string[] {"God"});
+
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Register";
+    Page.Description = "Add an account";
+    Page.ShowTitle = "false";
+
+    var userName = "";
+    var password = "";
+    var confirmPassword = "";
+
+    Validation.RequireField("userName", "You must enter an Email address");
+    Validation.RequireField("password", "Your password cannot be blank");
+    Validation.RequireField("confirmPassword", "Your confirmation password can't be blank either");
+    Validation.Add("confirmPassword",
+        Validator.EqualsTo("password", "Confirmation password does not match password"));
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Password must contain at least 6 characters"));
+    Validation.Add("userName",
+        Validator.StringLength(
+            maxLength: 400,
+            errorMessage: "Your email cannot contain more than 4000 characters"));
+
+    if(IsPost)
+    {
+        AntiForgery.Validate();
+        userName = Request.Form["userName"];
+        password = Request.Form["password"];
+        confirmPassword = Request.Form["confirmPassword"];
+
+        if(Validation.IsValid())
+        {
+            var db = Database.Open(App.AuthDataBase);
+
+            var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+            if(user == null)
+            {
+                db.Execute("INSERT INTO UserProfile (UserName) VALUES (@0)", userName);
+
+                try
+                {
+                    var token = WebSecurity.CreateAccount(userName, password, false);
+                    Roles.AddUserToRole(userName, "Admin");
+                    db.Close();
+                    Response.Redirect("~/User_Management/Manage");
+                }
+                catch(System.Web.Security.MembershipCreateUserException e)
+                {
+                    db.Close();
+                    ModelState.AddFormError(e.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("UserName is already in use");
+            }
+            db.Close();
+        }
+    }
+}
+
+<div class="col-md-12">
+    <form method="post">
+        @AntiForgery.GetHtml()
+        @Html.ValidationSummary("Account creation failed, please correct errors and try again", excludeFieldErrors: true, htmlAttributes: null)
+        <fieldset>
+            <h2>Register a new account</h2>
+            <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" id="userName" name="userName" value="@userName" class="form-control">
+                @Html.ValidationMessage("userName")
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="@password" class="form-control">
+                @Html.ValidationMessage("password")
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
+                @Html.ValidationMessage("confirmPassword")
+            </div>
+            <div class="from-group">
+                <button type="submit" class="btn btn-default">Register</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
