@@ -2,28 +2,33 @@
 }
 
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <title>@Page.Title</title>
-        <link rel="icon" href="favicon.ico">    
+        <link rel="icon" href="favicon.ico">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="~/css/bootstrap.css" type="text/css">
         <link href="~/css/bootstrap-theme.css" rel="stylesheet" type="text/css">
-	    <link href="~/css/mainstyle.css" rel="stylesheet" type="text/css"/>
+        <!--<link href="~/css/mainstyle.css" rel="stylesheet" type="text/css"/>-->
     </head>
     <body>
-        @if(WebSecurity.IsAuthenticated)
+        @if(!WebSecurity.IsAuthenticated)
         {  
-            <ul class="nav navbar-nav" id="navLeft">
+            <div class="page-header">
+                <div class="container">
+                    <ul class="nav navbar-nav" id="navLeft">Hai</ul>
+                    <ul class="nav navbar-nav" id="navRight">
                 <li><a href="~/User_Management/Login"><span class="glyphicon glyphicon-log-out"></span> Log in</a></li> 
-                <li><a href="~/User_Management/Register"><span class="glyphicon glyphicon-log-out"></span> Register</a></li>
+                
                 <li><a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
             </ul>
+                </div>
+            </div>
         }
         <div class="container">
             @RenderBody()
         </div>
+        <footer class="footer"><div class="container"><p>Margin/padding moet hier nog gefixt worden xx</p></div></footer>
     </body>
 </html>
