@@ -13,19 +13,14 @@
         <!--<link href="~/css/mainstyle.css" rel="stylesheet" type="text/css"/>-->
     </head>
     <body>
-        @if(!WebSecurity.IsAuthenticated)
-        {  
-            <div class="page-header">
+        <div class="page-header">
                 <div class="container">
-                    <ul class="nav navbar-nav" id="navLeft">Hai</ul>
-                    <ul class="nav navbar-nav" id="navRight">
-                <li><a href="~/User_Management/Login"><span class="glyphicon glyphicon-log-out"></span> Log in</a></li> 
-                
-                <li><a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
-            </ul>
+                    <div id="headerLeft"><h1>Logo</h1></div>
+                    <div id="headerRight">
+                        @if(!WebSecurity.IsAuthenticated){<a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath"><span class="glyphicon glyphicon-log-out"></span> Log Out</a>}
+                    </div>
                 </div>
             </div>
-        }
         <div class="container">
             @RenderBody()
         </div>
