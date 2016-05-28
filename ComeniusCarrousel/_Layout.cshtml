@@ -10,34 +10,52 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="~/css/bootstrap.css" type="text/css">
         <link href="~/css/bootstrap-theme.css" rel="stylesheet" type="text/css">
-        <!--<link href="~/css/mainstyle.css" rel="stylesheet" type="text/css"/>-->
+        <link href="~/css/mainstyle.css" rel="stylesheet" type="text/css" />
     </head>
-    <body>
+    <body style="font-size: 16px;">
         <div class="page-header">
                 <div class="container">
-                    <div id="headerLeft"><h1>Logo</h1></div>
-                    <div id="headerRight">
+                    <div id="floatLeft">
+                        <h1>[CSG Comenius]</h1>
+                    </div>
+                    <div id="floatRight">
                         @if(WebSecurity.IsAuthenticated)
                         {
-                            <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath">
-                                <span class="glyphicon glyphicon-log-out"></span> Log out
+                            <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                                <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
                             </a>
                         }
                         else
                         {
-                            <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath">
-                                <span class="glyphicon glyphicon-log-in"></span> Log in
+                            <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                                <span class="glyphicon glyphicon-log-in" style="color:#fff"></span> Log in
                             </a>
                         }
-                        <a href="~/User_Management/About?ReturnUrl=~@Request.Url.AbsolutePath">
-                                <span class="glyphicon glyphicon-question-sign"></span> About
+                        <a href="~/User_Management/About?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                                <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
                         </a>
                     </div>
                 </div>
             </div>
-        <div class="container">
+        </div>
+        <div class="container" id="content">
             @RenderBody()
         </div>
-        <footer class="footer"><div class="container"><p>Margin/padding moet hier nog gefixt worden xx</p></div></footer>
+        <footer class="footer">
+            <div class="container">
+                <div id="floatLeft">
+                    <ul style="list-style-type:none">
+                        <li>© @DateTime.Now.Year - Group Default</li>
+                    </ul>
+                </div>
+                <div id="floatRight">
+                    <ul style="list-style-type:none">
+                        <li><a href="google.com" style="color: #fff">Link 1</a></li>
+                        <li><a href="google.com" style="color: #fff">Link 2</a></li>
+                        <li><a href="google.com" style="color: #fff">Link 3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
