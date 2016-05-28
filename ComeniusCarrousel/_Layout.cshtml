@@ -21,17 +21,17 @@
                     <div id="floatRight">
                         @if(WebSecurity.IsAuthenticated)
                         {
-                            <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                            <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                                 <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
                             </a>
                         }
                         else
                         {
-                            <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                            <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                                 <span class="glyphicon glyphicon-log-in" style="color:#fff"></span> Log in
                             </a>
                         }
-                        <a href="~/User_Management/About?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">>
+                        <a href="~/User_Management/About?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                                 <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
                         </a>
                     </div>
