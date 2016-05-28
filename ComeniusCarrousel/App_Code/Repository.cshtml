@@ -1,3 +1,9 @@
 ﻿@functions{
-    
+    public static class CRUD {
+        public static void doSimpleIdUpdate(String table, String column, String value, String idName, int id) {
+            var db = Database.Open(App.Database);
+            db.Execute("UPDATE @0 SET @1 = @2 WHERE @3 = @4", table, column, value, idName, id);
+            db.Close();
+        }    
+    }
 }

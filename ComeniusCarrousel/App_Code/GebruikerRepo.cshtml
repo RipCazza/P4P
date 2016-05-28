@@ -1,0 +1,66 @@
+﻿@functions{
+    public class Gebruiker
+    {
+        private const string table = "Gebruiker";
+        private const string idName = "UserId";
+
+        protected int userId;
+        protected string userName;
+        protected string voornaam;
+        protected string achternaam;
+
+        public Gebruiker(int userId, string userName, string voornaam, string achternaam)
+        {
+            this.userId = userId;
+            this.userName = userName;
+            this.voornaam = voornaam;
+            this.achternaam = achternaam;
+        }
+
+        public static Gebruiker makeGebruiker(int id)
+        {
+            var db = Database.Open(App.DataBase);
+            var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
+            var userDb = Database.Open(App.AuthDataBase);
+            var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", id);
+            if(data != null && userData != null)
+            {
+                Gebruiker gebruiker = new Gebruiker(id, userData.UserName, data.Voornaam, data.Achternaam);
+                db.Close();
+                userDb.Close();
+                return gebruiker;
+            }
+            db.Close();
+            userDb.Close();
+            return null;
+        }
+
+        public int UserId
+        {
+            get{return userId;}
+        }
+        public string Voornaam
+        {
+            get{return voornaam;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Voornaam", value, idName, userId);
+            }
+        }
+        public string Achternaam
+        {
+            get{return achternaam;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Achternaam", value, idName, userId);
+            }
+        }
+        public string UserName
+        {
+            get{return userName;} 
+            set{
+                var db = Database.Open(App.AuthDataBase);
+                db.Execute("UPDATE UserProfile SET UserName = @0 WHERE UserId = @1", value, userId);
+                db.Close();
+            }
+        }
+    }
+}

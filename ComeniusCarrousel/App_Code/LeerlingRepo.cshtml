@@ -1,0 +1,98 @@
+﻿@functions{
+    public class Leerling : GebruikerRepo.Gebruiker
+    {
+        private const string table = "Leerling";
+        private const string idName = "UserId";
+
+        private string klas;
+        private string niveau;
+        private int leerlingnummer;
+        private bool instroomLeerling;
+        private string mailVerzorger;
+        private string talentstroomVak;
+        private bool aangemeld;
+
+        public Leerling(int userId, string userName, string voornaam, string achternaam,
+            string klas, string niveau, int leerlingnummer, bool instroomLeerling, string mailVerzorger, string talentsroomVak, bool aangemeld) : base(userId, userName, voornaam, achternaam)
+        {
+            this.klas = klas;
+            this.niveau = niveau;
+            this.leerlingnummer = leerlingnummer;
+            this.instroomLeerling = instroomLeerling;
+            this.mailVerzorger = mailVerzorger;
+            this.talentstroomVak = talentsroomVak;
+            this.aangemeld = aangemeld;
+        }
+
+        public static Leerling makeLeerling(int id)
+        {
+            var db = Database.Open(App.DataBase);
+            var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
+            var leerlingData = db.QuerySingle("SELECT * FROM Leerling WHERE UserId = @0", id);
+            var userDb = Database.Open(App.AuthDataBase);
+            var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", id);
+            if(data != null && userData != null)
+            {
+                Leerling leerling = new Leerling(id, userData.UserName, data.Voornaam, data.Achternaam,
+                    leerlingData.Klas, leerlingData.Niveau, leerlingData.Leerlingnummer, leerlingData.InstroomLeerling,
+                    leerlingData.MailVerzorger, leerlingData.TalentstroomVak, leerlingData.Aangemeld);
+                db.Close();
+                userDb.Close();
+                return leerling;
+            }
+            db.Close();
+            userDb.Close();
+            return null;
+        }
+
+        public string Klas
+        {
+            get{return klas;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Klas", value, idName, userId);
+            }
+        }
+        public string Niveau
+        {
+            get{return niveau;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Niveau", value, idName, userId);
+            }
+        }
+        public int Leerlingnummer
+        {
+            get{return leerlingnummer;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Leerlingnummer", Convert.ToString(value), idName, userId);
+            }
+        }
+        public bool InstroomLeerling
+        {
+            get{return InstroomLeerling;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "InstroomLeerling", Convert.ToString(value), idName, userId);
+            }
+        }
+        public string MailVerzorger
+        {
+            get{return mailVerzorger;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "MailVerzorger", value, idName, userId);
+            }
+        }
+        public string TalentstroomVak
+        {
+            get{return talentstroomVak;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "TalentstroomVak", value, idName, userId);
+            }
+        }
+        public bool Aangemeld
+        {
+            get{return aangemeld;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Aangemeld", Convert.ToString(value), idName, userId);
+            }
+        }
+    }
+}

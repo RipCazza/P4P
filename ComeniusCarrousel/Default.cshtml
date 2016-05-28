@@ -3,4 +3,19 @@
     Layout = "~/_Layout.cshtml";
 }
 
-<p>Hello World!</p>
+@if (User.IsInRole("Leerling"))
+{
+    @RenderPage("~/Leerling/_Leerling.cshtml")
+}
+else if (User.IsInRole("Leraar"))
+{
+    @RenderPage("~/Leraar/_Leraar.cshtml")
+}
+else if (User.IsInRole("Decaan") || User.IsInRole("Admin"))
+{
+    @RenderPage("~/Decaan/_Decaan.cshtml")
+}
+else
+{
+    @RenderPage("~/_AboutDetails.cshtml")
+}

@@ -1,0 +1,13 @@
+﻿@{
+    int id = WebSecurity.CurrentUserId;
+    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.makeLeerling(id);
+}
+
+<p>Naam: @leerling.Voornaam @leerling.Achternaam</p>
+<p>Leerling Nummer: @leerling.Leerlingnummer</p>
+<p>Klas: @leerling.Klas</p>
+<p>Niveau: @leerling.Niveau</p>
+<p>E-Mail: @leerling.UserName</p>
+<p>E-Mail van je verzorger: @leerling.MailVerzorger</p>
+<p>Talentstroom: @leerling.TalentstroomVak</p>
+<p>Aangemeld: @leerling.Aangemeld</p>
