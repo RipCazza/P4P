@@ -1,6 +1,6 @@
 ﻿@{
     int id = WebSecurity.CurrentUserId;
-    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.makeLeerling(id);
+    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
 }
 
 <p>Naam: @leerling.Voornaam @leerling.Achternaam</p>
@@ -12,4 +12,9 @@
 <p>Talentstroom: @leerling.TalentstroomVak</p>
 <p>Aangemeld: @leerling.Aangemeld</p>
 <br>
-<p>Vakken: WIP</p>
+<p>Vakken: 
+    @foreach (string vak in leerling.KeuzeVakken())
+    {
+        @vak;
+    }
+</p>
