@@ -1,15 +1,12 @@
 ﻿@{
-    
+    Page.Title= "Keuze";
+    Layout = "~/_Layout.cshtml";
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<select>
+    @foreach(VakRepo.Vak vak in vakken)
+    {
+        <option value="@vak.VakId">@vak.VakNaam</option>
+    }
+</select>

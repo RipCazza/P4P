@@ -4,6 +4,6 @@
             var db = Database.Open(App.Database);
             db.Execute("UPDATE @0 SET @1 = @2 WHERE @3 = @4", table, column, value, idName, id);
             db.Close();
-        }    
+        }
     }
 }

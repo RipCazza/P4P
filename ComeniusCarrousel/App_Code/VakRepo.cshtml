@@ -1,0 +1,49 @@
+﻿@functions{
+    public class Vak
+    {
+        private const string table = "Vak";
+        private const string idName = "VakId";
+
+        private int vakId;
+        private string vakNaam;
+        private string niveau;
+
+        public Vak(int vakId, string vakNaam, string niveau)
+        {
+            this.vakId = vakId;
+            this.vakNaam = vakNaam;
+            this.niveau = niveau;
+        }
+
+        public int VakId
+        {
+            get{return vakId;}
+        }
+        public string VakNaam
+        {
+            get{return vakNaam;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "VakNaam", value, idName, vakId);
+            }
+        }
+        public string Niveau
+        {
+            get{return niveau;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Niveau", value, idName, vakId);
+            }
+        }
+    }
+    
+    public static List<Vak> GetVakken()
+    {
+        List<Vak> vakken = new List<Vak>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Vak");
+        foreach(var row in data)
+        {
+            vakken.Add(new Vak(row.VakId, row.VakNaam, row.Niveau));
+        }
+        return vakken;
+    }
+}
