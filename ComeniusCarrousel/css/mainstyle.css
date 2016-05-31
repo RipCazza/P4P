@@ -93,6 +93,7 @@ a:focus {
     border-color: #ccc;
     width: 800px;
     margin-top: 4%;
+    text-align: justify;
 }
 
 @media (max-width: 800px) {
