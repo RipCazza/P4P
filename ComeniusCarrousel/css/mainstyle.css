@@ -2,9 +2,12 @@
 
 /*Colors*/
 .comeniusblauw {
-    background-color: #0085BC !important; }
+    background-color: #0085BC !important;
+}
+
 .comeniusgroen {
-    background-color: #C7D41B !important; }
+    background-color: #C7D41B !important;
+}
 
 .glyphicon {
     color: #585858;
@@ -29,7 +32,7 @@ label {
     /* Set the fixed height of the footer here */
     height: 15%;
     padding: 24px 0px 12px 0px;
-    background-color: rgba(0, 0, 0, 0.05); 
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 #floatLeft {
@@ -88,6 +91,14 @@ a:focus {
     border-style: solid;
     border-width: 0px 0px 10px 0px;
     border-color: #ccc;
+    width: 800px;
+    margin-top: 4%;
+}
+
+@media (max-width: 800px) {
+    #content {
+        width: 100%;
+    }
 }
 
 .btn {
