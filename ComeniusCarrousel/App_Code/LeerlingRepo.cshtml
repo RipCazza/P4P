@@ -24,7 +24,7 @@
             this.aangemeld = aangemeld;
         }
 
-        public static Leerling makeLeerling(int id)
+        public static Leerling GetLeerling(int id)
         {
             var db = Database.Open(App.DataBase);
             var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
@@ -43,6 +43,18 @@
             db.Close();
             userDb.Close();
             return null;
+        }
+
+        public List<string> KeuzeVakken()
+        {
+            List<string> keuzeVakken = new List<string>();
+            var db = Database.Open(App.DataBase);
+            var data = db.Query("SELECT VakNaam FROM Vak INNER JOIN Keuze ON Vak.VakId = Keuze.VakId Where Keuze.UserId = @0", userId);
+            foreach(var row in data)
+            {
+                keuzeVakken.Add(row.VakNaam);
+            }
+            return keuzeVakken;
         }
 
         public string Klas
