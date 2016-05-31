@@ -19,14 +19,14 @@
                         <h1>[CSG Comenius]</h1>
                     </div>
                     <div id="floatRight">
-                        <a href="~/Default" style="color: #fff;">
+                        <a href="~/" style="color: #fff;">
                                 <span class="glyphicon glyphicon-home" style="color:#fff"></span> Main
-                        </a>
-                        <a href="~/About" style="color: #fff;">
-                                <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
                         </a>
                         @if(WebSecurity.IsAuthenticated)
                         {
+                            <a href="~/About" style="color: #fff;">
+                                    <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
+                            </a>
                             <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                                 <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
                             </a>
