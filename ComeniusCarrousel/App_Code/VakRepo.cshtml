@@ -35,11 +35,24 @@
         }
     }
     
-    public static List<Vak> GetVakken()
+    /*public static List<Vak> GetVakken()
     {
         List<Vak> vakken = new List<Vak>();
         var db = Database.Open(App.DataBase);
         var data = db.Query("SELECT * FROM Vak");
+        foreach(var row in data)
+        {
+            vakken.Add(new Vak(row.VakId, row.VakNaam, row.Niveau));
+        }
+        return vakken;
+    }*/
+
+    public static List<Vak> GetVakken(string niveau = "Default")
+    {
+        List<Vak> vakken = new List<Vak>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query((niveau == "Default" ? "SELECT * FROM Vak" : "SELECT * FROM Vak WHERE Niveau = @0"), niveau);
+        //var data = db.Query("SELECT * FROM Vak WHERE Niveau = @0", niveau);
         foreach(var row in data)
         {
             vakken.Add(new Vak(row.VakId, row.VakNaam, row.Niveau));

@@ -1,12 +1,50 @@
 ﻿@{
     Page.Title= "Keuze";
     Layout = "~/_Layout.cshtml";
-    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+
+    int id = WebSecurity.CurrentUserId;
+    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
+
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
+
+    if(IsPost && Request.Form["submitKeuze"] != null)
+    {
+        string[] inputArr = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
+                                        Request.Form["keuzevak_2"], Request.Form["keuzevak_3"]};
+
+        if(Validation.IsValid())
+        {
+            var db = Database.Open(App.DataBase);
+            var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
+            var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
+            db.Execute(deleteCommand, id);
+            foreach (string input in inputArr)
+            {
+                if (input != "-")
+                {
+                    db.Execute(insertCommand, id, input, 1);
+                }
+            }
+            db.Close();
+            Response.Redirect(Request.Url.AbsoluteUri);
+        }
+    }
 }
 
-<select>
-    @foreach(VakRepo.Vak vak in vakken)
+<form method="post" class="form-inline">
+    @for(int i = 0; i < 4; i++)
     {
-        <option value="@vak.VakId">@vak.VakNaam</option>
+        <p>
+            <select name="keuzevak_@i">
+                <option value="-"></option>
+                @foreach(VakRepo.Vak vak in vakken)
+                {
+                    <option value="@vak.VakId">@vak.VakNaam</option>
+                }
+            </select>
+        </p>
     }
-</select>
+    <button type="submit" id="submit" name="submitKeuze" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span> Submit
+    </button>
+</form>
