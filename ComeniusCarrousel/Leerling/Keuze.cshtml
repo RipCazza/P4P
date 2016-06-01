@@ -20,6 +20,18 @@
             var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
             var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
             db.Execute(deleteCommand, id);
+
+            var groups = keuzeVakArr.GroupBy(v => v);
+            foreach(var group in groups)
+            {
+                if (group.Count() > 1)
+                {
+                    db.Execute(deleteCommand, id);
+                    db.Close();
+                    Response.Redirect(Request.Url.AbsoluteUri);
+                }
+            }
+
             for (int i = 0; i < 4; i++)
             {
                 if (keuzeVakArr[i] != "-")
@@ -30,8 +42,8 @@
                     }
                     else
                     {
-                        Validation.AddFormError("Er is iets mis gegaan. Probeer het alsjeblieft op nieuw.");
                         db.Execute(deleteCommand, id);
+                        db.Close();
                         Response.Redirect(Request.Url.AbsoluteUri);
                     }
                 }
@@ -41,13 +53,14 @@
         }
     }
 }
-
+<h4>Vul hier uw keuzes in.</h4>
 <form method="post" class="form-inline">
     @for(int i = 0; i < 4; i++)
     {
         <p>
             <select name="keuzevak_@i">
                 <option value="-"></option>
+
                 @foreach(VakRepo.Vak vak in vakken)
                 {
                     <option value="@vak.VakId">@vak.VakNaam</option>
