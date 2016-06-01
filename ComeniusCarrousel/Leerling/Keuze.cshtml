@@ -25,6 +25,7 @@
             var db = Database.Open(App.DataBase);
             var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
             var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
+            var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
             db.Execute(deleteCommand, id);
 
             var groups = keuzeVakArr.GroupBy(v => v);
@@ -34,6 +35,7 @@
                 {
                     error = "Er is een fout ontstaan, probeer het nog eens.";
                     db.Execute(deleteCommand, id);
+                    db.Execute(updateCommand, "False", id);
                     db.Close();
                 }
             }
@@ -51,11 +53,13 @@
                         {
                             error = "Er is een fout ontstaan, probeer het nog eens.";
                             db.Execute(deleteCommand, id);
+                            db.Execute(updateCommand, "False", id);
                             db.Close();
                             break;
                         }
                     }
                 }
+                db.Execute(updateCommand, "True", id);
                 db.Close();
                 Response.Redirect("~/");
             }
