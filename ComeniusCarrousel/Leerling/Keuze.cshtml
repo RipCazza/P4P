@@ -24,7 +24,7 @@
             var groups = keuzeVakArr.GroupBy(v => v);
             foreach(var group in groups)
             {
-                if (group.Count() > 1)
+                if (group.Key != "-" && group.Count() > 1)
                 {
                     db.Execute(deleteCommand, id);
                     db.Close();
