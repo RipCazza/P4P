@@ -2,6 +2,11 @@
     Page.Title= "Keuze";
     Layout = "~/_Layout.cshtml";
 
+    if (!User.IsInRole("Leerling"))
+    {
+        Response.Redirect("~/");
+    }
+
     int id = WebSecurity.CurrentUserId;
     LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
 
