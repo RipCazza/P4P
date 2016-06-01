@@ -14,32 +14,32 @@
     </head>
     <body style="font-size: 16px;">
         <div class="page-header">
-                <div class="container">
-                    <div id="floatLeft">
-                        <h1>[CSG Comenius]</h1>
-                    </div>
-                    <div id="floatRight">
-                        <a href="~/" style="color: #fff;">
-                                <span class="glyphicon glyphicon-home" style="color:#fff"></span> Main
+            <div class="container">
+                <div id="floatLeft">
+                    <h1>[CSG Comenius]</h1>
+                </div>
+                <div id="floatRight">
+                    <a href="~/" style="color: #fff;">
+                        <span class="glyphicon glyphicon-home" style="color:#fff"></span> Main
+                    </a>
+                    @if(WebSecurity.IsAuthenticated)
+                    {
+                        <a href="~/About" style="color: #fff;">
+                            <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
                         </a>
-                        @if(WebSecurity.IsAuthenticated)
-                        {
-                            <a href="~/About" style="color: #fff;">
-                                    <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
-                            </a>
-                            <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                                <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                                <span class="glyphicon glyphicon-log-in" style="color:#fff"></span> Log in
-                            </a>
-                        }
-                    </div>
+                        <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
+                            <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
+                        </a>
+}
+else
+{
+                        <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
+                            <span class="glyphicon glyphicon-log-in" style="color:#fff"></span> Log in
+                        </a>
+                    }
                 </div>
             </div>
+        </div>
         </div>
         <div class="container" id="content">
             @RenderBody()

@@ -32,7 +32,7 @@ label {
     /* Set the fixed height of the footer here */
     height: 15%;
     padding: 24px 0px 12px 0px;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.10);
 }
 
 #floatLeft {
@@ -86,14 +86,16 @@ a:focus {
 
 #content {
     background: #fff;
-    box-shadow: 0px 2px 10px rgba(67, 67, 67, 0.75);
+    box-shadow: 0px 2px 10px rgba(20, 20, 20, 0.50);
     color: #585858;
     border-style: solid;
-    border-width: 0px 0px 10px 0px;
-    border-color: #ccc;
+    border-width: 0px 0px 12px 0px;
+    border-color: #C7D41B;
     width: 800px;
     margin-top: 4%;
     text-align: justify;
+    padding-bottom: 15px;
+    padding-top: 15px;
 }
 
 @media (max-width: 800px) {
@@ -104,4 +106,17 @@ a:focus {
 
 .btn {
     border-radius: 0px;
+    font-weight: normal;
+}
+
+.btn-default {
+    background-image: none;
+    background-color: #0085BC;
+    border-width: 0px;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn .glyphicon {
+    color: #fff;
 }
