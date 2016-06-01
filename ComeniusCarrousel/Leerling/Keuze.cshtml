@@ -9,8 +9,10 @@
 
     if(IsPost && Request.Form["submitKeuze"] != null)
     {
-        string[] inputArr = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
-                                        Request.Form["keuzevak_2"], Request.Form["keuzevak_3"]};
+        string[] keuzeVakArr = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
+                                              Request.Form["keuzevak_2"], Request.Form["keuzevak_3"]};
+        int[] aantalMensenArr = new int[4] {Convert.ToInt16(Request.Form["aantalMensen_0"]), Convert.ToInt16(Request.Form["aantalMensen_1"]),
+                                            Convert.ToInt16(Request.Form["aantalMensen_2"]), Convert.ToInt16(Request.Form["aantalMensen_3"])};
 
         if(Validation.IsValid())
         {
@@ -18,15 +20,24 @@
             var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
             var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
             db.Execute(deleteCommand, id);
-            foreach (string input in inputArr)
+            for (int i = 0; i < 4; i++)
             {
-                if (input != "-")
+                if (keuzeVakArr[i] != "-")
                 {
-                    db.Execute(insertCommand, id, input, 1);
+                    if (!(aantalMensenArr[i] > 3) && !(aantalMensenArr[i] < 1))
+                    {
+                        db.Execute(insertCommand, id, keuzeVakArr[i], aantalMensenArr[i]);
+                    }
+                    else
+                    {
+                        Validation.AddFormError("Er is iets mis gegaan. Probeer het alsjeblieft op nieuw.");
+                        db.Execute(deleteCommand, id);
+                        Response.Redirect(Request.Url.AbsoluteUri);
+                    }
                 }
             }
             db.Close();
-            Response.Redirect(Request.Url.AbsoluteUri);
+            Response.Redirect("~/");
         }
     }
 }
@@ -42,6 +53,7 @@
                     <option value="@vak.VakId">@vak.VakNaam</option>
                 }
             </select>
+            <input type="number" name="aantalMensen_@i" min="1" max="3" value="1">
         </p>
     }
     <button type="submit" id="submit" name="submitKeuze" class="btn btn-success">
