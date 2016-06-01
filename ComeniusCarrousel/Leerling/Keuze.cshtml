@@ -6,6 +6,7 @@
     LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
 
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
+    string error = "";
 
     if(IsPost && Request.Form["submitKeuze"] != null)
     {
@@ -26,34 +27,39 @@
             {
                 if (group.Key != "-" && group.Count() > 1)
                 {
+                    error = "Er is een fout ontstaan, probeer het nog eens.";
                     db.Execute(deleteCommand, id);
                     db.Close();
-                    Response.Redirect(Request.Url.AbsoluteUri);
                 }
             }
-
-            for (int i = 0; i < 4; i++)
+            if (error != "Er is een fout ontstaan, probeer het nog eens.")
             {
-                if (keuzeVakArr[i] != "-")
+                for (int i = 0; i < 4; i++)
                 {
-                    if (!(aantalMensenArr[i] > 3) && !(aantalMensenArr[i] < 1))
+                    if (keuzeVakArr[i] != "-")
                     {
-                        db.Execute(insertCommand, id, keuzeVakArr[i], aantalMensenArr[i]);
-                    }
-                    else
-                    {
-                        db.Execute(deleteCommand, id);
-                        db.Close();
-                        Response.Redirect(Request.Url.AbsoluteUri);
+                        if (!(aantalMensenArr[i] > 3) && !(aantalMensenArr[i] < 1))
+                        {
+                            db.Execute(insertCommand, id, keuzeVakArr[i], aantalMensenArr[i]);
+                        }
+                        else
+                        {
+                            error = "Er is een fout ontstaan, probeer het nog eens.";
+                            db.Execute(deleteCommand, id);
+                            db.Close();
+                            break;
+                        }
                     }
                 }
+                db.Close();
+                Response.Redirect("~/");
             }
-            db.Close();
-            Response.Redirect("~/");
         }
     }
 }
+
 <h4>Vul hier uw keuzes in.</h4>
+@Html.Raw(error)
 <form method="post" class="form-inline">
     @for(int i = 0; i < 4; i++)
     {
