@@ -6,10 +6,14 @@
 @foreach (LeerlingRepo.Leerling leerling in leerlingen)
 {
     <p>
-        @leerling.Voornaam
-        @leerling.Achternaam
-        @leerling.Leerlingnummer
-        @leerling.Niveau Vakken: 
+        <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">
+            <span class="glyphicon glyphicon-user"></span> 
+            <span>@leerling.Voornaam</span>
+            <span>@leerling.Achternaam</span>
+        </a>
+        <span>@leerling.Leerlingnummer</span>
+        <span>@leerling.Niveau</span>
+        <span>Vakken:</span>
         @foreach (string vak in leerling.KeuzeVakken())
         {
             <span>@vak</span>

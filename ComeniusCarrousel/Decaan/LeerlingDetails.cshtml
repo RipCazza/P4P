@@ -1,15 +1,17 @@
 ﻿@{
-    
+    Page.Title= "Keuze";
+    Layout = "~/_Layout.cshtml";
+
+    var leerlingId;
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()) 
+    {
+        leerlingId = Request.QueryString["ID"];
+        LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(leerlingId);
+    }
 }
-
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
