@@ -1,5 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Arvo:400,400italic,700,700italic);
 
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 /*Colors*/
 .comeniusblauw {
     background-color: #0085BC !important;
@@ -27,12 +32,16 @@ label {
 
 .footer {
     position: absolute;
+    left: 0;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 15%;
     padding: 24px 0px 12px 0px;
     background-color: rgba(0, 0, 0, 0.10);
+    margin-top: 100px;
+    position: absolute;
+
 }
 
 #floatLeft {
@@ -47,6 +56,7 @@ body {
     background-color: #0085BC;
     color: #fff;
     font-family: Arvo;
+    padding-bottom: 15%;
 }
 
 a {
@@ -119,4 +129,39 @@ a:focus {
 
 .btn .glyphicon {
     color: #fff;
+}
+
+#succesText {
+    color: #5cb85c;
+}
+
+#dangerText {
+    color: #d9534f;
+}
+
+.panel {
+    border-radius: 0px;
+}
+
+.panel-heading {
+    border-radius: 0px;
+}
+
+.panel-default {
+    border-color: #585858;
+}
+
+.panel-default .panel-heading {
+    background-image: none;
+    background-color: #585858;
+    color: #fff;
+}
+
+.panel-primary {
+    border-color: #1976D2;
+}
+
+.panel-primary .panel-heading {
+    background-image: none;
+    background-color: #0085BC;
 }
