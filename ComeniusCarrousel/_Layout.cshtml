@@ -25,16 +25,16 @@
                     @if(WebSecurity.IsAuthenticated)
                     {
                         <a href="~/About" style="color: #fff;">
-                            <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span> About
+                            <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span>&nbsp; About
                         </a>
                         <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                            <span class="glyphicon glyphicon-log-out" style="color:#fff"></span> Log out
+                            <span class="glyphicon glyphicon-log-out" style="color:#fff"></span>&nbsp; Log out
                         </a>
 }
 else
 {
                         <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                            <span class="glyphicon glyphicon-log-in" style="color:#fff"></span> Log in
+                            <span class="glyphicon glyphicon-log-in" style="color:#fff"></span>&nbsp; Log in
                         </a>
                     }
                 </div>

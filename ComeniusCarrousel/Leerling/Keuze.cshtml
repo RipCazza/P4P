@@ -31,7 +31,7 @@
             var groups = keuzeVakArr.GroupBy(v => v);
             foreach(var group in groups)
             {
-                if (group.Key != "-" && group.Count() > 1)
+                if (group.Key != "-" && group.Count() > 1 || group.Key == "-" && group.Count() == keuzeVakArr.Length)
                 {
                     error = "Er is een fout ontstaan, probeer het nog eens.";
                     db.Execute(deleteCommand, id);
