@@ -1,5 +1,18 @@
 ﻿@{
-    
+   int id = WebSecurity.CurrentUserId;
+   List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(); 
 }
 
-<p>Test2</p>
+@foreach (LeerlingRepo.Leerling leerling in leerlingen)
+{
+    <p>
+        @leerling.Voornaam
+        @leerling.Achternaam
+        @leerling.Leerlingnummer
+        @leerling.Niveau Vakken: 
+        @foreach (string vak in leerling.KeuzeVakken())
+        {
+            <span>@vak</span>
+        }
+    </p>
+}

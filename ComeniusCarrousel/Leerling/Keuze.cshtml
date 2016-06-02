@@ -8,7 +8,7 @@
     }
 
     int id = WebSecurity.CurrentUserId;
-    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
+    LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
     string error = "";

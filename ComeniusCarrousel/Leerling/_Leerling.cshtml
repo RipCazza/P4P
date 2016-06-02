@@ -1,6 +1,6 @@
 ﻿@{
     int id = WebSecurity.CurrentUserId;
-    LeerlingRepo.Leerling leerling = LeerlingRepo.Leerling.GetLeerling(id);
+    LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 }
 
 <p>Naam: @leerling.Voornaam @leerling.Achternaam</p>
