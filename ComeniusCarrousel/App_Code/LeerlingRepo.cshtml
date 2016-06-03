@@ -26,14 +26,14 @@
 
         
 
-        public List<string> KeuzeVakken()
+        public List<Tuple<string, int>> KeuzeVakken()
         {
-            List<string> keuzeVakken = new List<string>();
+            List<Tuple<string, int>> keuzeVakken = new List<Tuple<string, int>>();
             var db = Database.Open(App.DataBase);
-            var data = db.Query("SELECT VakNaam FROM Vak INNER JOIN Keuze ON Vak.VakId = Keuze.VakId Where Keuze.UserId = @0", userId);
+            var data = db.Query("SELECT VakNaam, Keuze.VakId FROM Vak INNER JOIN Keuze ON Vak.VakId = Keuze.VakId Where Keuze.UserId = @0", userId);
             foreach(var row in data)
             {
-                keuzeVakken.Add(row.VakNaam);
+                keuzeVakken.Add(new Tuple<string, int> (row.VakNaam, row.VakId));
             }
             return keuzeVakken;
         }
@@ -128,5 +128,12 @@
         }
         db.Close();
         return null;
+    }
+    public static void UpdateAangemeld(string aangemeld, int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
+        db.Execute(updateCommand, aangemeld, id);
+        db.Close();
     }
 }

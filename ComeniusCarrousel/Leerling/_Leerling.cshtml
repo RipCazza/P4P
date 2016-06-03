@@ -50,9 +50,9 @@
             <tr>
                 <td>Vakken:</td>
                 <td>
-                    @foreach (string vak in leerling.KeuzeVakken())
+                    @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
                     {
-                        <span>@vak</span>
+                        <span>@vak.Item1</span>
                     }
                 </td>
             </tr>

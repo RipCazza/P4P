@@ -1,0 +1,23 @@
+﻿@functions{
+    public static void DeleteKeuze(int id, int keuzeVak)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0 AND VakId = @1";
+        db.Execute(deleteCommand, id, keuzeVak);
+        db.Close();
+    }
+    public static void UpdateKeuze(int nieuweKeuze, int aantalMensen, int keuzeVak, int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var updateCommand = "UPDATE Keuze SET VakId = @0, AantalPersonen = @1 where VakId = @2 AND UserId = @3";
+        db.Execute(updateCommand, nieuweKeuze, aantalMensen, keuzeVak, id);
+        db.Close();
+    }
+    public static void InsertKeuze(int id, int keuzeVak, int aantalMensen)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
+        db.Execute(insertCommand, id, keuzeVak, aantalMensen);
+        db.Close();
+    }
+}
