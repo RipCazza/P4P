@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "DecaanOverzicht";
+    Page.Title = "LeerlingOverzicht";
     var db = Database.Open("authenticationData");
     var selectedData = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId=4");
     var grid = new WebGrid(source: selectedData);
