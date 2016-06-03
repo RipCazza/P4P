@@ -1,15 +1,67 @@
 ﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Edit Movies";
     
+    var onderwerp = "";
+    var inhoud = "";
+    var mailId = "";
+
+    if(!IsPost){
+        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()) {
+            mailId = Request.QueryString["ID"];
+            var db = Database.Open("ComeniusCarrousel");
+            var dbCommand = "SELECT * FROM Mail WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, mailId);
+
+            if(row != null) {
+                onderwerp = row.Onderwerp;
+                inhoud = row.Inhoud;
+
+            }
+            else{
+                Validation.AddFormError("Er was geen mail concept geselecteerd");
+            }
+        }
+        else{
+            Validation.AddFormError("Er was geen mail concept geselecteerd");
+        }
+    }
+
+    if(IsPost){
+        Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
+        Validation.RequireField("inhoud", "Inhoud is vereist");
+        Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
+
+        onderwerp = Request.Form["Onderwerp"];
+        inhoud = Request.Form["Inhoud"];
+        mailId = Request.Form["MailId"];
+
+        if(Validation.IsValid()){
+            var db = Database.Open("ComeniusCarrousel");
+            var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1, WHERE MailId=@2";
+            db.Execute(updateCommand, onderwerp, inhoud, mailId);
+            Response.Redirect("~/Decaan/Mail/Mailoverzicht.cshtml");
+        }
+    }
 }
 
-<!DOCTYPE html>
+<body>
+  <h1>Edit a Movie</h1>
+    @Html.ValidationSummary()
+  <form method="post">
+    <fieldset>
+      <legend>Movie Information</legend>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+      <p><label for="onderwerp">Onderwerp:</label>
+         <input type="text" name="onderwerp" value="@onderwerp" /></p>
+
+      <p><label for="inhoud">Inhoud:</label>
+         <input type="text" name="inhoud" value="@inhoud" /></p>
+
+      <input type="hidden" name="mailid" value="@mailId" />
+
+      <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+    </fieldset>
+  </form>
+  <p><a href="~/Decaan/Mail/MailOverzicht.cshtml">Terug naar MailOverzicht</a></p>
+</body>
