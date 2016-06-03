@@ -7,15 +7,19 @@
     
 }
 
-<a href="~/Admin/Decaan/DecaanToevoegen">
+<a class="btn btn-default" href="~/Admin/Decaan/DecaanToevoegen">
     <span class="glyphicon glyphicon-pencil"></span> Nieuwe decaan aanmaken
 </a>
-     <div style="padding: 30px">
+
             @grid.GetHtml(
+       tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
             columns: grid.Columns(
-                grid.Column(format: @<a style="padding: 30px" href="~/Admin/Decaan/DecaanWijzigen?id=@item.UserId">Edit</a>),
-                grid.Column("UserName")
+                
+                grid.Column("UserName"),
+                grid.Column(format: @<a href="~/Admin/Decaan/DecaanWijzigen?id=@item.UserId">&nbsp; Edit</a>)
                 )
             )
-    </div>
+
 
