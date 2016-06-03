@@ -1,15 +1,28 @@
 ﻿@{
-    
-}
-
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
+  Layout = "~/_Layout.cshtml";
+  var name = "";
+  var Id = "";
+  var row = "";
+  var db = Database.Open("authenticationData");
+  if(!Request.QueryString["UserId"].IsEmpty() && Request.QueryString["UserId"].IsInt()){
+            Id = Request.QueryString["UserId"];
+            var selectedData = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId=@0");
+            var row = db.QuerySingle(selectedData, name);
+            if(row != null) {
+                name = selectedData;
+            }
+            else{
+                Validation.AddFormError("No movie was found for that ID.");
+            }
+        }
+        else{
+            Validation.AddFormError("No movie was found for that ID.");
+        }
+    }
+ }
+<html>
+    <body></body>
+    <p><span>Name:</span>
+    <span>@name</span></p>
     </body>
 </html>
