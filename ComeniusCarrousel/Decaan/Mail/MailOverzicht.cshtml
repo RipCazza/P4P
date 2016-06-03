@@ -17,8 +17,8 @@
         var changeID = Request.QueryString["ID"];
     }
 
-    var selectOnderwerp = "SELECT Onderwerp FROM Mail";
-    var selectData = db.Query(selectOnderwerp);
+    var selectCommand = "SELECT * FROM Mail";
+    var selectData = db.Query(selectCommand);
     var grid = new WebGrid(source: selectData, defaultSort: "Onderwerp");
 }
 
@@ -28,12 +28,12 @@
         headerStyle: "head",
         alternatingRowStyle: "alt",
         columns: grid.Columns(
-        grid.Column("Onderwerp"),
-        grid.Column(format: @<a href="~/MailOverzicht.cshtml?ID=@item.ID">Edit</a>),
-        grid.Column(format: @<a href="~/MailOverzicht.cshtml?deleteID=@item.ID">Verwijderen</a>)
+            grid.Column("Onderwerp"),
+            grid.Column(format: @<a href="~/Decaan/Mail/MailWijzigen?id=@item.MailId">Edit</a>)
+        
         ))
 
-        <p> <a href="~/Decaan/Mail/MailToevoegen.cshtml">
+        <p> <a class="btn btn-default" href="~/Decaan/Mail/MailToevoegen.cshtml">
             <span class="glyphicon glyphicon-pencil"></span> Nieuwe Mail
             </a>
         </p>
