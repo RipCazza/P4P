@@ -1,16 +1,15 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Edit Movies";
     
     var onderwerp = "";
     var inhoud = "";
     var mailId = "";
 
     if(!IsPost){
-        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()) {
-            mailId = Request.QueryString["ID"];
+        if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt()) {
+            mailId = Request.QueryString["MailId"];
             var db = Database.Open("ComeniusCarrousel");
-            var dbCommand = "SELECT * FROM Mail WHERE ID = @0";
+            var dbCommand = "SELECT * FROM Mail WHERE MailId = @0";
             var row = db.QuerySingle(dbCommand, mailId);
 
             if(row != null) {
@@ -38,7 +37,7 @@
 
         if(Validation.IsValid()){
             var db = Database.Open("ComeniusCarrousel");
-            var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1, WHERE MailId=@2";
+            var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1 WHERE MailId=@2";
             db.Execute(updateCommand, onderwerp, inhoud, mailId);
             Response.Redirect("~/Decaan/Mail/Mailoverzicht.cshtml");
         }
