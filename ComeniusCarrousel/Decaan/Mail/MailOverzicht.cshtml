@@ -1,7 +1,37 @@
 ﻿@{
+    /*Dit is de Mail Overzicht Pagina van de Decaan. Op deze Pagina krijgt de decaan een overzicht te zien van onderwerpen van mails die reeds gemaakt zijn. Ook krijgt de decaan de mogelijkheid om deze mails aan te passen of te verwijderen vanaf deze pagina, naast dat er een redirect knop is richting een pagina om een nieuw e-mail ontwerp te maken voor een ander onderwerp.*/
+
+
     Layout = "~/_Layout.cshtml";
     // Connectie Database
+    var db = Database.Open("ComeniusCarrousel");
+
+    if (!Request.QueryString["deleteID"].IsEmpty() && Request.QueryString["deleteID"].IsInt()){
+        var deleteID = Request.QueryString["deleteID"];
+        var deleteCommand = "DELETE FROM Mail WHERE ID = @0";
+        db.Execute(deleteCommand, deleteID);
+        Response.Redirect("~/MailOverzicht.cshtml");
+    }
+
+    if (IsPost && Validation.IsValid() && Request.QueryString["ID"].IsInt()){
+        var changeID = Request.QueryString["ID"];
+    }
+
+    var selectOnderwerp = "SELECT Onderwerp FROM Mail";
+    var selectData = db.Query(selectOnderwerp);
+    var grid = new WebGrid(source: selectData, defaultSort: "Onderwerp");
 }
+
+
+@grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
+        columns: grid.Columns(
+        grid.Column("Onderwerp"),
+        grid.Column(format: @<a href="~/MailOverzicht.cshtml?ID=@item.ID">Edit</a>),
+        grid.Column(format: @<a href="~/MailOverzicht.cshtml?deleteID=@item.ID">Verwijderen</a>)
+        ))
 
         <p> <a href="~/Decaan/Mail/MailToevoegen.cshtml">
             <span class="glyphicon glyphicon-pencil"></span> Nieuwe Mail

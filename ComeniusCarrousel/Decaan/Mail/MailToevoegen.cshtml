@@ -39,6 +39,7 @@
                 ModelState.AddFormError("Onderwerp wordt al gebruikt");
             }
             db.Close();
+            Response.Redirect("~/");
         }
     }
 }
