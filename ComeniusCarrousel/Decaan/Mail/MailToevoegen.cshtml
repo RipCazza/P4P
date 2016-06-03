@@ -1,15 +1,63 @@
 ﻿@{
+    //Deze pagina is bedoeld om nieuwe mails te maken voor bepaalde onderwerpen (Verzenden Userdata, Reminder voor aanmelden, Verzenden Persoonlijk Rooster). De gemaakte mails zullen verschijnen in de Mail Database en opgehaald worden in MailOverzicht.cshtml, waar ze ook gewijzigd kunnen worden. Ze zullen uiteindelijk op de verzend pagina verzonden kunnen worden aan de juiste doelgroep.
     
+    Page.Title= "Keuze";
+    Layout = "~/_Layout.cshtml";
+
+    var inhoud = "";
+    var onderwerp = "";
+
+    Validation.RequireField("onderwerp", "Je moet een onderwerp aan de mail even");
+    Validation.RequireField("inhoud", "Er moet een inhoud zijn");
+    Validation.Add("onderwerp",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 4,
+            errorMessage: "Onderwerp must contain at least 4 characters"));
+    Validation.Add("inhoud",
+        Validator.StringLength(
+            maxLength: 4000,
+            errorMessage: "Your email cannot contain more than 4000 characters"));
+
+    if(IsPost)
+    {
+        inhoud = Request.Form["inhoud"];
+        onderwerp = Request.Form["onderwerp"];
+
+        if(Validation.IsValid())
+        {
+            var db = Database.Open("ComeniusCarrousel");
+
+            var bestaandOnderwerp  = db.QuerySingle("SELECT Onderwerp FROM Mail WHERE LOWER(Onderwerp) = LOWER(@0)", onderwerp);
+            if(bestaandOnderwerp == null)
+            {
+                db.Execute("INSERT INTO Mail (Inhoud, Onderwerp) VALUES (@0, @1)", inhoud, onderwerp);
+
+            }
+            else
+            {
+                ModelState.AddFormError("Onderwerp wordt al gebruikt");
+            }
+            db.Close();
+            Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
+        }
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<h4>Nieuwe Mail</h4>
+<form method="post" class="form-inline">
+    <div>
+        <label for="onderwerp">Onderwerp</label>
+        <input type="text" id="onderwerp" name="onderwerp" value="@onderwerp">
+        @Html.ValidationMessage("onderwerp")           
+    </div>
+    <div>
+        <label for="inhoud">Inhoud</label>
+        <input type="text" id="inhoud" name="inhoud" value="@inhoud">
+        @Html.ValidationMessage("inhoud")          
+    </div>
+    
+    <button type="submit" id="submit" name="submitNewMail" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span> Submit
+    </button>
+</form>

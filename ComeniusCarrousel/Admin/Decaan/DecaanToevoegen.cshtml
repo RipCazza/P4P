@@ -42,7 +42,7 @@
                 try
                 {
                     var token = WebSecurity.CreateAccount(userName, password, false);
-                    Roles.AddUserToRole(userName, "Admin");
+                    Roles.AddUserToRole(userName, "Decaan");
                     db.Close();
                     Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
                 }

@@ -165,3 +165,28 @@ a:focus {
     background-image: none;
     background-color: #0085BC;
 }
+
+/*.head { background-color: #969696; font-weight: bold; color: #FFF; }
+.grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
+.alt { background-color: #E8E8E8; color: #000; }
+.selected {background-color:Yellow;}
+span.caption {width:100px;}
+span.dataDisplay {font-weight:bold;}
+
+.field-validation-error {
+      font-weight:bold;
+      color: White;
+      background-color: #8b3b3b;
+     }
+    .validation-summary-errors{
+      color: White;
+      background-color:#8b3b3b;
+      font-weight:bold;
+      margin:12px;
+    }
+
+      .validation-summary-errors{
+        color: White;
+      font-weight:bold;
+      margin:12px;
+      }*/
