@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "LeerlingOverzicht";
+    var db = Database.Open("authenticationData");
+    var selectedData = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId=4");
+    var grid = new WebGrid(source: selectedData);
+    
+}
+
+<a href="~/Admin/Decaan/DecaanToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuwe Leerling aanmaken
+</a>
+     <div style="padding: 30px">
+            @grid.GetHtml(
+            columns: grid.Columns(
+                grid.Column(format: @<a style="padding: 30px" href="~/Admin/Decaan/LeerlingWijzigen?id=@item.UserId">Edit</a>),
+                grid.Column("UserName")
+                )
+            )
+    </div>
+
