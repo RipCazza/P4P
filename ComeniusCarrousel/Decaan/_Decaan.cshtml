@@ -14,9 +14,9 @@
         <span>@leerling.Leerlingnummer</span>
         <span>@leerling.Niveau</span>
         <span>Vakken:</span>
-        @foreach (string vak in leerling.KeuzeVakken())
+        @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
         {
-            <span>@vak</span>
+            <span>@vak.Item1</span>
         }
     </p>
 }

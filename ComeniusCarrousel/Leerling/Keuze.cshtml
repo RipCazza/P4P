@@ -12,7 +12,15 @@
 
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
     string error = "";
-
+    
+    int keuzeVakCount = 0;
+    int[] keuzeVakken = new int[4] {-1, -1, -1, -1};
+    foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
+    {
+        keuzeVakken[keuzeVakCount] = vak.Item2;
+        keuzeVakCount++;
+    }
+    
     if(IsPost && Request.Form["submitKeuze"] != null)
     {
         string[] keuzeVakArr = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
@@ -22,7 +30,7 @@
 
         if(Validation.IsValid())
         {
-            var db = Database.Open(App.DataBase);
+            /*var db = Database.Open(App.DataBase);
             var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
             var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
             var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
@@ -62,6 +70,55 @@
                 db.Execute(updateCommand, "True", id);
                 db.Close();
                 Response.Redirect("~/");
+            }*/
+            var groups = keuzeVakArr.GroupBy(v => v);
+            foreach(var group in groups)
+            {
+                if (group.Key != "-" && group.Count() > 1 || group.Key == "-" && group.Count() == keuzeVakArr.Length)
+                {
+                    error = "Er is een fout ontstaan, probeer het nog eens.";
+                }
+            }
+            foreach(int aantalMensen in aantalMensenArr)
+            {
+                if (aantalMensen > 3 || aantalMensen < 1)
+                {
+                    error = "Er is een fout ontstaan, probeer het nog eens.";
+                }
+            }
+
+            if (error != "Er is een fout ontstaan, probeer het nog eens.")
+            {
+                for (int i = 0; i < keuzeVakken.Length; i++)
+                {
+                    if (keuzeVakken[i] != -1 && keuzeVakArr[i] != "-")
+                    {
+                        if (keuzeVakken[i] == Convert.ToInt16(keuzeVakArr[i])){}
+                        else
+                        {
+                            for (int j = i + 1; j < keuzeVakken.Count(); j++)
+                            {
+                                if (keuzeVakken[j] == Convert.ToInt16(keuzeVakArr[i]))
+                                {
+                                    KeuzeRepo.DeleteKeuze(id, Convert.ToInt16(keuzeVakArr[i]));
+                                    keuzeVakken[j] = -1;
+                                }
+                            }
+                        }
+                        KeuzeRepo.UpdateKeuze(Convert.ToInt16(keuzeVakArr[i]), aantalMensenArr[i], keuzeVakken[i], id);
+                    }
+                    else if (keuzeVakken[i] == -1 && keuzeVakArr[i] != "-")
+                    {
+                        KeuzeRepo.InsertKeuze(id, Convert.ToInt16(keuzeVakArr[i]), aantalMensenArr[i]);
+                    }
+                    else if (keuzeVakken[i] != -1 && keuzeVakArr[i] == "-")
+                    {
+                        KeuzeRepo.DeleteKeuze(id, keuzeVakken[i]);
+                    }
+                }
+                
+                LeerlingRepo.UpdateAangemeld("True", id);
+                Response.Redirect("~/");
             }
         }
     }
@@ -78,7 +135,14 @@
 
                 @foreach(VakRepo.Vak vak in vakken)
                 {
-                    <option value="@vak.VakId">@vak.VakNaam</option>
+                    if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
+                    {
+                        <option value="@vak.VakId" selected>@vak.VakNaam</option>
+                    }
+                    else
+                    {
+                        <option value="@vak.VakId">@vak.VakNaam</option>
+                    }
                 }
             </select>
             <input type="number" name="aantalMensen_@i" min="1" max="3" value="1">
