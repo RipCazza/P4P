@@ -6,35 +6,4 @@
             db.Close();
         }
     }
-
-    public static List<Tuple<int, string>> GetDecanen()
-    {
-        List<Tuple<int, string>> decanen = new List<Tuple<int, string>>{};
-        var db = Database.Open("authenticationData");
-        var data = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId = 2");
-        foreach (var row in data)
-        {
-            decanen.Add(new Tuple<int, string> (row.UserId, row.UserName));
-        }
-        db.Close();
-        return decanen;
-    }
-
-    public static Tuple<int, string> GetDecaan(int id)
-    {
-        Tuple<int, string> decaan;
-        var db = Database.Open("authenticationData");
-        var data = db.QuerySingle("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId = webpages_UsersInRoles.UserId WHERE RoleId = 2 AND UserProfile.UserId = @0", id);
-        if(data != null)
-        {
-            decaan = new Tuple<int, string> (data.UserId, data.UserName);
-            db.Close();
-            return decaan;
-        }
-        else
-        {
-            db.Close();
-            return null;
-        }
-    }
 }

@@ -7,7 +7,7 @@
         Response.Redirect("~/");
     }
 
-    List<Tuple<int, string>> decanen = Repository.GetDecanen(); // Geeft het ID en username van alle decanen mee
+    List<Tuple<int, string>> decanen = DecaanRepo.GetDecanen(); // Geeft het ID en username van alle decanen mee
 }
 
 <a class="btn btn-default" href="~/Admin/Decaan/DecaanToevoegen">

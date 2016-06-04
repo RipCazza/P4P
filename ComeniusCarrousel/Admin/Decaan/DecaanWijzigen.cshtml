@@ -10,7 +10,7 @@
     Tuple<int, string> decaan;
     var user = "";
     int id = Convert.ToInt16(Request.QueryString["id"]);
-    decaan = Repository.GetDecaan(id);
+    decaan = DecaanRepo.GetDecaan(id);
 
     if (decaan == null)
     {
