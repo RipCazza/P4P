@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "DecaanOverzicht";
+    Page.Title = "Decaan overzicht";
 
     if (!User.IsInRole("Admin"))
     {
@@ -17,7 +17,11 @@
     @foreach (Tuple<int, string> decaan in decanen)
     {
         <tr>
-            <td><a href="~/Admin/Decaan/DecaanWijzigen?id=@decaan.Item1">&nbsp; Edit</a></td>
+            <td>
+                <a href="~/Admin/Decaan/DecaanWijzigen?id=@decaan.Item1" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
             <td>@decaan.Item2</td>
         </tr>
     }

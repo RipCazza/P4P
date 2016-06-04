@@ -1,20 +1,38 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
+    Page.Title = "Decaan wijzigen";
+
     if (!User.IsInRole("Admin"))
     {
         Response.Redirect("~/");
     }
+
     Tuple<int, string> decaan;
-    var email = "";
+    var user = "";
     int id = Convert.ToInt16(Request.QueryString["id"]);
     decaan = Repository.GetDecaan(id);
+
     if (decaan == null)
     {
         Validation.AddFormError("Deze decaan bestaat niet.");
     }
     else
     {
-        email = decaan.Item2;
+        user = decaan.Item2;
+    }
+
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        if (WebMatrix.WebData.WebSecurity.UserExists(user))
+        {
+            var userRoles = Roles.GetRolesForUser(user);
+            if (userRoles.Count() > 0)
+            {
+                Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
+            }
+            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
+            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+        }
     }
  }
 
@@ -22,7 +40,12 @@
 @if (decaan != null)
 {
 <p>
-    <span>Email:</span>
-    <span>@email</span>
+    <span>Gebruiker:</span>
+    <span>@user</span>
 </p>
+<form method="post" class="form-inline">
+    <button type="submit" id="submit" name="delete" class="btn btn-danger">
+        <span class="glyphicon glyphicon-remove"></span> Remove
+    </button>
+</form>
 }

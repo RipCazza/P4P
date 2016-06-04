@@ -11,7 +11,7 @@
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
-    string error = "";
+    int error = 0;
     
     int keuzeVakCount = 0;
     int[] keuzeVakken = new int[4] {-1, -1, -1, -1};
@@ -35,18 +35,20 @@
             {
                 if (group.Key != "-" && group.Count() > 1 || group.Key == "-" && group.Count() == keuzeVakArr.Length)
                 {
-                    error = "Er is een fout ontstaan, probeer het nog eens.";
+                    Validation.AddFormError("Er is een fout ontstaan, probeer het nog eens.");
+                    error = 1;
                 }
             }
             foreach(int aantalMensen in aantalMensenArr)
             {
                 if (aantalMensen > 3 || aantalMensen < 1)
                 {
-                    error = "Er is een fout ontstaan, probeer het nog eens.";
+                    Validation.AddFormError("Er is een fout ontstaan, probeer het nog eens.");
+                    error = 1;
                 }
             }
 
-            if (error != "Er is een fout ontstaan, probeer het nog eens.")
+            if (error != 1)
             {
                 for (int i = 0; i < keuzeVakken.Length; i++)
                 {
@@ -84,7 +86,7 @@
 }
 
 <h4>Vul hier uw keuzes in.</h4>
-@Html.Raw(error)
+@Html.ValidationSummary()
 <form method="post" class="form-inline">
     @for(int i = 0; i < 4; i++)
     {

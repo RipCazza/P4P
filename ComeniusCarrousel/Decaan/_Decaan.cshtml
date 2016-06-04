@@ -14,6 +14,14 @@
 </a>
 
 <table class="table">
+    <tr>
+        <td>Voornaam</td>
+        <td>Achternaam</td>
+        <td>Leerlingnummer</td>
+        <td>Niveau</td>
+        <td>Keuze vakken</td>
+        <td>Details</td>
+    </tr>
     @foreach (LeerlingRepo.Leerling leerling in leerlingen)
     {
     
@@ -23,7 +31,6 @@
             <td>@leerling.Leerlingnummer</td>
             <td>@leerling.Niveau</td>
             <td>
-                <span>Vakken:</span>
                 @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
                 {
                     <span>@vak.Item1</span>
