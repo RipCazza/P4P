@@ -21,6 +21,8 @@
         user = decaan.Item2;
     }
 
+
+    // Delete de decaan en alles waar de decaan in voor komt.
     if (IsPost && Request.Form["delete"] != null)
     {
         if (WebMatrix.WebData.WebSecurity.UserExists(user))
@@ -33,6 +35,7 @@
             ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
             ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
         }
+        Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
     }
  }
 

@@ -2,69 +2,10 @@
     Page.Title= "Keuze";
     Layout = "~/_Layout.cshtml";
 
-    int leerlingId = Convert.ToInt16(Request.QueryString["Id"]);
-    LeerlingRepo.Leerling leerling = !Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt() == true ? LeerlingRepo.GetLeerling(leerlingId) : null;
-
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {
         Response.Redirect("~/");
     }
 }
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Leerlinggegevens
-    </div>
-    <div class="panel-body">
-        <table class="table">
-            <tr>
-                <td>Naam:</td>
-                <td>@leerling.Voornaam @leerling.Achternaam</td>
-            </tr>
-            <tr>
-                <td>Leerlingnummer:</td>
-                <td>@leerling.Leerlingnummer</td>
-            </tr>
-            <tr>
-                <td>Klas:</td>
-                <td>@leerling.Klas</td>
-            </tr>
-            <tr>
-                <td>Niveau:</td>
-                <td>@leerling.Niveau</td>
-            </tr>
-            <tr>
-                <td>E-Mail:</td>
-                <td>@leerling.UserName</td>
-            </tr>
-            <tr>
-                <td>E-Mail Verzorger:</td>
-                <td>@leerling.MailVerzorger</td>
-            </tr>
-            <tr>
-                <td>Talentstroom:</td>
-                <td>@leerling.TalentstroomVak</td>
-            </tr>
-            <tr>
-                <td>Aangemeld:</td>
-                @if (leerling.Aangemeld)
-                {
-                    <td id="succesText">Aangemeld</td> 
-                }
-                else 
-                {
-                    <td id="dangerText">Niet aangemeld</td>
-                }
-            </tr>
-            <tr>
-                <td>Vakken:</td>
-                <td>
-                    @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
-                    {
-                        <span>@vak.Item1</span>
-                    }
-                </td>
-            </tr>
-        </table> 
-    </div>
-</div>
+@RenderPage("~/Leerling/_LeerlingDetails.cshtml")

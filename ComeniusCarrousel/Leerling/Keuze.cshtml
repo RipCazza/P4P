@@ -13,71 +13,102 @@
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
     int error = 0;
     
+    int[] keuzeVakken = new int[4];
+
+    // Keuze vakken worden naar -1 gezet voor error catching
+    for (int i = 0; i < keuzeVakken.Length; i++)
+    {
+        keuzeVakken[i] = -1;
+    }
+
     int keuzeVakCount = 0;
-    int[] keuzeVakken = new int[4] {-1, -1, -1, -1};
+    // Keuze vakken worden ingevuld
     foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
     {
+        if (keuzeVakCount >= keuzeVakken.Length)
+        {
+            break;
+        }
         keuzeVakken[keuzeVakCount] = vak.Item2;
         keuzeVakCount++;
     }
     
     if(IsPost && Request.Form["submitKeuze"] != null)
     {
-        string[] keuzeVakArr = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
+        // Alle nieuw gekozen keuzevakken.
+        string[] nieuweVakken = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
                                               Request.Form["keuzevak_2"], Request.Form["keuzevak_3"]};
-        int[] aantalMensenArr = new int[4] {Convert.ToInt16(Request.Form["aantalMensen_0"]), Convert.ToInt16(Request.Form["aantalMensen_1"]),
+        // Het aantal mensen voor elk keuzevak.
+        int[] aantalMensen = new int[4] {Convert.ToInt16(Request.Form["aantalMensen_0"]), Convert.ToInt16(Request.Form["aantalMensen_1"]),
                                             Convert.ToInt16(Request.Form["aantalMensen_2"]), Convert.ToInt16(Request.Form["aantalMensen_3"])};
 
         if(Validation.IsValid())
         {
-            var groups = keuzeVakArr.GroupBy(v => v);
+            var groups = nieuweVakken.GroupBy(v => v);
+
+            // Gooit een error als alle vakken leeg zijn of als er meerdere de zelfde vakken zijn.
             foreach(var group in groups)
             {
-                if (group.Key != "-" && group.Count() > 1 || group.Key == "-" && group.Count() == keuzeVakArr.Length)
+                if (group.Key != "-" && group.Count() > 1)
                 {
-                    Validation.AddFormError("Er is een fout ontstaan, probeer het nog eens.");
+                    Validation.AddFormError("Je kunt een vak maar één keer tegelijk op geven.");
+                    error = 1;
+                }
+                if (group.Key == "-" && group.Count() == nieuweVakken.Length)
+                {
+                    Validation.AddFormError("Geef minimaal 1 vak op.");
                     error = 1;
                 }
             }
-            foreach(int aantalMensen in aantalMensenArr)
+
+            // Gooit een error als het aantal mensen buiten de marges valt.
+            foreach(int aantal in aantalMensen)
             {
-                if (aantalMensen > 3 || aantalMensen < 1)
+                if (aantal > 3 || aantal < 1)
                 {
                     Validation.AddFormError("Er is een fout ontstaan, probeer het nog eens.");
                     error = 1;
                 }
             }
 
-            if (error != 1)
+            if (error != 1) // Check voor errors.
             {
                 for (int i = 0; i < keuzeVakken.Length; i++)
                 {
-                    if (keuzeVakken[i] != -1 && keuzeVakArr[i] != "-")
+                    // update keuzevak als er op bijde een waarde staat.
+                    if (keuzeVakken[i] != -1 && nieuweVakken[i] != "-")
                     {
-                        if (keuzeVakken[i] == Convert.ToInt16(keuzeVakArr[i])){}
+                        if (keuzeVakken[i] == Convert.ToInt16(nieuweVakken[i])){}// als beide keuzevakken het zelfde zijn, do niets.
+
+                        // als verderop het nieuwe keuzevak voorkomt, verwijder deze eerst.
                         else
                         {
                             for (int j = i + 1; j < keuzeVakken.Count(); j++)
                             {
-                                if (keuzeVakken[j] == Convert.ToInt16(keuzeVakArr[i]))
+                                if (keuzeVakken[j] == Convert.ToInt16(nieuweVakken[i]))
                                 {
-                                    KeuzeRepo.DeleteKeuze(id, Convert.ToInt16(keuzeVakArr[i]));
+                                    KeuzeRepo.DeleteKeuze(id, Convert.ToInt16(nieuweVakken[i]));
                                     keuzeVakken[j] = -1;
                                 }
                             }
                         }
-                        KeuzeRepo.UpdateKeuze(Convert.ToInt16(keuzeVakArr[i]), aantalMensenArr[i], keuzeVakken[i], id);
+                        KeuzeRepo.UpdateKeuze(Convert.ToInt16(nieuweVakken[i]), aantalMensen[i], keuzeVakken[i], id);
                     }
-                    else if (keuzeVakken[i] == -1 && keuzeVakArr[i] != "-")
+
+                    // Geef een nieuwe keuze op als er op het oude keuzevak geen waarde staat.
+                    else if (keuzeVakken[i] == -1 && nieuweVakken[i] != "-")
                     {
-                        KeuzeRepo.InsertKeuze(id, Convert.ToInt16(keuzeVakArr[i]), aantalMensenArr[i]);
+                        KeuzeRepo.InsertKeuze(id, Convert.ToInt16(nieuweVakken[i]), aantalMensen[i]);
                     }
-                    else if (keuzeVakken[i] != -1 && keuzeVakArr[i] == "-")
+
+                    // Delete het oude keuzevak als er op het nieuwe keuzevak geen waarde staat.
+                    else if (keuzeVakken[i] != -1 && nieuweVakken[i] == "-")
                     {
                         KeuzeRepo.DeleteKeuze(id, keuzeVakken[i]);
                     }
                 }
                 
+                // Zet de leerling op aangemeld.
                 LeerlingRepo.UpdateAangemeld("True", id);
                 Response.Redirect("~/");
             }
@@ -88,14 +119,14 @@
 <h4>Vul hier uw keuzes in.</h4>
 @Html.ValidationSummary()
 <form method="post" class="form-inline">
-    @for(int i = 0; i < 4; i++)
+    @for(int i = 0; i < keuzeVakken.Length; i++) // Geeft het aantal keuzes
     {
         <p>
             <select name="keuzevak_@i">
                 <option value="-"></option>
-
-                @foreach(VakRepo.Vak vak in vakken)
+                @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
                 {
+                    // Als het vak overeen komt met het keuzevak, zet deze als default.
                     if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
                     {
                         <option value="@vak.VakId" selected>@vak.VakNaam</option>

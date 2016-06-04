@@ -32,7 +32,6 @@
         {
             if(WebSecurity.Login(userName, password, rememberMe))
             {
-                //Redirect to new page
                 Context.RedirectLocal("~/");
                 return;
             }
