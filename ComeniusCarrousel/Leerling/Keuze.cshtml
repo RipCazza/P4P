@@ -10,7 +10,7 @@
     int id = WebSecurity.CurrentUserId;
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 
-    List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau);
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau, leerling.TalentstroomVak); // Haalt alle vakken van het niveau van de leerling, minus zijn talenstroom vak.
     int error = 0;
     
     int[] keuzeVakken = new int[4];
