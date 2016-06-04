@@ -1,28 +1,28 @@
 ﻿@{
-  Layout = "~/_Layout.cshtml";
-  var name = "";
-  var Id = "";
-  var row = "";
-  var db = Database.Open("authenticationData");
-  if(!Request.QueryString["UserId"].IsEmpty() && Request.QueryString["UserId"].IsInt()){
-            Id = Request.QueryString["UserId"];
-            var selectedData = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId=@0");
-            var row = db.QuerySingle(selectedData, name);
-            if(row != null) {
-                name = selectedData;
-            }
-            else{
-                Validation.AddFormError("No movie was found for that ID.");
-            }
-        }
-        else{
-            Validation.AddFormError("No movie was found for that ID.");
-        }
+    Layout = "~/_Layout.cshtml";
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+    Tuple<int, string> decaan;
+    var email = "";
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    decaan = Repository.GetDecaan(id);
+    if (decaan == null)
+    {
+        Validation.AddFormError("Deze decaan bestaat niet.");
+    }
+    else
+    {
+        email = decaan.Item2;
     }
  }
-<html>
-    <body></body>
-    <p><span>Name:</span>
-    <span>@name</span></p>
-    </body>
-</html>
+
+@Html.ValidationSummary()
+@if (decaan != null)
+{
+<p>
+    <span>Email:</span>
+    <span>@email</span>
+</p>
+}

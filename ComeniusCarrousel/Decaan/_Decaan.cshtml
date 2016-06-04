@@ -3,25 +3,36 @@
    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(); 
 }
 
-@foreach (LeerlingRepo.Leerling leerling in leerlingen)
+@if (User.IsInRole("Admin"))
 {
-    <p>
-        <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">
-            <span class="glyphicon glyphicon-user"></span> 
-            <span>@leerling.Voornaam</span>
-            <span>@leerling.Achternaam</span>
-        </a>
-        <span>@leerling.Leerlingnummer</span>
-        <span>@leerling.Niveau</span>
-        <span>Vakken:</span>
-        @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
-        {
-            <span>@vak.Item1</span>
-        }
-    </p>
-
-
-    <a href="~/Decaan/Mail/MailOverzicht.cshtml" class="btn btn-default" role="button">
-        <span class="glyphicon glyphicon-pencil"></span>&nbsp; Mail Overzicht
+    <a href="~/Admin/Decaan/DecaanOverzicht" class="btn btn-default" role="button">
+        <span class="glyphicon glyphicon-user"></span> Decaan overzicht
     </a>
 }
+<a href="~/Decaan/Mail/MailOverzicht.cshtml" class="btn btn-default" role="button">
+    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Mail Overzicht
+</a>
+
+<table class="table">
+    @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+    {
+    
+        <tr>
+            <td>@leerling.Voornaam</td>
+            <td>@leerling.Achternaam</td>
+            <td>@leerling.Leerlingnummer</td>
+            <td>@leerling.Niveau</td>
+            <td>
+                <span>Vakken:</span>
+                @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
+                {
+                    <span>@vak.Item1</span>
+                }
+            </td>
+            <td>
+                <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId" class="btn btn-default" role="button">
+                    <span class="glyphicon glyphicon-user"></span> Meer
+                </a>
+            </td>
+        </tr>
+    }</table>

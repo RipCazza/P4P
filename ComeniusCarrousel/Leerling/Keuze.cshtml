@@ -30,47 +30,6 @@
 
         if(Validation.IsValid())
         {
-            /*var db = Database.Open(App.DataBase);
-            var deleteCommand = "DELETE FROM Keuze WHERE UserId = @0";
-            var insertCommand = "INSERT INTO Keuze (UserId, VakId, AantalPersonen) VALUES(@0,@1,@2)";
-            var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
-            db.Execute(deleteCommand, id);
-
-            var groups = keuzeVakArr.GroupBy(v => v);
-            foreach(var group in groups)
-            {
-                if (group.Key != "-" && group.Count() > 1 || group.Key == "-" && group.Count() == keuzeVakArr.Length)
-                {
-                    error = "Er is een fout ontstaan, probeer het nog eens.";
-                    db.Execute(deleteCommand, id);
-                    db.Execute(updateCommand, "False", id);
-                    db.Close();
-                }
-            }
-            if (error != "Er is een fout ontstaan, probeer het nog eens.")
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    if (keuzeVakArr[i] != "-")
-                    {
-                        if (!(aantalMensenArr[i] > 3) && !(aantalMensenArr[i] < 1))
-                        {
-                            db.Execute(insertCommand, id, keuzeVakArr[i], aantalMensenArr[i]);
-                        }
-                        else
-                        {
-                            error = "Er is een fout ontstaan, probeer het nog eens.";
-                            db.Execute(deleteCommand, id);
-                            db.Execute(updateCommand, "False", id);
-                            db.Close();
-                            break;
-                        }
-                    }
-                }
-                db.Execute(updateCommand, "True", id);
-                db.Close();
-                Response.Redirect("~/");
-            }*/
             var groups = keuzeVakArr.GroupBy(v => v);
             foreach(var group in groups)
             {

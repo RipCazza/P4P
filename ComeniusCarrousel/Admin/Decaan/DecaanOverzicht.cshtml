@@ -1,6 +1,11 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "DecaanOverzicht";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
     List<Tuple<int, string>> decanen = Repository.GetDecanen();
 }
 
