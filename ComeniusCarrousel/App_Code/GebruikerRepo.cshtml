@@ -17,7 +17,7 @@
             this.achternaam = achternaam;
         }
 
-        public static Gebruiker makeGebruiker(int id)
+        public static Gebruiker GetGebruiker(int id)
         {
             var db = Database.Open(App.DataBase);
             var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
