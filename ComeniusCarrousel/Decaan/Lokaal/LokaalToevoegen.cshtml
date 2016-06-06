@@ -20,7 +20,7 @@
         if(Validation.IsValid())
         {
             LokaalRepo.MakeLokaal(lokaalNaam, capaciteit);
-            Response.Redirect("~/Admin/Tools/EditRobot?Id=" + robotID);
+            Response.Redirect(Request.Url.AbsoluteUri);
         }
     }
 }
