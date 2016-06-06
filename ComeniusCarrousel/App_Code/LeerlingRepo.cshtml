@@ -70,7 +70,10 @@
         {
             get{return mailVerzorger;} 
             set{
-                Repository.CRUD.doSimpleIdUpdate(table, "MailVerzorger", value, idName, userId);
+                var db = Database.Open(App.DataBase);
+                var updateCommand = "UPDATE Leerling SET MailVerzorger = LOWER(@0) where UserId = @1";
+                db.Execute(updateCommand, value, userId);
+                db.Close();
             }
         }
         public string TalentstroomVak
@@ -84,7 +87,10 @@
         {
             get{return aangemeld;} 
             set{
-                Repository.CRUD.doSimpleIdUpdate(table, "Aangemeld", Convert.ToString(value), idName, userId);
+                var db = Database.Open(App.DataBase);
+                var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
+                db.Execute(updateCommand, Convert.ToString(value), userId);
+                db.Close();
             }
         }
     }
@@ -129,19 +135,4 @@
         db.Close();
         return null;
     }
-    /*public static void UpdateAangemeld(string aangemeld, int id)
-    {
-        var db = Database.Open(App.DataBase);
-        var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
-        db.Execute(updateCommand, aangemeld, id);
-        db.Close();
-    }
-
-    public static void UpdateMailVerzorger(string mailVerzorger, int id)
-    {
-        var db = Database.Open(App.DataBase);
-        var updateCommand = "UPDATE Leerling SET LCASE(MailVerzorger) = @0 where UserId = @1";
-        db.Execute(updateCommand, mailVerzorger, id);
-        db.Close();
-    }*/
 }

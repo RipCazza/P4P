@@ -111,8 +111,8 @@
                 }
                 
                 // Zet de leerling op aangemeld.
-                leerling.Aangemeld(true);
-                leerling.MailVerzorger(mailVerzorger);
+                leerling.Aangemeld = true;
+                leerling.MailVerzorger = mailVerzorger;
                 Response.Redirect("~/");
             }
         }
