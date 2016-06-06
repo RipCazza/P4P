@@ -49,6 +49,37 @@
                 vakken.Add(new Vak(row.VakId, row.VakNaam, row.Niveau));
             }
         }
+        db.Close();
         return vakken;
+    }
+
+    public static List<Vak> GetVak(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Vak WHERE VakId = @0", id);
+        if(data != null)
+        {
+            Vak vak = new Vak(id, data.VakNaam, data.Niveau);
+            db.Close();
+            return vak;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static void MakeVak(string vakNaam, string niveau)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Vak (VakNaam, Niveau) VALUES(@0,@1)";
+        db.Execute(insertCommand, vakNaam, niveau);
+        db.Close();
+    }
+
+    public static void DeleteVak(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Vak WHERE VakId = @0";
+        db.Execute(deleteCommand, id);
+        db.Close();
     }
 }

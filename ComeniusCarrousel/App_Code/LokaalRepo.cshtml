@@ -1,0 +1,66 @@
+﻿@functions{
+    public class Lokaal
+    {
+        private const string table = "Lokaal";
+        private const string idName = "LokaalId";
+
+        protected int lokaalId;
+        protected string lokaalNaam;
+        protected int capaciteit;
+
+        public Lokaal(int lokaalId, string lokaalNaam, int capaciteit)
+        {
+            this.lokaalId = lokaalId;
+            this.lokaalNaam = lokaalNaam;
+            this.capaciteit = capaciteit;
+        }
+    }
+
+    public static List<Lokaal> GetLokalen()
+    {
+        List<Leerling> lokalen = new List<Lokaal>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Lokaal");
+        if(data != null)
+        {
+            foreach (var row in data)
+            {
+                lokalen.Add(new Lokaal(row.LokaalId, row.LokaalNaam, row.Capaciteit));
+            }
+            db.Close();
+            return lokalen;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static List<Lokaal> GetLokaal(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Lokaal WHERE LokaalId = @0", id);
+        if(data != null)
+        {
+            Lokaal lokaal = new Lokaal(id, data.LokaalNaam, data.Capaciteit);
+            db.Close();
+            return lokaal;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static void MakeLokaal(string lokaalNaam, int capaciteit)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Lokaal (LokaalNaam, Capaciteit) VALUES(@0,@1)";
+        db.Execute(insertCommand, lokaalNaam, capaciteit);
+        db.Close();
+    }
+
+    public static void DeleteLokaal(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Lokaal WHERE LokaalId = @0";
+        db.Execute(deleteCommand, id);
+        db.Close();
+    }
+}

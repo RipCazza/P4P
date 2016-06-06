@@ -1,15 +1,37 @@
 ﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Lokaal overzicht";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
+    if (IsPost && Request.Form["submitKeuze"] != null)
+    {
+        string lokaalNaam = "";
+        int capaciteit = -1;
+        Validation.RequireField("lokaalNaam", "Geef een lokaalnaam op");
+        Validation.RequireField("capaciteit", "Geef de capaciteit van het lokaal aan");
+
+        if(Request.Form["lokaalNaam"] != null) {string lokaalNaam = Request.Form["lokaalNaam"];}
+        if(Request.Form["capaciteit"] != null) {int capaciteit = Convert.ToInt16(Request.Form["capaciteit"]);}
     
+        if(Validation.IsValid())
+        {
+            LokaalRepo.MakeLokaal(lokaalNaam, capaciteit);
+            Response.Redirect("~/Admin/Tools/EditRobot?Id=" + robotID);
+        }
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<form id="submitKeuze" method="post" enctype="multipart/form-data">
+    <fieldset>
+        @Html.ValidationSummary()
+        <input type="text" name="lokaalNaam">
+        <input type="number" name="capaciteit" min="1" value="30">
+        <button type="submit" name="lokaalToevoegen" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Continue
+        </button>
+    </fieldset>
+</form>

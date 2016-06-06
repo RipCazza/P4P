@@ -44,7 +44,7 @@
             var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
             if(user == null)
             {
-                db.Execute("INSERT INTO UserProfile (UserName) VALUES (@0)", userName);
+                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
 
                 try
                 {

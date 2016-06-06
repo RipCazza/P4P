@@ -41,6 +41,8 @@
         // Het aantal mensen voor elk keuzevak.
         int[] aantalMensen = new int[4] {Convert.ToInt16(Request.Form["aantalMensen_0"]), Convert.ToInt16(Request.Form["aantalMensen_1"]),
                                             Convert.ToInt16(Request.Form["aantalMensen_2"]), Convert.ToInt16(Request.Form["aantalMensen_3"])};
+        // Mail van de verzorger/ouder.
+        string mailVerzorger = Request.Form["mailVerzorger"];
 
         if(Validation.IsValid())
         {
@@ -110,6 +112,7 @@
                 
                 // Zet de leerling op aangemeld.
                 LeerlingRepo.UpdateAangemeld("True", id);
+                LeerlingRepo.UpdateMailVerzorger(mailVerzorger, id);
                 Response.Redirect("~/");
             }
         }
@@ -119,27 +122,38 @@
 <h4>Vul hier uw keuzes in.</h4>
 @Html.ValidationSummary()
 <form method="post" class="form-inline">
-    @for(int i = 0; i < keuzeVakken.Length; i++) // Geeft het aantal keuzes
-    {
-        <p>
-            <select name="keuzevak_@i">
-                <option value="-"></option>
-                @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
-                {
-                    // Als het vak overeen komt met het keuzevak, zet deze als default.
-                    if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
-                    {
-                        <option value="@vak.VakId" selected>@vak.VakNaam</option>
-                    }
-                    else
-                    {
-                        <option value="@vak.VakId">@vak.VakNaam</option>
-                    }
-                }
-            </select>
-            <input type="number" name="aantalMensen_@i" min="1" max="3" value="1">
-        </p>
-    }
+    <table class="table">
+        <tr>
+            <td>Vak</td>
+            <td>Aantal mensen</td>
+        </tr>
+        @for(int i = 0; i < keuzeVakken.Length; i++) // Geeft het aantal keuzes
+        {
+            <tr>
+                <td>
+                    <select name="keuzevak_@i">
+                        <option value="-"></option>
+                        @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
+                        {
+                            // Als het vak overeen komt met het keuzevak, zet deze als default.
+                            if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
+                            {
+                                <option value="@vak.VakId" selected>@vak.VakNaam</option>
+                            }
+                            else
+                            {
+                                <option value="@vak.VakId">@vak.VakNaam</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="aantalMensen_@i" min="1" max="3" value="1">
+                </td>
+            </tr>
+        }
+    </table>
+    <input type="text" name="mailVerzorger" placeholder="voorbeeld@provider.frl" value="@leerling.MailVerzorger"> Mail van je ouder/verzorger
     <button type="submit" id="submit" name="submitKeuze" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span> Submit
     </button>

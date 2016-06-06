@@ -1,15 +1,30 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Lokaal overzicht";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
+    List<LokaalRepo.Lokaal> lokalen = LokaalRepo.GetLokalen();
 }
 
-<!DOCTYPE html>
+<a class="btn btn-default" href="~/Decaan/Lokaal/LokaalToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuw lokaal aanmaken
+</a>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<table class="table">
+    @foreach (List<LokaalRepo.Lokaal> lokaal in lokalen)
+    {
+        <tr>
+            <td>
+                <a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.lokaalId" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
+            <td>@lokaal.lokaalNaam</td>
+            <td>@lokaal.Capacity</td>
+        </tr>
+    }
+</table>
