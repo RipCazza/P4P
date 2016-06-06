@@ -129,7 +129,7 @@
         db.Close();
         return null;
     }
-    public static void UpdateAangemeld(string aangemeld, int id)
+    /*public static void UpdateAangemeld(string aangemeld, int id)
     {
         var db = Database.Open(App.DataBase);
         var updateCommand = "UPDATE Leerling SET aangemeld = @0 where UserId = @1";
@@ -143,5 +143,5 @@
         var updateCommand = "UPDATE Leerling SET LCASE(MailVerzorger) = @0 where UserId = @1";
         db.Execute(updateCommand, mailVerzorger, id);
         db.Close();
-    }
+    }*/
 }

@@ -15,16 +15,16 @@
 </a>
 
 <table class="table">
-    @foreach (List<LokaalRepo.Lokaal> lokaal in lokalen)
+    @foreach (LokaalRepo.Lokaal lokaal in lokalen)
     {
         <tr>
             <td>
-                <a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.lokaalId" class="btn btn-default">
+                <a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.LokaalId" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
                 </a>
             </td>
-            <td>@lokaal.lokaalNaam</td>
-            <td>@lokaal.Capacity</td>
+            <td>@lokaal.LokaalNaam</td>
+            <td>@lokaal.Capaciteit</td>
         </tr>
     }
 </table>

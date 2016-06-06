@@ -4,9 +4,9 @@
         private const string table = "Lokaal";
         private const string idName = "LokaalId";
 
-        protected int lokaalId;
-        protected string lokaalNaam;
-        protected int capaciteit;
+        private int lokaalId;
+        private string lokaalNaam;
+        private int capaciteit;
 
         public Lokaal(int lokaalId, string lokaalNaam, int capaciteit)
         {
@@ -14,11 +14,30 @@
             this.lokaalNaam = lokaalNaam;
             this.capaciteit = capaciteit;
         }
+
+        public int LokaalId
+        {
+            get{return lokaalId;}
+        }
+        public string LokaalNaam
+        {
+            get{return lokaalNaam;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "LokaalNaam", value, idName, lokaalId);
+            }
+        }
+        public int Capaciteit
+        {
+            get{return capaciteit;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Capaciteit", Convert.ToString(value), idName, lokaalId);
+            }
+        }
     }
 
     public static List<Lokaal> GetLokalen()
     {
-        List<Leerling> lokalen = new List<Lokaal>();
+        List<Lokaal> lokalen = new List<Lokaal>();
         var db = Database.Open(App.DataBase);
         var data = db.Query("SELECT * FROM Lokaal");
         if(data != null)
@@ -34,7 +53,7 @@
         return null;
     }
 
-    public static List<Lokaal> GetLokaal(int id)
+    public static Lokaal GetLokaal(int id)
     {
         var db = Database.Open(App.DataBase);
         var data = db.QuerySingle("SELECT * FROM Lokaal WHERE LokaalId = @0", id);

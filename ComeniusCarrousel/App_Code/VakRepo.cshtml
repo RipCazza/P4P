@@ -53,7 +53,7 @@
         return vakken;
     }
 
-    public static List<Vak> GetVak(int id)
+    public static Vak GetVak(int id)
     {
         var db = Database.Open(App.DataBase);
         var data = db.QuerySingle("SELECT * FROM Vak WHERE VakId = @0", id);
