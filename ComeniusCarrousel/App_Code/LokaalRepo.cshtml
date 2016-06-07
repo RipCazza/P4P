@@ -79,7 +79,12 @@
     {
         var db = Database.Open(App.DataBase);
         var deleteCommand = "DELETE FROM Lokaal WHERE LokaalId = @0";
+        var voorlichtingData = db.Query("SELECT VoorlichtingId FROM Voorlichting Where LokaalId = @0", id);
         db.Execute(deleteCommand, id);
+        foreach (var row in voorlichtingData)
+        {
+            VoorlichtingRepo.DeleteVoorlichting(row.VoorlichtingId);
+        }
         db.Close();
     }
 }

@@ -15,7 +15,11 @@
         Validation.AddFormError("Dit vak bestaat niet.");
     }
 
-    // IMPLEMENT SOMETHING HERE!
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        VakRepo.DeleteVak(id);
+        Response.Redirect("~/Decaan/Vak/VakOverzicht");
+    }
 }
 
 @Html.ValidationSummary()
