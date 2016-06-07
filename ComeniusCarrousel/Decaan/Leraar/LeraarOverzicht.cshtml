@@ -1,15 +1,29 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Decaan overzicht";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
+    List<LeraarRepo.Leraar> leraren = LeraarRepo.GetLeraren(); // Geeft het ID en username van alle decanen mee
 }
 
-<!DOCTYPE html>
+<a class="btn btn-default" href="~/Decaan/Leraar/LeraarToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuwe leraar aanmaken
+</a>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<table class="table">
+    @foreach (LeraarRepo.Leraar leraar in leraren)
+    {
+        <tr>
+            <td>
+                <a href="~/Admin/Decaan/DecaanWijzigen?id=@leraar.UserId" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
+            <td>@leraar.Voornaam</td> <td>@leraar.Achternaam</td>
+        </tr>
+    }
+</table>

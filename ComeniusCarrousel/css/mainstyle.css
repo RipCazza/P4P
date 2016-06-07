@@ -85,13 +85,21 @@ a:focus {
     color: #969696;
     background-color: #eeeeee;
     background-image: none;
-    border: 0px solid #ccc;
+    border: none;
     border-radius: 0px;
-    -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 0px 0px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+.form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: #e7e6e6;
 }
 
 #content {
@@ -114,6 +122,19 @@ a:focus {
     }
 }
 
+.btn:hover, .btn:focus {
+    border: 0;
+    outline: none;
+    color: #fff;
+}
+
+.btn:active, .btn:active:focus {
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    color: #fff;
+}
+
 .btn {
     border-radius: 0px;
     font-weight: normal;
@@ -123,6 +144,38 @@ a:focus {
     background-image: none;
     background-color: #0085BC;
     border-width: 0px;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-default:hover, .btn-default:focus {
+    background-color: #00a0e2;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-default:active, .btn-default:active:focus {
+    background-color: #00a0e2;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-success {
+    background-image: none;
+    background-color: #5cb85c;
+    border-width: 0px;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-success:hover, .btn-success:focus {
+    background-color: #62ca62;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-success:active, .btn-succes:active:focus {
+    background-color: #62ca62;
     color: #fff;
     text-shadow: none;
 }
