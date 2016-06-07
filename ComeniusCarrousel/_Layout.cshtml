@@ -21,21 +21,21 @@
                 </div>
                 <div id="floatRight">
                     <a href="~/" style="color: #fff;">
-                        <span class="glyphicon glyphicon-home" style="color:#fff"></span> Main
+                        <span class="glyphicon glyphicon-home" style="color:#fff"></span>&nbsp; Main&nbsp;
                     </a>
                     @if(WebSecurity.IsAuthenticated)
                     {
                         <a href="~/About" style="color: #fff;">
-                            <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span>&nbsp; About
+                            <span class="glyphicon glyphicon-question-sign" style="color:#fff"></span>&nbsp; About&nbsp;
                         </a>
                         <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                            <span class="glyphicon glyphicon-log-out" style="color:#fff"></span>&nbsp; Log out
+                            <span class="glyphicon glyphicon-log-out" style="color:#fff"></span>&nbsp; Log out&nbsp;
                         </a>
 }
 else
 {
                         <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
-                            <span class="glyphicon glyphicon-log-in" style="color:#fff"></span>&nbsp; Log in
+                            <span class="glyphicon glyphicon-log-in" style="color:#fff"></span>&nbsp; Log in&nbsp;
                         </a>
                     }
                 </div>
