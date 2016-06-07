@@ -109,14 +109,14 @@ a:focus {
     border-style: solid;
     border-width: 0px 0px 12px 0px;
     border-color: #C7D41B;
-    width: 800px;
+    width: 1000px;
     margin-top: 4%;
     text-align: justify;
     padding-bottom: 15px;
     padding-top: 15px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
     #content {
         width: 100%;
     }
@@ -232,6 +232,9 @@ a:focus {
         word-wrap: break-word;
     }
 
+.dropdown-menu {
+    font-size: 16px;
+}
 
 /*.head { background-color: #969696; font-weight: bold; color: #FFF; }
 .grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }

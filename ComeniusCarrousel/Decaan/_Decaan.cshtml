@@ -4,40 +4,41 @@
    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(); 
 }
 
-@if (User.IsInRole("Admin"))
-{
-    <a href="~/Admin/Decaan/DecaanOverzicht" class="btn btn-default" role="button">
-        <span class="glyphicon glyphicon-user"></span> Decaan overzicht
-    </a>
-}
-
-<a href="~/Decaan/Lokaal/LokaalOverzicht.cshtml" class="btn btn-default" role="button">
-    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Lokaal Overzicht
-</a>
-
-<a href="~/Decaan/Vak/VakOverzicht.cshtml" class="btn btn-default" role="button">
-    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Vak Overzicht
-</a>
-
-<a href="~/Decaan/Leraar/LeraarOverzicht.cshtml" class="btn btn-default" role="button">
-    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Leraar Overzicht
-</a>
-<a href="~/Decaan/Mail/MailOverzicht.cshtml" class="btn btn-default" role="button">
-    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Mail Overzicht
-</a>
-
+<ul class="nav nav-tabs">
+    <li class="active"><a href="~/">Home</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a href="~/Admin/Decaan/DecaanOverzicht">Decaanoverzicht</a></li>
+            }
+            <li><a href="~/Decaan/Lokaal/LokaalOverzicht.cshtml">Lokaaloverzicht</a></li>
+            <li><a href="~/Decaan/Vak/VakOverzicht.cshtml">Vakkenoverzicht</a></li>
+            <li><a href="~/Decaan/Leraar/LeraarOverzicht.cshtml">Lerarenoverzicht</a></li>
+            <li><a href="~/Decaan/Mail/MailOverzicht.cshtml">E-mail overzicht</a></li>
+        </ul>
+    </li>
+</ul>
+</br>
+Leerlingenoverzicht
+</br>
+</br>
 <table class="table">
+    <thead>
     <tr>
-        <td>Voornaam</td>
-        <td>Achternaam</td>
-        <td>Leerlingnummer</td>
-        <td>Niveau</td>
-        <td>Keuze vakken</td>
-        <td>Details</td>
+        <th>Voornaam</td>
+        <th>Achternaam</td>
+        <th>Leerlingnummer</td>
+        <th>Niveau</td>
+        <th>Keuze vakken</td>
+        <th>Details</td>
     </tr>
-    @foreach (LeerlingRepo.Leerling leerling in leerlingen)
-    {
-    
+    </thead>
+    <tbody>
+            @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+            {
+        
         <tr>
             <td>@leerling.Voornaam</td>
             <td>@leerling.Achternaam</td>
@@ -55,4 +56,6 @@
                 </a>
             </td>
         </tr>
-    }</table>
+    }
+    </tbody>
+</table>
