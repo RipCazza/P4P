@@ -41,15 +41,19 @@
             db.Execute(updateCommand, onderwerp, inhoud, mailId);
             Response.Redirect("~/Decaan/Mail/Mailoverzicht.cshtml");
         }
+
+        if(IsPost && !Request["buttonDelete"].IsEmpty()){
+            var db = Database.Open("ComeniusCarrousel");
+            var deleteCommand = "DELETE FROM Mail WHERE MailId = @2";
+            db.Execute(deleteCommand, mailId);
+            Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
+        }
     }
 }
 
 <body>
-  <h1>Edit a Movie</h1>
     @Html.ValidationSummary()
   <form method="post">
-    <fieldset>
-      <legend>Movie Information</legend>
 
       <p><label for="onderwerp">Onderwerp:</label>
          <input type="text" name="onderwerp" value="@onderwerp" /></p>
@@ -59,8 +63,8 @@
 
       <input type="hidden" name="mailid" value="@mailId" />
 
-      <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
-    </fieldset>
+      <p><input type="submit" name="buttonSubmit" value="Mail Veranderingen opslaan" /></p>
+      <p><input type="submit" name="buttonDelete" value="Mail Verwijderen" /></p>
   </form>
   <p><a href="~/Decaan/Mail/MailOverzicht.cshtml">Terug naar MailOverzicht</a></p>
 </body>
