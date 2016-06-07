@@ -1,15 +1,33 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Vak wijzigen";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    VakRepo.Vak vak = VakRepo.GetVak(id);
+
+    if (vak == null)
+    {
+        Validation.AddFormError("Dit vak bestaat niet.");
+    }
+
+    // IMPLEMENT SOMETHING HERE!
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+@Html.ValidationSummary()
+@if (lokaal != null)
+{
+    <p>
+        <span>Lokaal:</span>
+        <span>@vak.VakNaam</span>
+    </p>
+    <form method="post" class="form-inline">
+        <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Remove
+        </button>
+    </form>
+}
