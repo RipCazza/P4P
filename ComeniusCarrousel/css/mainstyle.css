@@ -166,7 +166,7 @@ a:focus {
     background-color: #0085BC;
 }
 
-#table-nostripes > thead > tr > th, #kiekeboe > tbody > tr > th, #kiekeboe > tfoot > tr > th, #kiekeboe > thead > tr > td, #kiekeboe > tbody > tr > td, #kiekeboe > tfoot > tr > td {
+#table-nostripes > thead > tr > th, #table-nostripes > tbody > tr > th, #table-nostripes > tfoot > tr > th, #table-nostripes > thead > tr > td, #table-nostripes > tbody > tr > td, #table-nostripes > tfoot > tr > td {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
