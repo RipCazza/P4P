@@ -122,7 +122,7 @@
 <h4>Vul hier uw keuzes in.</h4>
 @Html.ValidationSummary()
 <form method="post" class="form-inline">
-    <table class="table">
+    <table class="table" id="table-nostripes">
         <tr>
             <td>Vak</td>
             <td>Aantal mensen</td>
@@ -131,7 +131,7 @@
         {
             <tr>
                 <td>
-                    <select name="keuzevak_@i">
+                    <select name="keuzevak_@i" class="form-control">
                         <option value="-"></option>
                         @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
                         {
@@ -148,12 +148,12 @@
                     </select>
                 </td>
                 <td>
-                    <input type="number" name="aantalMensen_@i" min="1" max="3" value="1">
+                    <input type="number" name="aantalMensen_@i" min="1" max="3" value="1" class="form-control">
                 </td>
             </tr>
         }
     </table>
-    <input type="text" name="mailVerzorger" placeholder="voorbeeld@provider.frl" value="@leerling.MailVerzorger"> <span>Mail van je ouder/verzorger</span> <br>
+    <input type="text" name="mailVerzorger" placeholder="voorbeeld@mail.frl" value="@leerling.MailVerzorger" class="form-control"> <span>Mail van je ouder/verzorger</span> <br>
     <button type="submit" id="submit" name="submitKeuze" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span> Submit
     </button>
