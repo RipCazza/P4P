@@ -1,15 +1,37 @@
 ﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Vak overzicht";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    if (IsPost && Request.Form["vakToevoegen"] != null)
+    {
+        string vakNaam = "";
+        string niveau = "";
+        Validation.RequireField("vakNaam", "Geef een vaknaam op");
+        Validation.RequireField("niveau", "Geef het niveau aan");
+
+        if(Request.Form["vakNaam"] != null) {lokaalNaam = Request.Form["vakNaam"];}
+        if(Request.Form["niveau"] != "") {capaciteit = Request.Form["niveau"];}
     
+        if(Validation.IsValid())
+        {
+            VakRepo.MakeVak(vakNaam, niveau);
+        }
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<form method="post" class="form-inline">
+    @Html.ValidationSummary()
+    <input type="text" name="vakNaam">
+    <select name="niveau" class="form-control">
+        <option value="HAVO">HAVO</option>
+        <option value="VWO">VWO</option>
+    </select>
+    <button type="submit" id="submit" name="vakToevoegen" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span> Verzenden
+    </button>
+</form>
