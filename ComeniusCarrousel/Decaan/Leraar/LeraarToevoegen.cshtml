@@ -1,15 +1,123 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Leraar ";
+    var userName = "";
+    var voornaam = "";
+    var achternaam= "";
+    var password = "";
+    var confirmPassword = "";
+    var vak = "";
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+
+    Validation.RequireField("userName", "U moet een gebruiker invullen.");
+    Validation.RequireField("voornaam", "U moet een voornaam invullen.");
+    Validation.RequireField("achternaam", "U moet een achternaam invullen.");
+    Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
+    Validation.RequireField("confirmPassword", "Bevestegings wachtwoord mag niet leeg zijn.");
+
+    Validation.Add("confirmPassword",
+        Validator.EqualsTo("password", "Bevestegings wachtwoord komt niet overeen met het wachtwoord."));
+    Validation.Add("password",
+        Validator.StringLength(
+            maxLength: Int32.MaxValue,
+            minLength: 6,
+            errorMessage: "Wachtwoord moet minstens 6 tekens bevatten"));
+    Validation.Add("userName",
+        Validator.StringLength(
+            maxLength: 400,
+            errorMessage: "gebruiker kan niet meer dan 400 tekens bevatten"));
+
+    if(IsPost)
+    {
+        AntiForgery.Validate();
+        userName = Request.Form["userName"];
+        password = Request.Form["password"];
+        confirmPassword = Request.Form["confirmPassword"];
+
+        voornaam = Request.Form["voornaam"];
+        achternaam = Request.Form["achternaam"];
+        if (Request.Form["vak"] != "-")
+        {
+            vak = Request.Form["vak"];
+        }
+        
+        if(Validation.IsValid())
+        {
+            var db = Database.Open(App.AuthDataBase);
+            var db2 = Database.Open(App.DataBase);
+            var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+            if(user == null)
+            {
+                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
+                
+                try
+                {
+                    var token = WebSecurity.CreateAccount(userName, password, false);
+                    var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+                    db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
+                    db2.Execute("INSERT INTO Leraar (VoorlichtingVak, UserId) VALUES (@0,@1)", vak, dataId.UserId);
+                    Roles.AddUserToRole(userName, "Leraar");
+                    db.Close();
+                    db2.Close();
+                    Response.Redirect("~/Decaan/Leraar/LeraarOverzicht");
+                }
+                catch(System.Web.Security.MembershipCreateUserException e)
+                {
+                    db.Close();
+                    db2.Close();
+                    ModelState.AddFormError(e.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("Gebruiker bestaat al");
+            }
+            db.Close();
+        }
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<div class="col-md-12">
+    <form method="post">
+        @AntiForgery.GetHtml()
+        @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
+        <fieldset>
+            <h2>Register a new account</h2>
+            <div class="form-group">
+                <label for="userName">Email adres</label>
+                <input type="text" id="userName" name="userName" value="@userName" class="form-control">
+                @Html.ValidationMessage("userName")
+            </div>
+            <div class="form-group">
+                <label for="userName">Voornaam</label>
+                <input type="text" id="voornaam" name="voornaam" value="@voornaam" class="form-control">
+                @Html.ValidationMessage("voornaam")
+            </div>
+            <div class="form-group">
+                <label for="userName">Achternaam</label>
+                <input type="text" id="achternaam" name="achternaam" value="@achternaam" class="form-control">
+                @Html.ValidationMessage("achternaam")
+            </div>
+            <div class="form-group">
+                <label for="password">Wachtwoord</label>
+                <input type="password" id="password" name="password" value="@password" class="form-control">
+                @Html.ValidationMessage("password")
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Bevestig wachtwoord</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
+                @Html.ValidationMessage("confirmPassword")
+            </div>
+            <select name="vak">
+                <option value="-"></option>
+                @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
+                {
+                    <option value="@v.VakNaam">@v.VakNaam</option>
+                }
+            </select>
+            <div class="from-group">
+                <button type="submit" class="btn btn-default">Registreer</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
