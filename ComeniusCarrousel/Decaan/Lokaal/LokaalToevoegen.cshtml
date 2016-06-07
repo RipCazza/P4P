@@ -2,7 +2,7 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Lokaal overzicht";
 
-    if (!User.IsInRole("Admin"))
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {
         Response.Redirect("~/");
     }

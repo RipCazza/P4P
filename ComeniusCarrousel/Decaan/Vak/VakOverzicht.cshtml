@@ -1,15 +1,30 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Lokaal overzicht";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
 }
 
-<!DOCTYPE html>
+<a class="btn btn-default" href="~/Decaan/Vak/VakToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuw vak aanmaken
+</a>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<table class="table">
+    @foreach (VakRepo.Vak vak in vakken)
+    {
+        <tr>
+            <td>
+                <a href="~/Decaan/Vak/VakWijzigen?id=@vak.VakId" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
+            <td>@vak.VakNaam</td>
+            <td>@vak.Niveau</td>
+        </tr>
+    }
+</table>

@@ -4,6 +4,11 @@
     Page.Description = "Add an account";
     Page.ShowTitle = "false";
 
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
     var userName = "";
     var password = "";
     var confirmPassword = "";
