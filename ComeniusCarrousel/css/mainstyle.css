@@ -166,6 +166,20 @@ a:focus {
     background-color: #0085BC;
 }
 
+#table-nostripes > thead > tr > th, #kiekeboe > tbody > tr > th, #kiekeboe > tfoot > tr > th, #kiekeboe > thead > tr > td, #kiekeboe > tbody > tr > td, #kiekeboe > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 0px solid #ddd;
+}
+
+.table {
+        max-width: none;
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+
+
 /*.head { background-color: #969696; font-weight: bold; color: #FFF; }
 .grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
 .alt { background-color: #E8E8E8; color: #000; }
