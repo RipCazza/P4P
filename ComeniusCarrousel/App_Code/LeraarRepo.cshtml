@@ -1,0 +1,62 @@
+﻿@functions{
+    public class Leraar : GebruikerRepo.Gebruiker
+    {
+        private const string table = "Leraar";
+        private const string idName = "UserId";
+
+        private string voorlichtingVak;
+
+        public Leraar(int userId, string userName, string voornaam, string achternaam,
+            string voorlichtingVak) : base(userId, userName, voornaam, achternaam)
+        {
+            this.voorlichtingVak = voorlichtingVak;
+        }
+
+        public string VoorlichtingVak
+        {
+            get{return voorlichtingVak;} 
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Klas", value, idName, userId);
+            }
+        }
+    }
+
+    public static Leraar GetLeraar(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
+        var leraarData = db.QuerySingle("SELECT * FROM Leraar WHERE UserId = @0", id);
+        var userDb = Database.Open(App.AuthDataBase);
+        var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", id);
+        if(data != null && userData != null)
+        {
+            Leraar leraar = new Leraar(id, userData.UserName, data.Voornaam, data.Achternaam,
+                leraarData.VoorlichtingVak);
+            db.Close();
+            userDb.Close();
+            return leraar;
+        }
+        db.Close();
+        userDb.Close();
+        return null;
+    }
+
+    public static List<Leraar> GetLeraren()
+    {
+        List<Leraar> leraren = new List<Leraar>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leraar Lera ON Gebr.UserId = Lera.UserId");
+        if(data != null)
+        {
+            foreach (var row in data)
+            {
+                leraren.Add(new Leraar(row.UserId,  null, row.Voornaam, row.Achternaam,
+                    row.VoorlichtingVak));
+            }
+            db.Close();
+            return leraren;
+        }
+        db.Close();
+        return null;
+    }
+}
