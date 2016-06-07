@@ -1,0 +1,107 @@
+﻿@functions{
+    public class Voorlichting
+    {
+        private const string table = "Voorlichting";
+        private const string idName = "VoorlichtingId";
+
+        private int voorlichtingId;
+        private int vakId;
+        private int userId;
+        private int lokaalId;
+        private DateTime dateTime;
+        private string niveau;
+
+        public Voorlichting(int voorlichtingId, int vakId, int userId, int lokaalId, DateTime dateTime, string niveau)
+        {
+            this.voorlichtingId = voorlichtingId;
+            this.vakId = vakId;
+            this.userId = userId;
+            this.lokaalId = lokaalId;
+            this.dateTime = dateTime;
+            this.niveau = niveau;
+        }
+
+        public int VoorlichtingId
+        {
+            get{return voorlichtingId;}
+        }
+        public int VakId
+        {
+            get{return vakId;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "VakId", Convert.ToString(value), idName, voorlichtingId);
+            }
+        }
+        public int UserId
+        {
+            get{return userId;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "UserId", Convert.ToString(value), idName, voorlichtingId);
+            }
+        }
+        public int LokaalId
+        {
+            get{return userId;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "LokaalId", Convert.ToString(value), idName, voorlichtingId);
+            }
+        }
+        public DateTime DateTime
+        {
+            get{return dateTime;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "DateTime", Convert.ToString(value), idName, voorlichtingId);
+            }
+        }
+        public string Niveau
+        {
+            get{return niveau;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Niveau", value, idName, voorlichtingId);
+            }
+        }
+    }
+
+    public static List<Voorlichting> GetVoorlichtingen()
+    {
+        List<Voorlichting> voorlichtingen = new List<Voorlichting>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Voorlichting");
+        foreach(var row in data)
+        {
+            voorlichtingen.Add(new Voorlichting(row.VoorlichtingId, row.VakId, row.UserId, row.LokaalId, row.DateTime, row.Niveau));
+        }
+        db.Close();
+        return voorlichtingen;
+    }
+
+    public static Voorlichting GetVoorlichting(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Voorlichting WHERE VoorlichtingId = @0", id);
+        if(data != null)
+        {
+            Voorlichting voorlichting = new Voorlichting(id, data.VakId, data.UserId, data.LokaalId, data.DateTime, data.Niveau);
+            db.Close();
+            return voorlichting;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static void MakeVoorlichting(int vakId, int userId, int lokaalId, DateTime dateTime, string niveau)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Voorlichting (VakId, UserId, LokaalId, DateTime, Niveau) VALUES(@0,@1,@2,@3,@4)";
+        db.Execute(insertCommand, vakId, userId, lokaalId, dateTime, niveau);
+        db.Close();
+    }
+
+    public static void DeleteVoorlichting(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Voorlichting WHERE VoorlichtingId = @0";
+        db.Execute(deleteCommand, id);
+        db.Close();
+    }
+}
