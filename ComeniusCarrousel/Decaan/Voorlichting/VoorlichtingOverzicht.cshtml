@@ -1,15 +1,35 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Lokaal overzicht";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetVoorlichtingen();
 }
 
-<!DOCTYPE html>
+<br>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<a class="btn btn-default" href="~/Decaan/Voorlichting/VoorlichtingToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuwe voorlichting aanmaken
+</a>
+
+<table class="table">
+    @foreach (VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
+    {
+        <tr>
+            <td>
+                <a href="~/Decaan/Voorlichting/VoorlichtingWijzigen?id=@voorlichting.VoorlichtingId" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
+            <td>@voorlichting.Lokaal</td>
+            <td>@voorlichting.Vak</td>
+            <td>@voorlichting.Leraar</td>
+            <td>@voorlichting.Niveau</td>
+            <td>@voorlichting.DateTime</td>
+        </tr>
+    }
+</table>

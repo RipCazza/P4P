@@ -32,6 +32,21 @@
                 Repository.CRUD.doSimpleIdUpdate(table, "VakId", Convert.ToString(value), idName, voorlichtingId);
             }
         }
+        public string Vak
+        {
+            get
+            {
+                var db = Database.Open(App.DataBase);
+                var data = db.QuerySingle("SELECT VakNaam FROM Voorlichting INNER JOIN Vak ON Vak.VakId = Voorlichting.VakId WHERE VoorlichtingId = @0", voorlichtingId);
+                if(data != null)
+                {
+                    db.Close();
+                    return data.VakNaam;
+                }
+                db.Close();
+                return null;
+            }
+        }
         public int UserId
         {
             get{return userId;}
@@ -39,11 +54,41 @@
                 Repository.CRUD.doSimpleIdUpdate(table, "UserId", Convert.ToString(value), idName, voorlichtingId);
             }
         }
+        public string Leraar
+        {
+            get
+            {
+                var db = Database.Open(App.DataBase);
+                var data = db.QuerySingle("SELECT Voornaam FROM Voorlichting INNER JOIN Gebruiker ON Gebruiker.UserId = Voorlichting.UserId WHERE VoorlichtingId = @0", voorlichtingId);
+                if(data != null)
+                {
+                    db.Close();
+                    return data.Voornaam;
+                }
+                db.Close();
+                return null;
+            }
+        }
         public int LokaalId
         {
             get{return userId;}
             set{
                 Repository.CRUD.doSimpleIdUpdate(table, "LokaalId", Convert.ToString(value), idName, voorlichtingId);
+            }
+        }
+        public string Lokaal
+        {
+            get
+            {
+                var db = Database.Open(App.DataBase);
+                var data = db.QuerySingle("SELECT LokaalNaam FROM Voorlichting INNER JOIN Lokaal ON Lokaal.LokaalId = Voorlichting.LokaalId WHERE VoorlichtingId = @0", voorlichtingId);
+                if(data != null)
+                {
+                    db.Close();
+                    return data.LokaalNaam;
+                }
+                db.Close();
+                return null;
             }
         }
         public DateTime DateTime
