@@ -22,23 +22,6 @@
     var grid = new WebGrid(source: selectData, defaultSort: "Onderwerp");
 }
 
-<ul class="nav nav-tabs">
-    <li><a href="~/">Home</a></li>
-    <li class="dropdown active">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            @if (User.IsInRole("Admin"))
-            {
-                <li><a href="~/Admin/Decaan/DecaanOverzicht">Decaanoverzicht</a></li>
-            }
-            <li><a href="~/Decaan/Lokaal/LokaalOverzicht.cshtml">Lokaaloverzicht</a></li>
-            <li><a href="~/Decaan/Vak/VakOverzicht.cshtml">Vakkenoverzicht</a></li>
-            <li><a href="~/Decaan/Leraar/LeraarOverzicht.cshtml">Lerarenoverzicht</a></li>
-            <li class="active"><a href="~/Decaan/Mail/MailOverzicht.cshtml">E-mail overzicht</a></li>
-        </ul>
-    </li>
-</ul>
-
 <br>
 
 @grid.GetHtml(
