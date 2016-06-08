@@ -33,9 +33,9 @@
                         <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                             <span class="glyphicon glyphicon-log-out" style="color:#fff"></span>&nbsp; Log out&nbsp;
                         </a>
-}
-else
-{
+                    }
+                    else
+                    {
                         <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                             <span class="glyphicon glyphicon-log-in" style="color:#fff"></span>&nbsp; Log in&nbsp;
                         </a>
@@ -45,6 +45,75 @@ else
         </div>
         </div>
         <div class="container" id="content">
+            @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
+            { 
+                <ul class="nav nav-tabs">
+                    @if (Request.Url.AbsolutePath == "/")
+                    {
+                        <li class="active"><a href="~/">Home</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/">Home</a></li>
+                    }
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                if (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanOverzicht")
+                                {
+                                    <li class="active"><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
+                                }
+                            }
+                            @if (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalOverzicht")
+                            {
+                                <li class="active"><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
+                            }
+                            @if (Request.Url.AbsolutePath == "/Decaan/Vak/VakOverzicht")
+                            {
+                                <li class="active"><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
+                            }
+                            @if (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarOverzicht")
+                            {
+                                <li class="active"><a href="~/Decaan/Leraar/LeraarOverzicht">Leraar overzicht</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/Decaan/Leraar/LeraarOverzicht">Leraren overzicht</a></li>
+                            }
+                            @if (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingOverzicht")
+                            {
+                                <li class="active"><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
+                            }
+                            @if (Request.Url.AbsolutePath == "/Decaan/Mail/MailOverzicht")
+                            {
+                                <li class="active"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+            }
             @RenderBody()
         </div>
         <footer class="footer">
