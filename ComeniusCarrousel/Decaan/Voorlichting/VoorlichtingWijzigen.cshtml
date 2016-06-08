@@ -1,15 +1,41 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Voorlichting wijzigen";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    VoorlichtingRepo.Voorlichting voorlichting = VoorlichtingRepo.Voorlichting(id);
+
+    if (voorlichting == null)
+    {
+        Validation.AddFormError("Deze voorlichting bestaat niet.");
+    }
+
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        VoorlichtingRepo.DeleteVoorlichting(id);
+        Response.Redirect("~/Decaan/Voorlichting/VoorlichtingOverzicht");
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+@Html.ValidationSummary()
+@if (voorlichting != null)
+{
+    <p>
+        <span>Voorlichting:</span>
+        <span>@voorlichting.Lokaal</span>
+        <span>@voorlichting.Vak</span>
+        <span>@voorlichting.Leraar</span>
+        <span>@voorlichting.Niveau</span>
+        <span>@voorlichting.DateTime</span>
+    </p>
+    <form method="post" class="form-inline">
+        <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Remove
+        </button>
+    </form>
+}
