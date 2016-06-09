@@ -1,37 +1,90 @@
-﻿@*@{
+﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Vak overzicht";
+    Page.Title = "Voorlichting toevoegen";
 
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {
         Response.Redirect("~/");
     }
 
-    if (IsPost && Request.Form["vakToevoegen"] != null)
-    {
-        string vakNaam = "";
-        string niveau = "";
-        Validation.RequireField("vakNaam", "Geef een vaknaam op");
-        Validation.RequireField("niveau", "Geef het niveau aan");
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+    List<LokaalRepo.Lokaal> lokalen = LokaalRepo.GetLokalen();
+    List<LeraarRepo.Leraar> leraren = LeraarRepo.GetLeraren();
 
-        if(Request.Form["vakNaam"] != null) {vakNaam = Request.Form["vakNaam"];}
+    if (IsPost && Request.Form["voorlichtingToevoegen"] != null)
+    {
+        int vakId = -1;
+        int lokaalId = -1;
+        int userId = -1;
+        string niveau = "";
+        DateTime dateTime = new DateTime();
+
+        Validation.RequireField("vakId", "Geef een vak op");
+        Validation.RequireField("lokaalId", "Geef een lokaal op");
+        Validation.RequireField("userId", "Geef een leraar op");
+        Validation.RequireField("niveau", "Geef het niveau aan");
+        Validation.RequireField("dateTime", "Geef het tijdstip aan");
+
+        VakRepo.Vak gekozenVak = VakRepo.GetVak(vakId);
+        LeraarRepo.Leraar gekozenLeraar = LeraarRepo.GetLeraar(userId);
+        if (niveau != gekozenVak.Niveau)
+        {
+            Validation.AddFormError("Het niveau van het gekozen vak komt niet overeen met het gekozen niveau.");
+        }
+        if (gekozenLeraar.VoorlichtingVak != gekozenVak.VakNaam)
+        {
+            Validation.AddFormError("Het voorlichting vak van de gekozen leraar komt niet overeen met het gekozen vak.");
+        }
+
+
+        if(Request.Form["vakId"] != null && Request.Form["vakId"] != "-") {vakId = Convert.ToInt16(Request.Form["vakId"]);}
+        if(Request.Form["lokaalId"] != null && Request.Form["lokaalId"] != "-") {lokaalId = Convert.ToInt16(Request.Form["lokaalId"]);}
+        if(Request.Form["userId"] != null && Request.Form["userId"] != "-") {userId = Convert.ToInt16(Request.Form["userId"]);}
+        if(Request.Form["dateTime"] != null) {dateTime = Convert.ToDateTime(Request.Form["dateTime"]);}
         if(Request.Form["niveau"] != null) {niveau = Request.Form["niveau"];}
     
         if(Validation.IsValid())
         {
-            VakRepo.MakeVak(vakNaam, niveau);
+            VoorlichtingRepo.MakeVoorlichting(vakId, userId, lokaalId, dateTime, niveau);
         }
     }
 }
 
 <form method="post" class="form-inline">
     @Html.ValidationSummary()
-    <input type="text" name="vakNaam"><br>
+
+    <select name="vakId" class="form-control">
+        <option value="-"></option>
+        @foreach (VakRepo.Vak vak in vakken)
+        {
+            <option value="@vak.VakId">@vak.VakNaam (@vak.Niveau)</option>
+        }
+    </select><br>
+
+    <select name="lokaalId" class="form-control">
+        <option value="-"></option>
+        @foreach (LokaalRepo.Lokaal lokaal in lokalen)
+        {
+            <option value="@lokaal.LokaalId">@lokaal.LokaalNaam</option>
+        }
+    </select><br>
+
+    <select name="userId" class="form-control">
+        <option value="-"></option>
+        @foreach (LeraarRepo.Leraar leraar in leraren)
+        {
+            <option value="@leraar.UserId">@leraar.Voornaam @leraar.Achternaam (@leraar.VoorlichtingVak)</option>
+        }
+    </select><br>
+
     <select name="niveau" class="form-control">
         <option value="HAVO">HAVO</option>
         <option value="VWO">VWO</option>
     </select><br>
+
+    <input type="datetime" name="dateTime"> <span>Voer getalwijs in als jaar-maand-dagTuur:minuten (YYYY-MM-DDThh:mm / 2016-06-09T10:59)</span><br>
+
     <button type="submit" id="submit" name="vakToevoegen" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span> Verzenden
     </button>
-</form>*@
+</form>
