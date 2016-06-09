@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Decaan overzicht";
+    Page.Title = "Leraaroverzicht overzicht";
 
     if (!User.IsInRole("Admin"))
     {
@@ -9,8 +9,6 @@
 
     List<LeraarRepo.Leraar> leraren = LeraarRepo.GetLeraren(); // Geeft het ID en username van alle decanen mee
 }
-
-<br>
 
 <a class="btn btn-default" href="~/Decaan/Leraar/LeraarToevoegen">
     <span class="glyphicon glyphicon-pencil"></span> Nieuwe leraar aanmaken
@@ -21,7 +19,7 @@
     {
         <tr>
             <td>
-                <a href="~/Admin/Decaan/DecaanWijzigen?id=@leraar.UserId" class="btn btn-default">
+                <a href="~/Decaan/Leraar/LeraarWijzigen?id=@leraar.UserId" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span> Edit
                 </a>
             </td>
