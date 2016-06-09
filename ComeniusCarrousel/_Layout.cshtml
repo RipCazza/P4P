@@ -1,5 +1,54 @@
-﻿@*Wordt standaard zo goed als overal aan geroepen*@
+﻿@*Wordt standaard zo goed als overal aangeroepen*@
 @{
+    //Hier wordt gecontroleerd welke pagina actief is en verandert de variabelen; dit wordt later weer aangeroepen
+    string dropdownOverzichtActive = "";
+    string navHomeActive = "";
+    string navDecaanActive = "";
+    string navLokaalActive = "";
+    string navVakActive = "";
+    string navLeraarActive = "";
+    string navVoorlichtingActive = "";
+    string navMailActive = "";
+    string navManageActive = "";
+    
+    if (Request.Url.AbsolutePath == "/")
+    {
+        navHomeActive = "active";
+    }
+    else if (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanOverzicht")
+    {
+        navDecaanActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalOverzicht")
+    {
+        navLokaalActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Vak/VakOverzicht")
+    {
+        navVakActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarOverzicht")
+    {
+        navLeraarActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingOverzicht")
+    {
+        navVoorlichtingActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Mail/MailOverzicht")
+    {
+        navMailActive = "active";
+        dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/User_Management/Manage")
+    {
+        navManageActive = "active";
+    }
 }
 
 <!DOCTYPE html>
@@ -45,74 +94,29 @@
         </div>
         </div>
         <div class="container" id="content">
+            @if(WebSecurity.IsAuthenticated)
+            {
+            <ul class="nav nav-tabs">
+            <li class="@navHomeActive"><a href="~/">Home</a></li>
+            <li class="@navManageActive"><a href="~/User_Management/Manage">Account Beheren</a></li>
             @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
-            { 
-                <ul class="nav nav-tabs">
-                    @if (Request.Url.AbsolutePath == "/")
-                    {
-                        <li class="active"><a href="~/">Home</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/">Home</a></li>
-                    }
-                    <li class="dropdown">
+            {      
+                    <li class="@dropdownOverzichtActive">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             @if (User.IsInRole("Admin"))
                             {
-                                if (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanOverzicht")
-                                {
-                                    <li class="active"><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
-                                }
-                                else
-                                {
-                                    <li><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
-                                }
+                                    <li class="@navDecaanActive"><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
                             }
-                            @if (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalOverzicht")
-                            {
-                                <li class="active"><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
-                            }
-                            @if (Request.Url.AbsolutePath == "/Decaan/Vak/VakOverzicht")
-                            {
-                                <li class="active"><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
-                            }
-                            @if (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarOverzicht")
-                            {
-                                <li class="active"><a href="~/Decaan/Leraar/LeraarOverzicht">Leraar overzicht</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="~/Decaan/Leraar/LeraarOverzicht">Leraren overzicht</a></li>
-                            }
-                            @if (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingOverzicht")
-                            {
-                                <li class="active"><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
-                            }
-                            @if (Request.Url.AbsolutePath == "/Decaan/Mail/MailOverzicht")
-                            {
-                                <li class="active"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
-                            }
-                            else
-                            {
-                                <li><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
-                            }
+                                <li class="@navLokaalActive"><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
+                                <li class="@navVakActive"><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
+                                <li class="@navLeraarActive"><a href="~/Decaan/Leraar/LeraarOverzicht">Leraar overzicht</a></li>
+                                <li class="@navVoorlichtingActive"><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
+                                <li class="@navMailActive"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
                         </ul>
                     </li>
-                </ul>
+            }
+            </ul>
             }
             @RenderBody()
         </div>
