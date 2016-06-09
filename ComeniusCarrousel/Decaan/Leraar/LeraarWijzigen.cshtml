@@ -1,15 +1,54 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Leraar wijzigen";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
+    Tuple<int, string> decaan;
+    var user = "";
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    decaan = DecaanRepo.GetDecaan(id);
+
+    if (decaan == null)
+    {
+        Validation.AddFormError("Deze decaan bestaat niet.");
+    }
+    else
+    {
+        user = decaan.Item2;
+    }
+
+
+    // Delete de decaan en alles waar de decaan in voor komt.
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        if (WebMatrix.WebData.WebSecurity.UserExists(user))
+        {
+            var userRoles = Roles.GetRolesForUser(user);
+            if (userRoles.Count() > 0)
+            {
+                Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
+            }
+            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
+            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+        }
+        Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
+    }
+ }
+
+@Html.ValidationSummary()
+@if (decaan != null)
+{
+    <p>
+        <span>Gebruiker:</span>
+        <span>@user</span>
+    </p>
+    <form method="post" class="form-inline">
+        <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Remove
+        </button>
+    </form>
 }
-
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
