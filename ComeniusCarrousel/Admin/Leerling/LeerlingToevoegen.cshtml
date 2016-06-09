@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Leerling toevoegen";
+    Page.Title = "Leerling Toevoegen";
 
     if (!User.IsInRole("Admin"))
     {
@@ -8,12 +8,27 @@
     }
 
     var userName = "";
+    var voornaam = "";
+    var achternaam= "";
     var password = "";
     var confirmPassword = "";
+    var talentstroomvak = "";
+    var klas = "";
+    var niveau = "";
+    int nummer = -1;
 
-    Validation.RequireField("userName", "U moet een gebruikersnaam invullen.");
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+
+    Validation.RequireField("userName", "U moet een gebruiker invullen.");
+    Validation.RequireField("voornaam", "U moet een voornaam invullen.");
+    Validation.RequireField("achternaam", "U moet een achternaam invullen.");
     Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
-    Validation.RequireField("confirmPassword", "Bevestegings wachtwoord mag niet leeg zijn.");
+    Validation.RequireField("confirmPassword", "bevestegings wachtwoord mag niet leeg zijn.");
+    Validation.RequireField("nummer", "U moet een leerling nummer invullen.");
+    Validation.RequireField("klas", "U moet een klas invullen.");
+    Validation.RequireField("niveau", "U moet een niveau invullen.");
+    Validation.RequireField("talentstroomvak", "U moet een talentstroomvak invullen.");
+
     Validation.Add("confirmPassword",
         Validator.EqualsTo("password", "Bevestegings wachtwoord komt niet overeen met het wachtwoord."));
     Validation.Add("password",
@@ -24,7 +39,7 @@
     Validation.Add("userName",
         Validator.StringLength(
             maxLength: 400,
-            errorMessage: "Uw e mail kan niet meer dan 400 tekens bevatten"));
+            errorMessage: "gebruiker kan niet meer dan 400 tekens bevatten"));
 
     if(IsPost)
     {
@@ -33,31 +48,60 @@
         password = Request.Form["password"];
         confirmPassword = Request.Form["confirmPassword"];
 
+        voornaam = Request.Form["voornaam"];
+        achternaam = Request.Form["achternaam"];
+        if (Request.Form["nummer"] != "")
+        {
+            nummer = Convert.ToInt32(Request.Form["nummer"]);
+        }
+        klas = Request.Form["klas"];
+        if (Request.Form["niveau"] != "-")
+        {
+            niveau = Request.Form["niveau"];
+        }
+        else
+        {
+            Validation.AddFormError("Kies een niveau.");
+        }
+        if (Request.Form["talentstroomvak"] != "-")
+        {
+            talentstroomvak = Request.Form["talentstroomvak"];
+        }
+        else
+        {
+            Validation.AddFormError("Kies een vak.");
+        }
+        
         if(Validation.IsValid())
         {
             var db = Database.Open(App.AuthDataBase);
-
+            var db2 = Database.Open(App.DataBase);
             var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
             if(user == null)
             {
                 db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
-
+                
                 try
                 {
                     var token = WebSecurity.CreateAccount(userName, password, false);
-                    Roles.AddUserToRole(userName, "Leerling");
+                    var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+                    db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
+                    db2.Execute("INSERT INTO Leerling (UserId, Klas, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klas, niveau, nummer, "False", talentstroomvak, "False");
+                    Roles.AddUserToRole(userName, "Leraar");
                     db.Close();
-                    Response.Redirect("~/Admin/Leerling/LeerlingOverzicht");
+                    db2.Close();
+                    Response.Redirect("~/");
                 }
                 catch(System.Web.Security.MembershipCreateUserException e)
                 {
                     db.Close();
+                    db2.Close();
                     ModelState.AddFormError(e.Message);
                 }
             }
             else
             {
-                ModelState.AddFormError("Gebruikersnaam bestaat al");
+                ModelState.AddFormError("Gebruiker bestaat al");
             }
             db.Close();
         }
@@ -76,6 +120,16 @@
                 @Html.ValidationMessage("userName")
             </div>
             <div class="form-group">
+                <label for="userName">Voornaam</label>
+                <input type="text" id="voornaam" name="voornaam" value="@voornaam" class="form-control">
+                @Html.ValidationMessage("voornaam")
+            </div>
+            <div class="form-group">
+                <label for="userName">Achternaam</label>
+                <input type="text" id="achternaam" name="achternaam" value="@achternaam" class="form-control">
+                @Html.ValidationMessage("achternaam")
+            </div>
+            <div class="form-group">
                 <label for="password">Wachtwoord</label>
                 <input type="password" id="password" name="password" value="@password" class="form-control">
                 @Html.ValidationMessage("password")
@@ -84,6 +138,36 @@
                 <label for="confirmPassword">Bevestig wachtwoord</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
                 @Html.ValidationMessage("confirmPassword")
+            </div>
+            <div class="form-group">
+                <label for="password">Leerling nummer</label>
+                <input type="number" id="nummer" name="nummer" value="" placeholder="123456" class="form-control">
+                @Html.ValidationMessage("nummer")
+            </div>
+            <div class="form-group">
+                <label for="password">Klas</label>
+                <input type="text" id="klas" name="klas" value="@klas" class="form-control">
+                @Html.ValidationMessage("klas")
+            </div>
+            <div>
+                <label>Selecteer Niveau</label>
+                <select name="niveau">
+                    <option value="-"></option>
+                    <option value="HAVO">HAVO</option>
+                    <option value="VWO">VWO</option>
+                </select>
+                @Html.ValidationMessage("niveau")
+            </div>
+            <div>
+                <label>Selecteer Talentstroom</label>
+                <select name="talentstroomvak">
+                    <option value="-"></option>
+                    @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
+                    {
+                        <option value="@v.VakNaam">@v.VakNaam</option>
+                    }
+                </select>
+                @Html.ValidationMessage("talentstroom")
             </div>
             <div class="from-group">
                 <button type="submit" class="btn btn-default">Registreer</button>
