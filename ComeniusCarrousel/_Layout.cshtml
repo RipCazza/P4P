@@ -9,6 +9,7 @@
     string navLeraarActive = "";
     string navVoorlichtingActive = "";
     string navMailActive = "";
+    string navManageActive = "";
     
     if (Request.Url.AbsolutePath == "/")
     {
@@ -43,6 +44,10 @@
     {
         navMailActive = "active";
         dropdownOverzichtActive = "dropdown active";
+    }
+    else if (Request.Url.AbsolutePath == "/User_Management/Manage")
+    {
+        navManageActive = "active";
     }
 }
 
@@ -89,11 +94,13 @@
         </div>
         </div>
         <div class="container" id="content">
+            @if(WebSecurity.IsAuthenticated)
+            {
+            <ul class="nav nav-tabs">
+            <li class="@navHomeActive"><a href="~/">Home</a></li>
+            <li class="@navManageActive"><a href="~/User_Management/Manage">Account Beheren</a></li>
             @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
-            { 
-                <ul class="nav nav-tabs">
-
-                    <li class="@navHomeActive"><a href="~/">Home</a></li>
+            {      
                     <li class="@dropdownOverzichtActive">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -108,7 +115,8 @@
                                 <li class="@navMailActive"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
                         </ul>
                     </li>
-                </ul>
+            }
+            </ul>
             }
             @RenderBody()
         </div>
