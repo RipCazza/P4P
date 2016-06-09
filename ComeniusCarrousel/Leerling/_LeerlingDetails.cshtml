@@ -14,13 +14,16 @@
     // zoniet is het null.
     LeerlingRepo.Leerling leerling = (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt() && (User.IsInRole("Admin") || User.IsInRole("Decaan"))) || User.IsInRole("Leerling") == true ? LeerlingRepo.GetLeerling(id) : null;
 }
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Leerlinggegevens
-    </div>
-    <div class="panel-body">
-        <table class="table">
-            <tr>
+<h4 style="color: #585858">&nbsp; Welkom terug, <i>@leerling.Voornaam @leerling.Achternaam</i> (<i>@leerling.Leerlingnummer</i>)!</h4>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th colspan="2">Test</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
                 <td>Naam:</td>
                 <td>@leerling.Voornaam @leerling.Achternaam</td>
             </tr>
@@ -68,6 +71,5 @@
                     }
                 </td>
             </tr>
-        </table> 
-    </div>
-</div>
+    </tbody>
+</table>
