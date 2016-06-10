@@ -232,6 +232,10 @@ a:focus {
         word-wrap: break-word;
     }
 
+.nav {
+    margin-bottom: 24px;
+}
+
 .dropdown-menu {
     font-size: 16px;
 }

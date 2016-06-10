@@ -97,12 +97,11 @@
             @if(WebSecurity.IsAuthenticated)
             {
             <ul class="nav nav-tabs">
-            <li class="@navHomeActive"><a href="~/">Home</a></li>
-            <li class="@navManageActive"><a href="~/User_Management/Manage">Account Beheren</a></li>
+            <li class="@navHomeActive"><a href="~/"><span class="glyphicon glyphicon-home"></span>&nbsp; Home</a></li>
             @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
             {      
                     <li class="@dropdownOverzichtActive">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Overzichten <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span>&nbsp; Overzichten<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             @if (User.IsInRole("Admin"))
                             {
@@ -116,6 +115,7 @@
                         </ul>
                     </li>
             }
+            <li class="@navManageActive"><a href="~/User_Management/Manage"><span class="glyphicon glyphicon-user"></span>&nbsp; Account Beheren</a></li>
             </ul>
             }
             @RenderBody()
