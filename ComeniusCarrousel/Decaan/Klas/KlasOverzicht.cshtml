@@ -1,15 +1,31 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Klas overzicht";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
 }
 
-<!DOCTYPE html>
+<br>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<a class="btn btn-default" href="~/Decaan/Klas/KlasToevoegen">
+    <span class="glyphicon glyphicon-pencil"></span> Nieuwe klas aanmaken
+</a>
+
+<table class="table">
+    @foreach (KlasRepo.Klas klas in klassen)
+    {
+        <tr>
+            <td>
+                <a href="~/Decaan/Klas/KlasWijzigen?id=@klas.KlasId" class="btn btn-default">
+                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                </a>
+            </td>
+            <td>@klas.KlasNaam</td>
+        </tr>
+    }
+</table>

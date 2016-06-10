@@ -1,15 +1,37 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Klas wijzigen";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    KlasRepo.Klas klas = KlasRepo.GetKlas(id);
+
+    if (klas == null)
+    {
+        Validation.AddFormError("Deze klas bestaat niet.");
+    }
+
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        KlasRepo.DeleteKlas(id);
+        Response.Redirect("~/Decaan/Vak/VakOverzicht");
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+@Html.ValidationSummary()
+@if (klas != null)
+{
+    <p>
+        <span>Klas:</span>
+        <span>@klas.KlasNaam</span>
+    </p>
+    <form method="post" class="form-inline">
+        <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Remove
+        </button>
+    </form>
+}

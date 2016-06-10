@@ -1,15 +1,30 @@
 ﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Klas toevoegen";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    if (IsPost && Request.Form["klasToevoegen"] != null)
+    {
+        string klasNaam = "";
+        Validation.RequireField("klasNaam", "Geef een klasnaam op");
+
+        if(Request.Form["klasNaam"] != null) {klasNaam = Request.Form["klasNaam"];}
     
+        if(Validation.IsValid())
+        {
+            KlasRepo.MakeKlas(klasNaam);
+        }
+    }
 }
 
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<form method="post" class="form-inline">
+    @Html.ValidationSummary()
+    <input type="text" name="klasNaam"><br>
+    <button type="submit" id="submit" name="klasToevoegen" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus"></span> Verzenden
+    </button>
+</form>
