@@ -1,0 +1,102 @@
+﻿@functions{
+    public class Klas
+    {
+        private const string table = "Klas";
+        private const string idName = "KlasId";
+
+        private int klasId;
+        private string klasNaam;
+
+        public Klas(int klasId, string klasNaam)
+        {
+            this.klasId = klasId;
+            this.klasNaam = klasNaam;
+        }
+
+        public int KlasId
+        {
+            get{return klasId;}
+        }
+        public string KlasNaam
+        {
+            get{return klasNaam;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "KlasNaam", value, idName, klasId);
+            }
+        }
+    }
+
+    public static List<Klas> GetKlassen()
+    {
+        List<Klas> klassen = new List<Klas>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Klas");
+        if(data != null)
+        {
+            foreach (var row in data)
+            {
+                klassen.Add(new Klas(row.KlasId, row.KlasNaam));
+            }
+            db.Close();
+            return klassen;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static Klas GetKlas(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Klas WHERE KlasId = @0", id);
+        if(data != null)
+        {
+            Klas klas = new Klas(id, data.KlasNaam);
+            db.Close();
+            return klas;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static void MakeKlas(string klasNaam)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Klas (KlasNaam) VALUES(@0)";
+        db.Execute(insertCommand, klasNaam);
+        db.Close();
+    }
+
+    public static void DeleteKlas(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var userDb = Database.Open(App.AuthDataBase);
+        var deleteCommand = "DELETE FROM Klas WHERE KlasId = @0";
+        var deleteMailOntvangerCommand = "DELETE FROM MailOntvanger WHERE KlasId = @0";
+        db.Execute(deleteCommand, id);
+        db.Execute(deleteMailOntvangerCommand, id);
+        var leerlingData = db.Query("SELECT UserId FROM Leerling WHERE KlasId = @0", id);
+        foreach (var row in leerlingData)
+        {
+            var user = "";
+            var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", row.UserId);
+            user = userData.UserName;
+            if (WebMatrix.WebData.WebSecurity.UserExists(user))
+            {
+                var deleteLeerlingCommand = "DELETE FROM Leerling WHERE UserId = @0";
+                var deleteGebruikerCommand = "DELETE FROM Gebruiker WHERE UserId = @0";
+                db.Execute(deleteLeerlingCommand, row.UserId);
+                db.Execute(deleteGebruikerCommand, row.UserId);
+                var userRoles = Roles.GetRolesForUser(user);
+                if (userRoles.Count() > 0)
+                {
+                    Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
+                }
+                ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
+                ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+            }
+        }
+        db.Close();
+        userDb.Close();
+    }
+}
+

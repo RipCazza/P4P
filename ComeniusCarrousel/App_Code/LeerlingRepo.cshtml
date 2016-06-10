@@ -4,7 +4,7 @@
         private const string table = "Leerling";
         private const string idName = "UserId";
 
-        private string klas;
+        private int klasId;
         private string niveau;
         private int leerlingnummer;
         private bool instroomLeerling;
@@ -13,9 +13,9 @@
         private bool aangemeld;
 
         public Leerling(int userId, string userName, string voornaam, string achternaam,
-            string klas, string niveau, int leerlingnummer, bool instroomLeerling, string mailVerzorger, string talentsroomVak, bool aangemeld) : base(userId, userName, voornaam, achternaam)
+            int klasId, string niveau, int leerlingnummer, bool instroomLeerling, string mailVerzorger, string talentsroomVak, bool aangemeld) : base(userId, userName, voornaam, achternaam)
         {
-            this.klas = klas;
+            this.klasId = klasId;
             this.niveau = niveau;
             this.leerlingnummer = leerlingnummer;
             this.instroomLeerling = instroomLeerling;
@@ -40,9 +40,25 @@
 
         public string Klas
         {
-            get{return klas;} 
+            get
+            {
+                var db = Database.Open(App.DataBase);
+                var data = db.QuerySingle("SELECT KlasNaam FROM Leerling INNER JOIN Klas ON Klas.KlasId = Leerling.KlasId WHERE UserId = @0", userId);
+                if(data != null)
+                {
+                    db.Close();
+                    return data.KlasNaam;
+                }
+                db.Close();
+                return null;
+            }
+        }
+
+        public int KlasId
+        {
+            get{return klasId;} 
             set{
-                Repository.CRUD.doSimpleIdUpdate(table, "Klas", value, idName, userId);
+                Repository.CRUD.doSimpleIdUpdate(table, "KlasId", Convert.ToString(value), idName, userId);
             }
         }
         public string Niveau
@@ -105,7 +121,7 @@
         if(data != null && userData != null)
         {
             Leerling leerling = new Leerling(id, userData.UserName, data.Voornaam, data.Achternaam,
-                leerlingData.Klas, leerlingData.Niveau, leerlingData.Leerlingnummer, leerlingData.InstroomLeerling,
+                leerlingData.KlasId, leerlingData.Niveau, leerlingData.Leerlingnummer, leerlingData.InstroomLeerling,
                 leerlingData.MailVerzorger, leerlingData.TalentstroomVak, leerlingData.Aangemeld);
             db.Close();
             userDb.Close();
@@ -126,7 +142,7 @@
             foreach (var row in data)
             {
                 leerlingen.Add(new Leerling(row.UserId,  null, row.Voornaam, row.Achternaam,
-                    row.Klas, row.Niveau, row.Leerlingnummer, row.InstroomLeerling,
+                    row.KlasId, row.Niveau, row.Leerlingnummer, row.InstroomLeerling,
                     row.MailVerzorger, row.TalentstroomVak, row.Aangemeld));
             }
             db.Close();

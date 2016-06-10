@@ -1,6 +1,6 @@
 ﻿@*Wordt aangeroepen in Leerling/_Leerling en Decaan/LeerlingDetails*@
 @{
-    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan") && !User.IsInRole("Leerling"))
+    if (!(User.IsInRole("Admin") || User.IsInRole("Decaan") || User.IsInRole("Leerling")))
     {
         Response.Redirect("~/");
     }
