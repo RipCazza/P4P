@@ -10,17 +10,18 @@
     string navVoorlichtingActive = "";
     string navMailActive = "";
     string navManageActive = "";
+    string navKlasActive = "";
     
     if (Request.Url.AbsolutePath == "/")
     {
         navHomeActive = "active";
     }
-    else if (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Admin/Decaan/DecaanOverzicht") || (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanToevoegen") || (Request.Url.AbsolutePath == "/Admin/Decaan/DecaanWijzigen"))
     {
         navDecaanActive = "active";
         dropdownOverzichtActive = "dropdown active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Lokaal/LokaalWijzigen"))
     {
         navLokaalActive = "active";
         dropdownOverzichtActive = "dropdown active";
@@ -48,6 +49,11 @@
     else if (Request.Url.AbsolutePath == "/User_Management/Manage")
     {
         navManageActive = "active";
+    }
+    else if (Request.Url.AbsolutePath == "/Decaan/Klas/KlasOverzicht")
+    {
+        navKlasActive = "active";
+        dropdownOverzichtActive = "dropdown active";
     }
 }
 
@@ -112,6 +118,7 @@
                                 <li class="@navLeraarActive"><a href="~/Decaan/Leraar/LeraarOverzicht">Leraar overzicht</a></li>
                                 <li class="@navVoorlichtingActive"><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
                                 <li class="@navMailActive"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
+                                <li class="@navKlasActive"><a href="~/Decaan/Klas/KlasOverzicht">Klas overzicht</a></li>
                         </ul>
                     </li>
             }

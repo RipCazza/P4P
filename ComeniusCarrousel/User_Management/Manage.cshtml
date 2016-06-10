@@ -1,8 +1,12 @@
 ﻿@*To be removed*@
 @{
+    if(!WebSecurity.IsAuthenticated)
+    {
+        Response.Redirect("~/");
+    }    
+
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Manage my account";
-    Page.Description = "Change your account information";   
+    Page.Title = "Account Beheren";   
     
     string passwordMessage = "";
 
@@ -16,20 +20,20 @@
     //code for changing password
     if(IsPost && Request.Form["submitPassword"] != null)
     {
-        Validation.RequireField("oldPassword", "You have to enter your old password");
-        Validation.RequireField("newPassword", "Your new password cannot be blank");
+        Validation.RequireField("oldPassword", "Vul je oude wachtwoord in");
+        Validation.RequireField("newPassword", "Je wachtwoord moet minimaal 6 tekens bevatten");
         Validation.Add("confirmNewPassword",
-            Validator.EqualsTo("newPassword", "Your new password does not match your confirmation password"));
+            Validator.EqualsTo("newPassword", "De ingevoerde wachtwoorden komen niet overeen"));
         Validation.Add("newPassword",
             Validator.StringLength(
                 maxLength: Int32.MaxValue,
                 minLength: 6,
-                errorMessage: "Your password must be at least 6 characters long"));
+                errorMessage: "Je wachtwoord moet minimaal 6 tekens bevatten"));
         Validation.Add("oldPassword",
             Validator.StringLength(
                 maxLength: Int32.MaxValue,
                 minLength: 6,
-                errorMessage: "Your password must be at least 6 characters long"));
+                errorMessage: "Je wachtwoord moet minimaal 6 tekens bevatten"));
         AntiForgery.Validate();
         if(Validation.IsValid())
         {
@@ -39,30 +43,19 @@
 
             if(WebSecurity.ChangePassword(WebSecurity.CurrentUserName, oldPassword, newPassword))
             {
-                passwordMessage = "Your password has been successfully changed";
+                passwordMessage = "Je wachtwoord is succesvol aangepast";
             }
             else
             {
-                passwordMessage = "Something went wrong while changing your password, please check your input and try again";
+                passwordMessage = "Er heeft zich een fout voorgedaan, probeer het nogmaals";
             }
         }
     }
-
-    if(IsPost && Request.Form["removeUser"] != null && Roles.IsUserInRole("God"))
-    {
-        var tempUserId = Request.Form["removeUserId"];
-        var tempUserName = Request.Form["removeUserName"];
-        Roles.RemoveUserFromRole(tempUserName, "Admin");
-        db.Execute("DELETE FROM webpages_Membership WHERE UserId = @0", tempUserId);
-        db.Execute("DELETE FROM UserProfile WHERE UserId = @0", tempUserId);
-    }
     db.Close();
-}
+}<h2>Verander wachtwoord</h2>
 <div class="col-md-12">
-    <h2 class="robot-title">Change Password</h2>
     <form method="post" class="content-padding">
         @AntiForgery.GetHtml()
-        <fieldset>
             @if(!passwordMessage.IsEmpty())
             {
                 if(WebSecurity.ChangePassword(WebSecurity.CurrentUserName, oldPassword, newPassword))
@@ -77,63 +70,25 @@
                 
             }
             <div class="form-group">
-                <label for="oldPassword"><span class="glyphicon glyphicon-erase"></span>&nbsp; Old Password</label>
+                <label for="oldPassword"><span class="glyphicon glyphicon-erase"></span>&nbsp; Oud wachtwoord</label>
                 <input type="password" name="oldPassword" id="oldPassword" value="@oldPassword" class="form-control">
                 @Html.ValidationMessage("oldPassword")
             </div>
             <div class="form-group">
-                <label for="newPassword"><span class="glyphicon glyphicon-edit"></span>&nbsp; New Password</label>
+                <label for="newPassword"><span class="glyphicon glyphicon-edit"></span>&nbsp; Nieuw wachtwoord</label>
                 <input type="password" name="newPassword" id="newPassword" value="@newPassword" class="form-control">
                 @Html.ValidationMessage("newPassword")
             </div>
             <div class="form-group">
-                <label for="confirmNewPassword"><span class="glyphicon glyphicon-check"></span>&nbsp; Confirm New Password</label>
+                <label for="confirmNewPassword"><span class="glyphicon glyphicon-check"></span>&nbsp; Bevestig nieuw wachtwoord</label>
                 <input type="password" name="confirmNewPassword" id="confirmNewPassword" value="@confirmNewPassword" class="form-control">
                 @Html.ValidationMessage("confirmNewPassword")
             </div>
-            <div class="form-group">
+            <div class="form-group" id="floatRight">
                 <button type="submit" id="submitPassword" name="submitPassword" class="btn btn-default">
-                    <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Change Password
+                    <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Verander wachtwoord
                 </button>
             </div>
-        </fieldset>
     </form>
     <br>
-    @if(Roles.IsUserInRole("God"))
-    {       
-        var users = db.Query("SELECT * FROM UserProfile WHERE UserId != @0", WebSecurity.CurrentUserId);
-        <div class="panel panel-primary">
-            <div class="panel-heading">Users</div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th style="width: 80%">User Name</th>
-                        <th><a href="~/Admin/Tools/Register" class="btn btn-success">Add new user</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var user in users)
-                    {
-                        string[] roles = Roles.GetRolesForUser(user.UserName);
-                        if(!roles.Contains("God"))
-                        {
-                            <tr>
-                                <td style="width: 80%">@user.UserName</td>
-                                <td>
-                                    <form method="post">
-                                        <button type="submit" name="removeUser" id="removeUser" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-remove"></span> Remove
-                                        </button>
-                                        <input type="hidden" name="removeUserId" id="removeUserId" value="@user.UserId">
-                                        <input type="hidden" name="removeUserName" id="removeUserName" value="@user.UserName">
-                                    </form>
-                                </td>
-                            </tr>   
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
 </div>
