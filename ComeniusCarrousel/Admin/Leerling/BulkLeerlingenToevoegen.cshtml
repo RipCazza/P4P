@@ -8,7 +8,6 @@
     }
 
     var leerlingenInvoer = "";
-
         /*var userName = "";
         var password = "";
 
@@ -30,11 +29,29 @@
     if(IsPost)
     {
         leerlingenInvoer = Request.Form["leerlingInvoer"];
-        List<string> leerlingen = new List<string>();
-        leerlingen = Repository.SplitLeerlingen(leerlingenInvoer, leerlingen);
-        foreach(string leerling in leerlingen)
+        string[] leerlingen = Repository.SplitLeerlingen(leerlingenInvoer);
+        for(int i = 0; i < leerlingen.Length; i++)
         {
-            
+            string[] leerling = Repository.SplitLeerling(leerlingen[i]);
+            if (!leerling.Length = 9) //Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
+            {
+                Validation.AddFormError("Het aantal waardes bij leerling " + i + " is onjuist");
+            }
+            else
+            {
+                string voornaam = leerling[0];
+                string achternaam = leerling[1];
+                bool result = Int32.TryParse(leerling[2], out leerlingnummer);
+                if (!result)
+                {
+                    Validation.AddFormError("het leerlingnummer van leerling " + i + " bevat niet alleen nummers");
+                }
+                string mail = leerling[3];
+                string wachtwoord = leerling[4];
+                string klas = leerling[5];
+
+                //WIP
+            }
         }
         /*foreach(string leerling in leerlingen)
         {
@@ -80,7 +97,7 @@
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
         <textarea style="width: 100%; resize: none; margin: 0 5px; padding: 0px" name="leerlingenInvoer" class="form-control col-md-12" rows="20"
-                  placeholder="Voornaam,Achternaam,Leerlingnummer,Mail,Wachtwoord,Klas,Niveau,Talentstroom vak,Instroomleerling(True/False)"
+                  placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)"
                   maxlength="4000"></textarea>
 
     </form>

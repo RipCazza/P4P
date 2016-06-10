@@ -7,24 +7,17 @@
         }
     }
 
-    public static List<string> SplitLeerlingen(string leerlingInvoer, List<string> leerlingen)
+    public static string[] SplitLeerlingen(string leerlingInvoer)
     {
-        string leerling = leerlingInvoer.Substring(0, leerlingInvoer.IndexOf("\n"));
-        leerlingen.Add(leerling);
-        if (leerlingInvoer.Contains("\n"))
-        {
-            leerlingInvoer = leerlingInvoer.Remove(0, leerlingInvoer.IndexOf("\n") + 2);
-        }
-        else
-        {
-            return leerlingen;
-        }
-        SplitLeerlingen(leerlingInvoer, leerlingen);
+        char[] splitter = {'\n'};
+        string[] leerlingen = leerlingInvoer.Split(splitter);
         return leerlingen;
     }
 
-    public static List<Tuple<string,string,int,string,string,string,string,bool>> SplitLeerling(string leerling)
+    public static string[] SplitLeerling(string leerling)
     {
-        return null;
+        char[] splitter = {'\n'};
+        string[] leerlingDetails = leerling.Split(splitter);
+        return leerlingDetails;
     }
 }

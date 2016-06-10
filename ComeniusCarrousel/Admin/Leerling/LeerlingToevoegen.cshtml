@@ -13,11 +13,12 @@
     var password = "";
     var confirmPassword = "";
     var talentstroomvak = "";
-    var klas = "";
+    int klasId = -1;
     var niveau = "";
     int nummer = -1;
 
     List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+    List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
 
     Validation.RequireField("userName", "U moet een gebruiker invullen.");
     Validation.RequireField("voornaam", "U moet een voornaam invullen.");
@@ -25,7 +26,7 @@
     Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
     Validation.RequireField("confirmPassword", "bevestegings wachtwoord mag niet leeg zijn.");
     Validation.RequireField("nummer", "U moet een leerling nummer invullen.");
-    Validation.RequireField("klas", "U moet een klas invullen.");
+    Validation.RequireField("klasId", "U moet een klas invullen.");
     Validation.RequireField("niveau", "U moet een niveau invullen.");
     Validation.RequireField("talentstroomvak", "U moet een talentstroomvak invullen.");
 
@@ -54,7 +55,14 @@
         {
             nummer = Convert.ToInt32(Request.Form["nummer"]);
         }
-        klas = Request.Form["klas"];
+        if (Request.Form["klasId"] != "-")
+        {
+            klasId = Convert.ToInt16(Request.Form["klasId"]);
+        }
+        else
+        {
+            Validation.AddFormError("Kies een klas.");
+        }
         if (Request.Form["niveau"] != "-")
         {
             niveau = Request.Form["niveau"];
@@ -86,7 +94,7 @@
                     var token = WebSecurity.CreateAccount(userName, password, false);
                     var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
                     db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
-                    db2.Execute("INSERT INTO Leerling (UserId, Klas, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klas, niveau, nummer, "False", talentstroomvak, "False");
+                    db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau, nummer, "False", talentstroomvak, "False");
                     Roles.AddUserToRole(userName, "Leraar");
                     db.Close();
                     db2.Close();
@@ -144,10 +152,16 @@
                 <input type="number" id="nummer" name="nummer" value="" placeholder="123456" class="form-control">
                 @Html.ValidationMessage("nummer")
             </div>
-            <div class="form-group">
-                <label for="password">Klas</label>
-                <input type="text" id="klas" name="klas" value="@klas" class="form-control">
-                @Html.ValidationMessage("klas")
+            <div>
+                <label>Selecteer Klas</label>
+                <select name="klasId">
+                    <option value="-"></option>
+                    @foreach(KlasRepo.Klas k in klassen) // maakt een keuzemenu met alle mogelijke vakken
+                    {
+                        <option value="@k.KlasId">@k.KlasNaam</option>
+                    }
+                </select>
+                @Html.ValidationMessage("klasId")
             </div>
             <div>
                 <label>Selecteer Niveau</label>
