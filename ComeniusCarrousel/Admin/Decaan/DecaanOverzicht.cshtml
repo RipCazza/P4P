@@ -10,10 +10,16 @@
     List<Tuple<int, string>> decanen = DecaanRepo.GetDecanen(); // Geeft het ID en username van alle decanen mee
 }
 
-<table class="table">
+<h2>Decaan Overzicht</h2>
+
+<a class="btn btn-success" href="~/Admin/Decaan/DecaanToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe decaan aanmaken
+</a>
+
+<table class="table" style="margin-top: 16px;">
     <thead>
         <tr>
-            <th colspan="2">Decaan overzicht</th>
+            <th colspan="2">Gebruikersnaam</th>
         </tr>
     </thead>
     <tbody>
@@ -28,7 +34,3 @@
     }
     </tbody>
 </table>
-
-<a class="btn btn-default" id="floatRight" href="~/Admin/Decaan/DecaanToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe decaan aanmaken
-</a>

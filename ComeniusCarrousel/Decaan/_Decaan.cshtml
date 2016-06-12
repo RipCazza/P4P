@@ -3,14 +3,13 @@
    int id = WebSecurity.CurrentUserId;
    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(); 
 }
-<a class="btn btn-default" href="~/Admin/Leerling/LeerlingToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe leerling aanmaken
+<h2>Leerlingenoverzicht</h2>
+
+<a class="btn btn-success" href="~/Admin/Leerling/LeerlingToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe leerling aanmaken
 </a>
-</br>
-Leerlingenoverzicht
-</br>
-</br>
-<table class="table">
+
+<table class="table" style="margin-top: 16px;">
     <thead>
     <tr>
         <th>Voornaam</td>

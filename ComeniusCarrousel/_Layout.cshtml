@@ -12,7 +12,7 @@
     string navManageActive = "";
     string navKlasActive = "";
     
-    if (Request.Url.AbsolutePath == "/")
+    if ((Request.Url.AbsolutePath == "/") || (Request.Url.AbsolutePath == "/Admin/Leerling/LeerlingToevoegen") || (Request.Url.AbsolutePath == "/Admin/Leerling/LeerlingToevoegen") || (Request.Url.AbsolutePath == "/Decaan/LeerlingDetails"))
     {
         navHomeActive = "active";
     }
@@ -26,22 +26,22 @@
         navLokaalActive = "active";
         dropdownOverzichtActive = "dropdown active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Vak/VakOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Vak/VakOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Vak/VakToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Vak/VakWijzigen"))
     {
         navVakActive = "active";
         dropdownOverzichtActive = "dropdown active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Leraar/LeraarWijzigen"))
     {
         navLeraarActive = "active";
         dropdownOverzichtActive = "dropdown active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Voorlichting/VoorlichtingWijzigen"))
     {
         navVoorlichtingActive = "active";
         dropdownOverzichtActive = "dropdown active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Mail/MailOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Mail/MailOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Mail/MailToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Mail/MailWijzigen"))
     {
         navMailActive = "active";
         dropdownOverzichtActive = "dropdown active";
@@ -50,7 +50,7 @@
     {
         navManageActive = "active";
     }
-    else if (Request.Url.AbsolutePath == "/Decaan/Klas/KlasOverzicht")
+    else if ((Request.Url.AbsolutePath == "/Decaan/Klas/KlasOverzicht") || (Request.Url.AbsolutePath == "/Decaan/Klas/KlasToevoegen") || (Request.Url.AbsolutePath == "/Decaan/Klas/KlasWijzigen"))
     {
         navKlasActive = "active";
         dropdownOverzichtActive = "dropdown active";
