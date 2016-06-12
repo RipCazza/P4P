@@ -29,7 +29,7 @@
             <td>@voorlichting.Vak</td>
             <td>@voorlichting.Leraar</td>
             <td>@voorlichting.Niveau</td>
-            <td>@voorlichting.DateTime</td>
+            <td>@string.Format("{0:d/M/yyyy HH:mm}", voorlichting.DateTime)</td>
         </tr>
     }
 </table>

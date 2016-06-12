@@ -18,6 +18,17 @@
         int userId = -1;
         string niveau = "";
         DateTime dateTime = new DateTime();
+        
+        if(Request.Form["vakId"] != null && Request.Form["vakId"] != "-") {vakId = Convert.ToInt16(Request.Form["vakId"]);}
+        if(Request.Form["lokaalId"] != null && Request.Form["lokaalId"] != "-") {lokaalId = Convert.ToInt16(Request.Form["lokaalId"]);}
+        if(Request.Form["userId"] != null && Request.Form["userId"] != "-") {userId = Convert.ToInt16(Request.Form["userId"]);}
+
+        if(!DateTime.TryParse(Request.Form["dateTime"], out dateTime))
+        {
+            Validation.AddFormError("De ingevoerde datum klopt niet.");
+        }
+
+        if(Request.Form["niveau"] != null) {niveau = Request.Form["niveau"];}
 
         Validation.RequireField("vakId", "Geef een vak op");
         Validation.RequireField("lokaalId", "Geef een lokaal op");
@@ -27,22 +38,21 @@
 
         VakRepo.Vak gekozenVak = VakRepo.GetVak(vakId);
         LeraarRepo.Leraar gekozenLeraar = LeraarRepo.GetLeraar(userId);
-        if (niveau != gekozenVak.Niveau)
+        if (gekozenVak != null)
         {
-            Validation.AddFormError("Het niveau van het gekozen vak komt niet overeen met het gekozen niveau.");
+            if (niveau != gekozenVak.Niveau)
+            {
+                Validation.AddFormError("Het niveau van het gekozen vak komt niet overeen met het gekozen niveau.");
+            }
         }
-        if (gekozenLeraar.VoorlichtingVak != gekozenVak.VakNaam)
+        if (gekozenVak != null && gekozenLeraar != null)
         {
-            Validation.AddFormError("Het voorlichting vak van de gekozen leraar komt niet overeen met het gekozen vak.");
+            if (gekozenLeraar.VoorlichtingVak != gekozenVak.VakNaam)
+            {
+                Validation.AddFormError("Het voorlichting vak van de gekozen leraar komt niet overeen met het gekozen vak.");
+            }
         }
-
-
-        if(Request.Form["vakId"] != null && Request.Form["vakId"] != "-") {vakId = Convert.ToInt16(Request.Form["vakId"]);}
-        if(Request.Form["lokaalId"] != null && Request.Form["lokaalId"] != "-") {lokaalId = Convert.ToInt16(Request.Form["lokaalId"]);}
-        if(Request.Form["userId"] != null && Request.Form["userId"] != "-") {userId = Convert.ToInt16(Request.Form["userId"]);}
-        if(Request.Form["dateTime"] != null) {dateTime = Convert.ToDateTime(Request.Form["dateTime"]);}
-        if(Request.Form["niveau"] != null) {niveau = Request.Form["niveau"];}
-    
+        
         if(Validation.IsValid())
         {
             VoorlichtingRepo.MakeVoorlichting(vakId, userId, lokaalId, dateTime, niveau);
@@ -84,7 +94,7 @@
 
     <input type="datetime" name="dateTime"> <span>Voer getalwijs in als jaar-maand-dagTuur:minuten (YYYY-MM-DDThh:mm / 2016-06-09T10:59)</span><br>
 
-    <button type="submit" id="submit" name="vakToevoegen" class="btn btn-success">
+    <button type="submit" id="submit" name="voorlichtingToevoegen" class="btn btn-success">
         <span class="glyphicon glyphicon-plus"></span> Verzenden
     </button>
 </form>
