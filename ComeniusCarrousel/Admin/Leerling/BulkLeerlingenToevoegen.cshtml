@@ -140,7 +140,7 @@
 <div class="col-md-12">
     <form method="post">
         @AntiForgery.GetHtml()
-        @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
+        @Html.ValidationSummary("Er is iets mislukt, voer zo nodig de leerlingen met problemen opniew in in en probeer het nog een keer.", excludeFieldErrors: true, htmlAttributes: null)
         <textarea style="width: 100%; resize: none; margin: 0 5px; padding: 0px" name="leerlingenInvoer" class="form-control col-md-12" rows="20"
                   placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)"
                   maxlength="4000"></textarea>
