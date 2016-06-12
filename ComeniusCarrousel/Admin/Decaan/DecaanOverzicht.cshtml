@@ -10,22 +10,27 @@
     List<Tuple<int, string>> decanen = DecaanRepo.GetDecanen(); // Geeft het ID en username van alle decanen mee
 }
 
-<br>
+<h2>Decaan Overzicht</h2>
 
-<a class="btn btn-default" href="~/Admin/Decaan/DecaanToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe decaan aanmaken
+<a class="btn btn-success" href="~/Admin/Decaan/DecaanToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe decaan aanmaken
 </a>
 
-<table class="table">
-    @foreach (Tuple<int, string> decaan in decanen)
-    {
+<table class="table" style="margin-top: 16px;">
+    <thead>
         <tr>
-            <td>
-                <a href="~/Admin/Decaan/DecaanWijzigen?id=@decaan.Item1" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                </a>
-            </td>
+            <th colspan="2">Gebruikersnaam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Tuple<int, string> decaan in decanen)
+        {
+        <tr>  
             <td>@decaan.Item2</td>
+            <td>
+                <a href="~/Admin/Decaan/DecaanWijzigen?id=@decaan.Item1">Aanpassen</a>
+            </td>
         </tr>
     }
+    </tbody>
 </table>

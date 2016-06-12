@@ -130,14 +130,15 @@ a:focus {
 
 .btn:active, .btn:active:focus {
     border: 0;
-    border-radius: 0;
+    border-radius: 3px;
     outline: none;
     color: #fff;
 }
 
 .btn {
-    border-radius: 0px;
+    border-radius: 3px;
     font-weight: normal;
+    padding: 10px;
 }
 
 .btn-default {
@@ -176,6 +177,26 @@ a:focus {
 
 .btn-success:active, .btn-succes:active:focus {
     background-color: #62ca62;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-danger {
+    background-image: none;
+    background-color: #d9534f;
+    border-width: 0px;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-danger:hover, .btn-danger:focus {
+    background-color: #f46b67;
+    color: #fff;
+    text-shadow: none;
+}
+
+.btn-danger:active, .btn-danger:active:focus {
+    background-color: #f46b67;
     color: #fff;
     text-shadow: none;
 }

@@ -13,10 +13,10 @@
 
     Validation.RequireField("userName", "U moet een gebruiker invullen.");
     Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
-    Validation.RequireField("confirmPassword", "Bevestegings wachtwoord mag niet leeg zijn.");
+    Validation.RequireField("confirmPassword", "Bevestigingswachtwoord mag niet leeg zijn.");
 
     Validation.Add("confirmPassword",
-        Validator.EqualsTo("password", "Bevestegings wachtwoord komt niet overeen met het wachtwoord."));
+        Validator.EqualsTo("password", "Bevestigingswachtwoord komt niet overeen met het wachtwoord."));
     Validation.Add("password",
         Validator.StringLength(
             maxLength: Int32.MaxValue,
@@ -65,12 +65,13 @@
     }
 }
 
+<h2>Nieuwe decaan aanmaken</h2>
+
 <div class="col-md-12">
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
         <fieldset>
-            <h2>Register a new account</h2>
             <div class="form-group">
                 <label for="userName">Email adres</label>
                 <input type="text" id="userName" name="userName" value="@userName" class="form-control">
@@ -86,8 +87,8 @@
                 <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
                 @Html.ValidationMessage("confirmPassword")
             </div>
-            <div class="from-group">
-                <button type="submit" class="btn btn-default">Registreer</button>
+            <div class="from-group" id="floatRight">
+                <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>&nbsp; Registreer</button>
             </div>
         </fieldset>
     </form>
