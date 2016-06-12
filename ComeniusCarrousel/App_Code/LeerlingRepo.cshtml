@@ -132,11 +132,15 @@
         return null;
     }
 
-    public static List<Leerling> GetLeerlingen()
+    public static List<Leerling> GetLeerlingen(int vakId = -1)
     {
         List<Leerling> leerlingen = new List<Leerling>();
         var db = Database.Open(App.DataBase);
         var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId");
+        if (vakId != -1)
+        {
+            data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId INNER JOIN Keuze Keuz ON Gebr.UserId = Keuz.UserId WHERE Keuz.VakId = @0", vakId);
+        }
         if(data != null)
         {
             foreach (var row in data)

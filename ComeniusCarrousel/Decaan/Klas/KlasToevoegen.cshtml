@@ -2,7 +2,7 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Klas toevoegen";
 
-    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    if (!User.IsInRole("Admin"))
     {
         Response.Redirect("~/");
     }

@@ -1,0 +1,43 @@
+﻿@functions{
+    public static void DeleteRooster(int voorlichtingId, int userId)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Rooster WHERE VoorlichtingId = @0 AND UserId = @1";
+        db.Execute(deleteCommand, voorlichtingId, userId);
+        db.Close();
+    }
+
+    public static void DeleteRoosters(int voorlichtingId)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Rooster WHERE VoorlichtingId = @0";
+        db.Execute(deleteCommand, voorlichtingId);
+        db.Close();
+    }
+
+    public static void InsertRooster(int voorlichtingId, int userId)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Rooster (VoorlichtingId, UserId) VALUES(@0,@1)";
+        db.Execute(insertCommand, voorlichtingId, userId);
+        db.Close();
+    }
+
+    public static bool ValidateRooster(int voorlichtingId, int userId)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "SELECT * FROM Rooster Where VoorlichtingId = @0 AND UserId = @1";
+        var validation = db.QuerySingle(insertCommand, voorlichtingId, userId);
+        if (validation == null)
+        {
+            db.Close();
+            return false;
+        }
+        else
+        {
+            db.Close();
+            return true;
+        }
+    }
+}
+

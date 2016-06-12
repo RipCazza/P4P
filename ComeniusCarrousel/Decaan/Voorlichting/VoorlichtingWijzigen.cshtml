@@ -8,11 +8,27 @@
     }
 
     int id = Convert.ToInt16(Request.QueryString["id"]);
-    VoorlichtingRepo.Voorlichting voorlichting = VoorlichtingRepo.Voorlichting(id);
+    VoorlichtingRepo.Voorlichting voorlichting = VoorlichtingRepo.GetVoorlichting(id);
+
+    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(voorlichting.VakId);
 
     if (voorlichting == null)
     {
         Validation.AddFormError("Deze voorlichting bestaat niet.");
+    }
+
+    if (IsPost && Request.Form["manage"] != null)
+    {
+        RoosterRepo.DeleteRoosters(voorlichting.VoorlichtingId);
+        foreach (string leerling in Request.Form.GetValues("leerlingenInvoer"))
+        {
+            if (leerling == "-")
+            {}
+            else
+            {
+            RoosterRepo.InsertRooster(voorlichting.VoorlichtingId, Convert.ToInt16(leerling));
+            }
+        }
     }
 
     if (IsPost && Request.Form["delete"] != null)
@@ -27,12 +43,32 @@
 {
     <p>
         <span>Voorlichting:</span>
-        <span>@voorlichting.Lokaal</span>
-        <span>@voorlichting.Vak</span>
-        <span>@voorlichting.Leraar</span>
-        <span>@voorlichting.Niveau</span>
-        <span>@voorlichting.DateTime</span>
+        <span>@voorlichting.Vak (@voorlichting.Niveau) van @voorlichting.Leraar. @string.Format("{0:d/M/yyyy HH:mm}", voorlichting.DateTime) in @voorlichting.Lokaal</span>
     </p>
+
+
+
+    <form method="post" class="form-inline">
+        <select class="form-control" id="sel1" name="leerlingenInvoer" multiple>
+            <option value="-"></option>
+            @foreach(LeerlingRepo.Leerling leerling in leerlingen)
+            {
+                bool check = RoosterRepo.ValidateRooster(voorlichting.VoorlichtingId, leerling.UserId);
+                if (check)
+                {
+                    <option value="@leerling.UserId" selected>@leerling.Voornaam @leerling.Achternaam (@leerling.Leerlingnummer)</option>
+                }
+                else
+                {
+                    <option value="@leerling.UserId">@leerling.Voornaam @leerling.Achternaam (@leerling.Leerlingnummer)</option>
+                }
+            }
+        </select>
+        <button type="submit" id="submit" name="manage" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Kies
+        </button>
+    </form>
+
     <form method="post" class="form-inline">
         <button type="submit" id="submit" name="delete" class="btn btn-danger">
             <span class="glyphicon glyphicon-remove"></span> Remove

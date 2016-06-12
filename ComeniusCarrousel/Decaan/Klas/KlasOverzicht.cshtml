@@ -12,19 +12,25 @@
 
 <br>
 
-<a class="btn btn-default" href="~/Decaan/Klas/KlasToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe klas aanmaken
-</a>
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-default" href="~/Decaan/Klas/KlasToevoegen">
+        <span class="glyphicon glyphicon-pencil"></span> Nieuwe klas aanmaken
+    </a>
+}
 
 <table class="table">
     @foreach (KlasRepo.Klas klas in klassen)
     {
         <tr>
-            <td>
-                <a href="~/Decaan/Klas/KlasWijzigen?id=@klas.KlasId" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                </a>
-            </td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    <a href="~/Decaan/Klas/KlasWijzigen?id=@klas.KlasId" class="btn btn-default">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </a>
+                </td>
+            }
             <td>@klas.KlasNaam</td>
         </tr>
     }
