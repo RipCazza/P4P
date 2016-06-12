@@ -58,12 +58,33 @@
         return null;
     }
 
+    public static Klas GetKlasId(string klasNaam, string niveau)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT KlasId FROM Klas WHERE LOWER(KlasNaam) = LOWER(@0) AND LOWER (Niveau) = LOWER(@1)", klasNaam, niveau);
+        if(data != null)
+        {
+            return data.KlasId;
+        }
+        db.Close();
+        return null;
+    }
+
     public static void MakeKlas(string klasNaam)
     {
         var db = Database.Open(App.DataBase);
         var insertCommand = "INSERT INTO Klas (KlasNaam) VALUES(@0)";
         db.Execute(insertCommand, klasNaam);
         db.Close();
+    }
+
+    public static bool ValidateKlas(string klasNaam, string niveau)
+    {
+        var db = Database.Open(App.DataBase);
+        var klasCheck = db.QuerySingle("SELECT KlasNaam FROM Klas WHERE LOWER(Klas) = LOWER(@0) AND LOWER(Niveau) = LOWER(@1)", klasNaam, niveau);
+        db.Close();
+        if (klasCheck.KlasNaam == null){return false;}
+        else{return true;}
     }
 
     public static void DeleteKlas(int id)

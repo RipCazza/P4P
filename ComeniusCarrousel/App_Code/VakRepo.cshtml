@@ -89,4 +89,13 @@
         }
         db.Close();
     }
+
+    public static bool ValidateVak(string vakNaam)
+    {
+        var db = Database.Open(App.DataBase);
+        var vakCheck = db.QuerySingle("SELECT VakNaam FROM Vak WHERE LOWER(Vak) = LOWER(@0)", vakNaam);
+        db.Close();
+        if (vakCheck.VakNaam == null){return false;}
+        else{return true;}
+    }
 }

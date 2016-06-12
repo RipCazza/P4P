@@ -73,6 +73,7 @@
                 ModelState.AddFormError("Gebruiker bestaat al");
             }
             db.Close();
+            db2.Close();
         }
     }
 }
