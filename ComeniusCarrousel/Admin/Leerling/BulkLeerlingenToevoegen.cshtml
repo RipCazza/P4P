@@ -26,105 +26,111 @@
                 maxLength: 400,
                 errorMessage: "Uw e mail kan niet meer dan 400 tekens bevatten"));*/
 
-    if(IsPost)
+    if(IsPost && Request.Form["leerlingenToevoegen"] != null)
     {
-        leerlingenInvoer = Request.Form["leerlingInvoer"];
-        string[] leerlingen = Repository.SplitLeerlingen(leerlingenInvoer);
-        for(int i = 0; i < leerlingen.Length; i++)
+        leerlingenInvoer = Request.Form["leerlingenInvoer"];
+        if (leerlingenInvoer == null)
         {
-            string[] leerling = Repository.SplitLeerling(leerlingen[i]);
-            if (!leerling.Length = 9) //Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
+            Validation.AddFormError("Vul iets in");
+        }
+        else
+        {
+            string[] leerlingen = Repository.SplitLeerlingen(leerlingenInvoer);
+            for(int i = 0; i < leerlingen.Length; i++)
             {
-                Validation.AddFormError("Het aantal waardes bij leerling " + i + " is onjuist.");
-            }
-            else
-            {
-                string voornaam = leerling[0];
-                string achternaam = leerling[1];
-
-                int leerlingnummer = -1;
-                bool result = Int32.TryParse(leerling[2], out leerlingnummer);
-                if (!result)
+                string[] leerling = Repository.SplitLeerling(leerlingen[i]);
+                if (leerling.Length != 9) //Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
                 {
-                    Validation.AddFormError("Het leerlingnummer van leerling " + i + " bevat niet alleen nummers.");
-                }
-
-                string mail = leerling[3];
-                if (!mail.Contains("@") && !mail.Substring(mail.IndexOf("@") + 2).Contains("."))
-                {
-                    Validation.AddFormError("De mail van leerling " + i + " kan niet juist zijn.");
-                }
-
-                string wachtwoord = leerling[4];
-                if (wachtwoord.Length < 8)
-                {
-                    Validation.AddFormError("Het wachtwoord van leerling " + i + " is te kort. (min 8)");
-                }
-
-                string niveau = leerling[6];
-                if (!(niveau.ToLower() == "havo" && niveau.ToLower() == "vwo"))
-                {
-                    Validation.AddFormError("Het niveau van leerling " + i + " bestaat niet.");
-                }
-
-                string klas = leerling[5];
-                int klasId = -1;
-                bool validateKlas = KlasRepo.ValidateKlas(klas, niveau);
-                if (validateKlas == false)
-                {
-                    Validation.AddFormError("De klas van leerling " + i + " klopt niet.");
+                    Validation.AddFormError("Het aantal waardes bij leerling " + i + " is onjuist.");
                 }
                 else
                 {
-                    klasId = KlasRepo.GetKlasId(klas, niveau);
-                }
+                    string voornaam = leerling[0];
+                    string achternaam = leerling[1];
 
-                string vak = leerling[7];
-                bool validateVak = VakRepo.ValidateVak(vak);
-                if (validateVak == false)
-                {
-                    Validation.AddFormError("Het vak van leerling " + i + " bestaat niet.");
-                }
-
-                string instroomleerling = leerling[8];
-                if (!(instroomleerling.ToLower() == "false" || instroomleerling.ToLower() == "true"))
-                {
-                    Validation.AddFormError("De waarde bij instroomleerling van leerling " + i + " is onjuist.");
-                }
-
-                if (Validation.IsValid())
-                {
-                    var db = Database.Open(App.AuthDataBase);
-                    var db2 = Database.Open(App.DataBase);
-                    var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
-                    if(user == null)
+                    int leerlingnummer = -1;
+                    bool result = Int32.TryParse(leerling[2], out leerlingnummer);
+                    if (!result)
                     {
-                        db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", mail);
-                
-                        try
-                        {
-                            var token = WebSecurity.CreateAccount(mail, wachtwoord, false);
-                            var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
-                            db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
-                            db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau, leerlingnummer, instroomleerling, talentstroomvak, "False");
-                            Roles.AddUserToRole(userName, "Leerling");
-                            db.Close();
-                            db2.Close();
-                            Response.Redirect("~/");
-                        }
-                        catch(System.Web.Security.MembershipCreateUserException e)
-                        {
-                            db.Close();
-                            db2.Close();
-                            ModelState.AddFormError(e.Message);
-                        }
+                        Validation.AddFormError("Het leerlingnummer van leerling " + i + " bevat niet alleen nummers.");
+                    }
+
+                    string mail = leerling[3];
+                    if (!mail.Contains("@") && !mail.Substring(mail.IndexOf("@") + 2).Contains("."))
+                    {
+                        Validation.AddFormError("De mail van leerling " + i + " kan niet juist zijn.");
+                    }
+
+                    string wachtwoord = leerling[4];
+                    if (wachtwoord.Length < 8)
+                    {
+                        Validation.AddFormError("Het wachtwoord van leerling " + i + " is te kort. (min 8)");
+                    }
+
+                    string niveau = leerling[6];
+                    if (!(niveau.ToLower() == "havo" || niveau.ToLower() == "vwo"))
+                    {
+                        Validation.AddFormError("Het niveau van leerling " + i + " bestaat niet.");
+                    }
+
+                    string klas = leerling[5];
+                    int klasId = -1;
+                    bool validateKlas = KlasRepo.ValidateKlas(klas);
+                    if (validateKlas == false)
+                    {
+                        Validation.AddFormError("De klas van leerling " + i + " bestaat niet.");
                     }
                     else
                     {
-                        ModelState.AddFormError("Gebruiker " + i + " bestaat al");
+                        klasId = KlasRepo.GetKlasId(klas);
                     }
-                    db.Close();
-                    db2.Close();
+
+                    string vak = leerling[7];
+                    bool validateVak = VakRepo.ValidateVak(vak, niveau);
+                    if (validateVak == false)
+                    {
+                        Validation.AddFormError("Het vak van leerling " + i + " klopt niet.");
+                    }
+
+                    string instroomleerling = leerling[8];
+                    if (!(instroomleerling.ToLower() == "false" || instroomleerling.ToLower() == "true"))
+                    {
+                        Validation.AddFormError("De waarde bij instroomleerling van leerling " + i + " is onjuist.");
+                    }
+
+                    if (Validation.IsValid())
+                    {
+                        var db = Database.Open(App.AuthDataBase);
+                        var db2 = Database.Open(App.DataBase);
+                        var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
+                        if(user == null)
+                        {
+                            db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", mail);
+                
+                            try
+                            {
+                                var token = WebSecurity.CreateAccount(mail, wachtwoord, false);
+                                var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
+                                db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
+                                db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau, leerlingnummer, instroomleerling, vak, "False");
+                                Roles.AddUserToRole(mail, "Leerling");
+                                db.Close();
+                                db2.Close();
+                            }
+                            catch(System.Web.Security.MembershipCreateUserException e)
+                            {
+                                db.Close();
+                                db2.Close();
+                                ModelState.AddFormError(e.Message);
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddFormError("Gebruiker " + i + " bestaat al");
+                        }
+                        db.Close();
+                        db2.Close();
+                    }
                 }
             }
         }
@@ -138,7 +144,9 @@
         <textarea style="width: 100%; resize: none; margin: 0 5px; padding: 0px" name="leerlingenInvoer" class="form-control col-md-12" rows="20"
                   placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)"
                   maxlength="4000"></textarea>
-
+        <button type="submit" id="submit" name="leerlingenToevoegen" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Verzenden
+        </button>
     </form>
 </div>
 

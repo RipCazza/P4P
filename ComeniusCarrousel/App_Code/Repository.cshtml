@@ -9,14 +9,13 @@
 
     public static string[] SplitLeerlingen(string leerlingInvoer)
     {
-        char[] splitter = {'\n'};
-        string[] leerlingen = leerlingInvoer.Split(splitter);
+        string[] leerlingen = leerlingInvoer.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
         return leerlingen;
     }
 
     public static string[] SplitLeerling(string leerling)
     {
-        char[] splitter = {'\n'};
+        char[] splitter = {'|'};
         string[] leerlingDetails = leerling.Split(splitter);
         return leerlingDetails;
     }

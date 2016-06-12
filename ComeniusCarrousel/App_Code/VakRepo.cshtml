@@ -90,10 +90,10 @@
         db.Close();
     }
 
-    public static bool ValidateVak(string vakNaam)
+    public static bool ValidateVak(string vakNaam, string niveau)
     {
         var db = Database.Open(App.DataBase);
-        var vakCheck = db.QuerySingle("SELECT VakNaam FROM Vak WHERE LOWER(Vak) = LOWER(@0)", vakNaam);
+        var vakCheck = db.QuerySingle("SELECT VakNaam FROM Vak WHERE LOWER(VakNaam) = LOWER(@0) AND LOWER(Niveau) = LOWER(@1)", vakNaam, niveau);
         db.Close();
         if (vakCheck.VakNaam == null){return false;}
         else{return true;}
