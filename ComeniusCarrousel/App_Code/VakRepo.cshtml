@@ -95,7 +95,7 @@
         var db = Database.Open(App.DataBase);
         var vakCheck = db.QuerySingle("SELECT VakNaam FROM Vak WHERE LOWER(VakNaam) = LOWER(@0) AND LOWER(Niveau) = LOWER(@1)", vakNaam, niveau);
         db.Close();
-        if (vakCheck.VakNaam == null){return false;}
+        if (vakCheck == null){return false;}
         else{return true;}
     }
 }

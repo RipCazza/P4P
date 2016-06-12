@@ -41,7 +41,7 @@
                 string[] leerling = Repository.SplitLeerling(leerlingen[i]);
                 if (leerling.Length != 9) //Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
                 {
-                    Validation.AddFormError("Het aantal waardes bij leerling " + i + " is onjuist.");
+                    Validation.AddFormError("Het aantal waardes bij leerling " + (i+1) + " is onjuist.");
                 }
                 else
                 {
@@ -52,25 +52,25 @@
                     bool result = Int32.TryParse(leerling[2], out leerlingnummer);
                     if (!result)
                     {
-                        Validation.AddFormError("Het leerlingnummer van leerling " + i + " bevat niet alleen nummers.");
+                        Validation.AddFormError("Het leerlingnummer van leerling " + (i+1) + " bevat niet alleen nummers.");
                     }
 
                     string mail = leerling[3];
                     if (!mail.Contains("@") && !mail.Substring(mail.IndexOf("@") + 2).Contains("."))
                     {
-                        Validation.AddFormError("De mail van leerling " + i + " kan niet juist zijn.");
+                        Validation.AddFormError("De mail van leerling " + (i+1) + " kan niet juist zijn.");
                     }
 
                     string wachtwoord = leerling[4];
                     if (wachtwoord.Length < 8)
                     {
-                        Validation.AddFormError("Het wachtwoord van leerling " + i + " is te kort. (min 8)");
+                        Validation.AddFormError("Het wachtwoord van leerling " + (i+1) + " is te kort. (min 8)");
                     }
 
                     string niveau = leerling[6];
                     if (!(niveau.ToLower() == "havo" || niveau.ToLower() == "vwo"))
                     {
-                        Validation.AddFormError("Het niveau van leerling " + i + " bestaat niet.");
+                        Validation.AddFormError("Het niveau van leerling " + (i+1) + " bestaat niet.");
                     }
 
                     string klas = leerling[5];
@@ -78,7 +78,7 @@
                     bool validateKlas = KlasRepo.ValidateKlas(klas);
                     if (validateKlas == false)
                     {
-                        Validation.AddFormError("De klas van leerling " + i + " bestaat niet.");
+                        Validation.AddFormError("De klas van leerling " + (i+1) + " bestaat niet.");
                     }
                     else
                     {
@@ -89,13 +89,13 @@
                     bool validateVak = VakRepo.ValidateVak(vak, niveau);
                     if (validateVak == false)
                     {
-                        Validation.AddFormError("Het vak van leerling " + i + " klopt niet.");
+                        Validation.AddFormError("Het vak van leerling " + (i+1) + " klopt niet.");
                     }
 
                     string instroomleerling = leerling[8];
                     if (!(instroomleerling.ToLower() == "false" || instroomleerling.ToLower() == "true"))
                     {
-                        Validation.AddFormError("De waarde bij instroomleerling van leerling " + i + " is onjuist.");
+                        Validation.AddFormError("De waarde bij instroomleerling van leerling " + (i+1) + " is onjuist.");
                     }
 
                     if (Validation.IsValid())
@@ -126,7 +126,7 @@
                         }
                         else
                         {
-                            ModelState.AddFormError("Gebruiker " + i + " bestaat al");
+                            ModelState.AddFormError("Gebruiker " + (i+1) + " bestaat al");
                         }
                         db.Close();
                         db2.Close();
