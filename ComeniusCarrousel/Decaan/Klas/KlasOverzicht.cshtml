@@ -37,9 +37,7 @@
             @if (User.IsInRole("Admin"))
             {
                 <td>
-                    <a href="~/Decaan/Klas/KlasWijzigen?id=@klas.KlasId" class="btn btn-default">
-                        <span class="glyphicon glyphicon-pencil"></span> Verwijderen
-                    </a>
+                    <a href="~/Decaan/Klas/KlasWijzigen?id=@klas.KlasId">Wijzig</a>
                 </td>
             }
         </tr>

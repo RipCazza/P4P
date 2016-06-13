@@ -28,11 +28,6 @@
         @foreach (LokaalRepo.Lokaal lokaal in lokalen)
         {    
         <tr>
-            <td>
-                <a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.LokaalId" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Verwijderen
-                </a>
-            </td>
             <td>@lokaal.LokaalNaam</td>
             <td>@lokaal.Capaciteit</td>
             <td><a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.LokaalId">Wijzig</a></td>
