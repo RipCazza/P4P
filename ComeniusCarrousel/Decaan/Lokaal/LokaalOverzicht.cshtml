@@ -10,23 +10,28 @@
     List<LokaalRepo.Lokaal> lokalen = LokaalRepo.GetLokalen();
 }
 
-<br>
+<h2>Lokaaloverzicht</h2>
 
-<a class="btn btn-default" href="~/Decaan/Lokaal/LokaalToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuw lokaal aanmaken
+<a class="btn btn-success" href="~/Decaan/Lokaal/LokaalToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuw lokaal aanmaken
 </a>
 
-<table class="table">
-    @foreach (LokaalRepo.Lokaal lokaal in lokalen)
-    {
+<table class="table" style="margin-top: 16px;">
+    <thead>
         <tr>
-            <td>
-                <a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.LokaalId" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                </a>
-            </td>
+            <th>Lokaal</th>
+            <th>Capaciteit</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (LokaalRepo.Lokaal lokaal in lokalen)
+        {    
+        <tr>
             <td>@lokaal.LokaalNaam</td>
             <td>@lokaal.Capaciteit</td>
+            <td><a href="~/Decaan/Lokaal/LokaalWijzigen?id=@lokaal.LokaalId">Wijzig</a></td>
         </tr>
-    }
+        }
+    </tbody>
 </table>
