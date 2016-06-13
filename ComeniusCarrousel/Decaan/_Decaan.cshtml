@@ -11,20 +11,22 @@
 <a class="btn btn-success" href="~/Admin/Leerling/LeerlingToevoegen">
     <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe leerling aanmaken
 </a>
-
-<input type="text" id="search" placeholder="Type to search">
-<table class="table" style="margin-top: 16px;" id="table">
+</br>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
+<table class="table" style="margin-top: 16px;">
     <thead>
     <tr>
         <th>Voornaam</td>
         <th>Achternaam</td>
         <th>Leerlingnummer</td>
         <th>Niveau</td>
-        <th>Keuze vakken</td>
+        <th>Keuzevakken</td>
         <th>Details</td>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="table">
         @foreach (LeerlingRepo.Leerling leerling in leerlingen)
         {
             <tr>
@@ -39,7 +41,7 @@
                 }
                 </td>
                 <td>
-                    <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">Meer</a>
+                    <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">Bekijken</a>
                 </td>
                 <td style="display:none;">@leerling.Klas</td>
                 <td style="display:none;">@leerling.Aangemeld</td>
