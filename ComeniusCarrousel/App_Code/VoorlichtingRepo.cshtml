@@ -148,6 +148,7 @@
         var deleteCommand = "DELETE FROM Voorlichting WHERE VoorlichtingId = @0";
         var deleteRoosterCommand = "DELETE FROM Rooster WHERE VoorlichtingId = @0";
         db.Execute(deleteCommand, id);
+        db.Execute(deleteRoosterCommand, id);
         db.Close();
     }
 }

@@ -103,17 +103,7 @@
             user = userData.UserName;
             if (WebMatrix.WebData.WebSecurity.UserExists(user))
             {
-                var deleteLeerlingCommand = "DELETE FROM Leerling WHERE UserId = @0";
-                var deleteGebruikerCommand = "DELETE FROM Gebruiker WHERE UserId = @0";
-                db.Execute(deleteLeerlingCommand, row.UserId);
-                db.Execute(deleteGebruikerCommand, row.UserId);
-                var userRoles = Roles.GetRolesForUser(user);
-                if (userRoles.Count() > 0)
-                {
-                    Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
-                }
-                ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
-                ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+                LeerlingRepo.DeleteLeerlingen(row.UserId, user);
             }
         }
         db.Close();

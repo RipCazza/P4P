@@ -1,15 +1,48 @@
 ﻿@{
-    
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Leerling wijzigen";
+
+    if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("~/");
+    }
+
+    LeerlingRepo.Leerling leerling;
+    var user = "";
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    leerling = LeerlingRepo.GetLeerling(id);
+
+    if (leerling == null)
+    {
+        Validation.AddFormError("Deze leerling bestaat niet.");
+    }
+    else
+    {
+        user = leerling.UserName;
+    }
+
+
+    // Delete de leerling en alles waar de leerling in voor komt.
+    if (IsPost && Request.Form["delete"] != null)
+    {
+        if (WebMatrix.WebData.WebSecurity.UserExists(user))
+        {
+            LeerlingRepo.DeleteLeerlingen(id, user);
+        }
+        Response.Redirect("~/");
+    }
+ }
+
+@Html.ValidationSummary()
+@if (leerling != null)
+{
+    <p>
+        <span>Gebruiker:</span>
+        <span>@user</span>
+    </p>
+    <form method="post" class="form-inline">
+        <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span> Remove
+        </button>
+    </form>
 }
-
-<!DOCTYPE html>
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>

@@ -7,40 +7,34 @@
         Response.Redirect("~/");
     }
 
-    Tuple<int, string> decaan;
+    LeraarRepo.Leraar leraar;
     var user = "";
     int id = Convert.ToInt16(Request.QueryString["id"]);
-    decaan = DecaanRepo.GetDecaan(id);
+    leraar = LeraarRepo.GetLeraar(id);
 
-    if (decaan == null)
+    if (leraar == null)
     {
-        Validation.AddFormError("Deze decaan bestaat niet.");
+        Validation.AddFormError("Deze leraar bestaat niet.");
     }
     else
     {
-        user = decaan.Item2;
+        user = leraar.UserName;
     }
 
 
-    // Delete de decaan en alles waar de decaan in voor komt.
+    // Delete de leraar en alles waar de leraar in voor komt.
     if (IsPost && Request.Form["delete"] != null)
     {
         if (WebMatrix.WebData.WebSecurity.UserExists(user))
         {
-            var userRoles = Roles.GetRolesForUser(user);
-            if (userRoles.Count() > 0)
-            {
-                Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
-            }
-            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
-            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+            LeraarRepo.DeleteLeraar(id, user);
         }
-        Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
+        Response.Redirect("~/Decaan/Leraar/LeraarOverzicht");
     }
  }
 
 @Html.ValidationSummary()
-@if (decaan != null)
+@if (leraar != null)
 {
     <p>
         <span>Gebruiker:</span>

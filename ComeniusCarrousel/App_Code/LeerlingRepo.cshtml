@@ -155,4 +155,29 @@
         db.Close();
         return null;
     }
+
+    public static void DeleteLeerlingen(int userId, string user)
+    {
+        var db = Database.Open(App.DataBase);
+        var userDb = Database.Open(App.AuthDataBase);
+        var deleteLeerlingCommand = "DELETE FROM Leerling WHERE UserId = @0";
+        var deleteGebruikerCommand = "DELETE FROM Gebruiker WHERE UserId = @0";
+        var deleteMailOntvangerCommand = "DELETE FROM Gebruiker WHERE UserId = @0";
+        var deleteKeuzeCommand = "DELETE FROM Keuze WHERE UserId = @0";
+        var deleteRoosterCommand = "DELETE FROM Rooster WHERE UserId = @0";
+        db.Execute(deleteLeerlingCommand, userId);
+        db.Execute(deleteGebruikerCommand, userId);
+        db.Execute(deleteMailOntvangerCommand, userId);
+        db.Execute(deleteKeuzeCommand, userId);
+        db.Execute(deleteRoosterCommand, userId);
+        var userRoles = Roles.GetRolesForUser(user);
+        if (userRoles.Count() > 0)
+        {
+            Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
+        }
+        ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
+        ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+        db.Close();
+        userDb.Close();
+    }
 }
