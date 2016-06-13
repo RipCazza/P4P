@@ -1,0 +1,18 @@
+﻿@functions{
+    // mailId, userId, Niveau, roleId, aangemeld, klasId
+    public static void DeleteKeuze(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM MailOntvanger WHERE MailId = @0";
+        db.Execute(deleteCommand, id);
+        db.Close();
+    }
+    public static void InsertMailOntvanger (string aangemeld = "", string niveau = "", string klasId = "", string roleId= "", string userId = "")
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO MailOntvanger (Aangemeld, Niveau, KlasId, RoleId, UserId) VALUES(@0,@1,@2,@3,@4)";
+        db.Execute(insertCommand, aangemeld != "" ? aangemeld : null, niveau != "" ? niveau : null, 
+                   klasId != "" ? klasId : null, roleId != "" ? roleId : null, userId != "" ? userId : null);
+        db.Close();
+    }
+}
