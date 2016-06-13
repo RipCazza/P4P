@@ -1,15 +1,63 @@
 ﻿@{
+    Layout = "~/_Layout.cshtml";
+    
+    var onderwerp = "";
+    var inhoud = "";
+    var mailId = "";
+
+    if(!IsPost){
+        if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt()) {
+            mailId = Request.QueryString["MailId"];
+            var db = Database.Open("ComeniusCarrousel");
+            var dbCommand = "SELECT * FROM Mail WHERE MailId = @0";
+            var row = db.QuerySingle(dbCommand, mailId);
+
+            if(row != null) {
+                onderwerp = row.Onderwerp;
+                inhoud = row.Inhoud;
+
+            }
+            else{
+                Validation.AddFormError("Er was geen mail concept geselecteerd");
+            }
+        }
+        else{
+            Validation.AddFormError("Er was geen mail concept geselecteerd");
+        }
+    }
+
+    if(IsPost){
+        Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
+        Validation.RequireField("inhoud", "Inhoud is vereist");
+        Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
+
+        onderwerp = Request.Form["Onderwerp"];
+        inhoud = Request.Form["Inhoud"];
+        mailId = Request.Form["MailId"];
+        }
     
 }
 
-<!DOCTYPE html>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title></title>
-    </head>
-    <body>
-        
-    </body>
-</html>
+<!DOCTYPE html>
+<body>
+  <form method="post" action="MailBevestiging.cshtml">
+
+    <p><label for="onderwerp">Onderwerp:</label>
+         <input type="text" name="onderwerp" value="@onderwerp" />
+    </p>
+
+    <div>
+        Aan:
+        <input type="text" name="ontvanger" />
+    </div>
+
+    <p><label for="inhoud">Inhoud:</label>
+         <input type="text" name="inhoud" value="@inhoud" />
+    </p>
+
+    <div>
+        <input type="submit" value="Submit" />
+    </div>
+  </form>
+</body>
