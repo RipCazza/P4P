@@ -1,7 +1,7 @@
 ﻿@*Wordt aangeroepen in default*@
 @{
    int id = WebSecurity.CurrentUserId;
-   List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(); 
+   List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen();
 }
 <h2>Leerlingenoverzicht</h2>
 
@@ -9,10 +9,11 @@
     <span class="glyphicon glyphicon-plus"></span>&nbsp; Meerdere leerlingen aanmaken
 </a>
 <a class="btn btn-success" href="~/Admin/Leerling/LeerlingToevoegen">
-    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe leerling toevoegen
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe leerling aanmaken
 </a>
 
-<table class="table" style="margin-top: 16px;">
+<input type="text" id="search" placeholder="Type to search">
+<table class="table" style="margin-top: 16px;" id="table">
     <thead>
     <tr>
         <th>Voornaam</td>
@@ -24,24 +25,39 @@
     </tr>
     </thead>
     <tbody>
-            @foreach (LeerlingRepo.Leerling leerling in leerlingen)
-            {
-        
-        <tr>
-            <td>@leerling.Voornaam</td>
-            <td>@leerling.Achternaam</td>
-            <td>@leerling.Leerlingnummer</td>
-            <td>@leerling.Niveau</td>
-            <td>
+        @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+        {
+            <tr>
+                <td>@leerling.Voornaam</td>
+                <td>@leerling.Achternaam</td>
+                <td>@leerling.Leerlingnummer</td>
+                <td>@leerling.Niveau</td>
+                <td>
                 @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
                 {
                     <span>@vak.Item1</span>
                 }
-            </td>
-            <td>
-                <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">Meer</a>
-            </td>
-        </tr>
-    }
+                </td>
+                <td>
+                    <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">Meer</a>
+                </td>
+                <td style="display:none;">@leerling.Klas</td>
+                <td style="display:none;">@leerling.Aangemeld</td>
+                <td style="display:none;">@leerling.UserName</td>
+                <td style="display:none;">@leerling.MailVerzorger</td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script>
+    var $rows = $('#table tr');
+    $('#search').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+        $rows.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+</script>

@@ -56,7 +56,7 @@
                     }
 
                     string mail = leerling[3];
-                    if (!mail.Contains("@") && !mail.Substring(mail.IndexOf("@") + 2).Contains("."))
+                    if (!(mail.Contains("@") || mail.Substring(mail.IndexOf("@") + 2).Contains(".")) || mail.Length > 400)
                     {
                         Validation.AddFormError("De mail van leerling " + (i+1) + " kan niet juist zijn.");
                     }
@@ -87,7 +87,7 @@
 
                     string vak = leerling[7];
                     bool validateVak = VakRepo.ValidateVak(vak, niveau);
-                    if (validateVak == false)
+                    if (validateVak == false && instroomleerling.ToLower() == "false")
                     {
                         Validation.AddFormError("Het vak van leerling " + (i+1) + " klopt niet.");
                     }
@@ -112,7 +112,7 @@
                                 var token = WebSecurity.CreateAccount(mail, wachtwoord, false);
                                 var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
                                 db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
-                                db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau, leerlingnummer, instroomleerling, vak, "False");
+                                db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau.ToUpper(), leerlingnummer, instroomleerling, vak, "False");
                                 Roles.AddUserToRole(mail, "Leerling");
                                 db.Close();
                                 db2.Close();
