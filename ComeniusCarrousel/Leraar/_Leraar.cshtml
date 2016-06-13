@@ -1,4 +1,12 @@
 ﻿@*Wordt aangeroepen in default*@
 @{
-    
+    if (!User.IsInRole("Leraar"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = WebSecurity.CurrentUserId;
+    LeraarRepo.Leraar leraar = LeraarRepo.GetLeraar(id);
 }
+
+<h3>@leraar.Voornaam @leraar.Achternaam (@leraar.UserName): @leraar.VoorlichtingVak</h3>
