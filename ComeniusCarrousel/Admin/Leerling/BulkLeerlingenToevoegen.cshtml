@@ -56,7 +56,7 @@
                     }
 
                     string mail = leerling[3];
-                    if (!mail.Contains("@") && !mail.Substring(mail.IndexOf("@") + 2).Contains("."))
+                    if (!(mail.Contains("@") || mail.Substring(mail.IndexOf("@") + 2).Contains(".")) || mail.Length > 400)
                     {
                         Validation.AddFormError("De mail van leerling " + (i+1) + " kan niet juist zijn.");
                     }
@@ -87,7 +87,7 @@
 
                     string vak = leerling[7];
                     bool validateVak = VakRepo.ValidateVak(vak, niveau);
-                    if (validateVak == false)
+                    if (validateVak == false && instroomleerling.ToLower() == "false")
                     {
                         Validation.AddFormError("Het vak van leerling " + (i+1) + " klopt niet.");
                     }
