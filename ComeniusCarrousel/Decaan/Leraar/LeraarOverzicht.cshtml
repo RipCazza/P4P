@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Leraaroverzicht overzicht";
+    Page.Title = "Leraar overzicht";
 
     if (!User.IsInRole("Admin"))
     {
@@ -20,7 +20,7 @@
         <tr>
             <td>
                 <a href="~/Decaan/Leraar/LeraarWijzigen?id=@leraar.UserId" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
+                    <span class="glyphicon glyphicon-pencil"></span> Verwijderen 
                 </a>
             </td>
             <td>@leraar.Voornaam</td> <td>@leraar.Achternaam</td>

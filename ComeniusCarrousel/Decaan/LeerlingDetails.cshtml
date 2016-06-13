@@ -1,5 +1,5 @@
 ﻿@{
-    Page.Title= "Keuze";
+    Page.Title= "Leerling details";
     Layout = "~/_Layout.cshtml";
     int id = Convert.ToInt16(Request.QueryString["id"]);
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
@@ -13,6 +13,6 @@
 @if (User.IsInRole("Admin"))
 {
     <a href="~/Admin/Leerling/LeerlingWijzigen?id=@id" class="btn btn-default">
-        <span class="glyphicon glyphicon-pencil"></span> Edit
+        <span class="glyphicon glyphicon-pencil"></span> Verwijderen
     </a>
 }
