@@ -1,18 +1,50 @@
 ﻿@functions{
     // mailId, userId, Niveau, roleId, aangemeld, klasId
-    public static void DeleteKeuze(int id)
+    public static void InsertMailOntvanger (int mailId, string aangemeld = "", string niveau = "", string klasId = "", string roleId= "", string userId = "")
     {
         var db = Database.Open(App.DataBase);
-        var deleteCommand = "DELETE FROM MailOntvanger WHERE MailId = @0";
-        db.Execute(deleteCommand, id);
-        db.Close();
-    }
-    public static void InsertMailOntvanger (string aangemeld = "", string niveau = "", string klasId = "", string roleId= "", string userId = "")
-    {
-        var db = Database.Open(App.DataBase);
-        var insertCommand = "INSERT INTO MailOntvanger (Aangemeld, Niveau, KlasId, RoleId, UserId) VALUES(@0,@1,@2,@3,@4)";
-        db.Execute(insertCommand, aangemeld != "" ? aangemeld : null, niveau != "" ? niveau : null, 
+        var insertCommand = "INSERT INTO MailOntvanger (MailId, Aangemeld, Niveau, KlasId, RoleId, UserId) VALUES(@0,@1,@2,@3,@4,@5)";
+        db.Execute(insertCommand, mailId, aangemeld != "" ? aangemeld : null, niveau != "" ? niveau : null, 
                    klasId != "" ? klasId : null, roleId != "" ? roleId : null, userId != "" ? userId : null);
         db.Close();
+    }
+    public static List<int> GetMailOntvangers (int mailId) //roleId werkt niet
+    {
+        List<int> userIds = new List<int>();
+        var db = Database.Open(App.DataBase);
+        var gebruikerData = db.Query("SELECT UserId FROM Gebruiker INNER JOIN MailOntvanger WHERE MailId = @0 AND Gebruiker.UserId = MailOntvanger.UserId", mailId);
+        var leerlingData = db.Query("SELECT UserId FROM Leerling INNER JOIN MailOntvanger WHERE MailId = @0 AND (Leerling.Niveau = MailOntvanger.Niveau OR Leerling.Aangemeld = MailOntvanger.Aangemeld OR Leerling.KlasId = MailOntvanger.KlasId)", mailId);
+        var roleData = db.Query("SELECT RoleId FROM MailOntvanger WHERE MailId = @0", mailId);
+
+        foreach (var row in leerlingData)
+        {
+            userIds.Add(row.UserId);
+        }
+        foreach (var row in gebruikerData)
+        {
+            if (!userIds.Contains(row.UserId))
+            {
+                userIds.Add(row.UserId);
+            }
+        }
+
+        if (roleData != null)
+        {
+            var authDb = Database.Open(App.AuthDataBase);
+            foreach (var row in roleData)
+            {
+                var moreRoleData = db.Query("SELECT UserId FROM webpages_UsersInRoles INNER JOIN webpages_Roles WHERE RoleId = @0", row.RoleId);
+                foreach (var r in moreRoleData)
+                {
+                    if (!userIds.Contains(r.UserId))
+                    {
+                        userIds.Add(r.UserId);
+                    }
+                }
+            }
+            authDb.Close();
+        }
+        db.Close();
+        return userIds;
     }
 }

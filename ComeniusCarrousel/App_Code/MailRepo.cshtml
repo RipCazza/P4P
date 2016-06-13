@@ -1,0 +1,82 @@
+﻿@functions{
+    public class Mail
+    {
+        private const string table = "Mail";
+        private const string idName = "MailId";
+
+        private int mailId;
+        private string inhoud;
+        private string onderwerp;
+
+        public Mail(int mailId, string inhoud, string onderwerp)
+        {
+            this.mailId = mailId;
+            this.inhoud = inhoud;
+            this.onderwerp = onderwerp;
+        }
+
+        public int MailId
+        {
+            get{return mailId;}
+        }
+        public string Inhoud
+        {
+            get{return inhoud;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Inhoud", value, idName, mailId);
+            }
+        }
+        public string Onderwerp
+        {
+            get{return onderwerp;}
+            set{
+                Repository.CRUD.doSimpleIdUpdate(table, "Onderwerp", value, idName, mailId);
+            }
+        }
+    }
+
+    public static List<Mail> GetMails()
+    {
+        List<Mail> mails = new List<Mail>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Mail");
+        foreach(var row in data)
+        {
+            mails.Add(new Mail(row.MailId, row.Inhoud, row.Onderwerp));
+        }
+        db.Close();
+        return mails;
+    }
+
+    public static Mail GetMail(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Mail WHERE MailId = @0", id);
+        if(data != null)
+        {
+            Mail mail = new Mail(id, data.Inhoud, data.Onderwerp);
+            db.Close();
+            return mail;
+        }
+        db.Close();
+        return null;
+    }
+
+    public static void MakeMail(string inhoud, string onderwerp)
+    {
+        var db = Database.Open(App.DataBase);
+        var insertCommand = "INSERT INTO Mail (Inhoud, Onderwerp) VALUES(@0,@1)";
+        db.Execute(insertCommand, inhoud, onderwerp);
+        db.Close();
+    }
+
+    public static void DeleteMail(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM Mail WHERE MailId = @0";
+        var deleteOntvangerCommand = "DELETE FROM MailOntvanger WHERE MailId = @0";
+        db.Execute(deleteCommand, id);
+        db.Execute(deleteOntvangerCommand, id);
+        db.Close();
+    }
+}
