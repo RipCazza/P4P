@@ -261,6 +261,10 @@ a:focus {
     font-size: 16px;
 }
 
+.modal-content {
+    border-radius: 0px;
+}
+
 /*.head { background-color: #969696; font-weight: bold; color: #FFF; }
 .grid th, .grid td { border: 1px solid #C0C0C0; padding: 5px; }
 .alt { background-color: #E8E8E8; color: #000; }

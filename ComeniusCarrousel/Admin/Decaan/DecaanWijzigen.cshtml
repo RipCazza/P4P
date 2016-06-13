@@ -37,7 +37,7 @@
         }
         Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
     }
- }
+}
 
 @Html.ValidationSummary()
 @if (decaan != null)
@@ -46,9 +46,30 @@
         <span>Gebruiker:</span>
         <span>@user</span>
     </p>
-    <form method="post" class="form-inline">
-        <button type="submit" id="submit" name="delete" class="btn btn-danger" style="float: right;">
+
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#verwijderDecaanWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
+
+    <div id="verwijderDecaanWarning" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Waarschuwing</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Weet je zeker dat je <b>@user</b> wil verwijderen?</p>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" class="form-inline">
+                    <button type="submit" id="submit" name="delete" class="btn btn-danger">
             <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder
-        </button>
-    </form>
+        </button>       
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                        </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 }
