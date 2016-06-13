@@ -30,11 +30,17 @@
         alternatingRowStyle: "alt",
         columns: grid.Columns(
             grid.Column("Onderwerp"),
-            grid.Column(format: @<a href="~/Decaan/Mail/MailWijzigen?MailId=@item.MailId">&nbsp; Wijzig</a>)
+            grid.Column(format: @<a href="~/Decaan/Mail/MailWijzigen?MailId=@item.MailId">&nbsp; Wijzig</a>),
+            grid.Column(format: @<a href="~/Decaan/Mail/MailVerzenden?MailId=@item.MailId">&nbsp; Verzenden</a>)
         
         ))
 
         <p> <a class="btn btn-default" href="~/Decaan/Mail/MailToevoegen.cshtml">
             <span class="glyphicon glyphicon-pencil"></span> Nieuwe Mail
+            </a>
+        </p>
+
+        <p> <a class="btn btn-default" href="~/Decaan/Mail/MailGegevens.cshtml">
+            <span class="glyphicon glyphicon-pencil"></span> Mail Account Gegevens
             </a>
         </p>
