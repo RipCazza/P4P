@@ -10,19 +10,30 @@
     List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
 }
 
-<br>
+<h2>Klassenoverzicht</h2>
 
 @if (User.IsInRole("Admin"))
 {
-    <a class="btn btn-default" href="~/Decaan/Klas/KlasToevoegen">
-        <span class="glyphicon glyphicon-pencil"></span> Nieuwe klas aanmaken
+    <a class="btn btn-success" href="~/Decaan/Klas/KlasToevoegen">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe klas aanmaken
     </a>
 }
 
-<table class="table">
+<table class="table" style="margin-top: 16px">
+    <thead>
+        <tr>
+            <th>Klas</th>
+            @if (User.IsInRole("Admin"))
+            {
+            <th>Details</th>
+            }
+        </tr>
+    </thead>
     @foreach (KlasRepo.Klas klas in klassen)
     {
         <tr>
+            
+            <td>@klas.KlasNaam</td>
             @if (User.IsInRole("Admin"))
             {
                 <td>
@@ -31,7 +42,6 @@
                     </a>
                 </td>
             }
-            <td>@klas.KlasNaam</td>
         </tr>
     }
 </table>

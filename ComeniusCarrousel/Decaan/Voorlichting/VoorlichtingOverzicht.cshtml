@@ -10,26 +10,34 @@
     List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetVoorlichtingen();
 }
 
-<br>
+<h2>Voorlichtingenoverzicht</h2>
 
-<a class="btn btn-default" href="~/Decaan/Voorlichting/VoorlichtingToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe voorlichting aanmaken
+<a class="btn btn-success" href="~/Decaan/Voorlichting/VoorlichtingToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe voorlichting aanmaken
 </a>
 
-<table class="table">
+<table class="table" style="margin-top: 16px;">
+    <thead>
+        <tr>
+            <th>Lokaal</th>
+            <th>Vak</th>
+            <th>Leraar</th>
+            <th>Niveau</th>
+            <th>Datum</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
     @foreach (VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
     {
         <tr>
-            <td>
-                <a href="~/Decaan/Voorlichting/VoorlichtingWijzigen?id=@voorlichting.VoorlichtingId" class="btn btn-default">
-                    <span class="glyphicon glyphicon-pencil"></span> Edit
-                </a>
-            </td>
             <td>@voorlichting.Lokaal</td>
             <td>@voorlichting.Vak</td>
             <td>@voorlichting.Leraar</td>
             <td>@voorlichting.Niveau</td>
             <td>@string.Format("{0:d/M/yyyy HH:mm}", voorlichting.DateTime)</td>
+            <td><a href="~/Decaan/Voorlichting/VoorlichtingWijzigen?id=@voorlichting.VoorlichtingId">Wijzig</a></td>
         </tr>
     }
+    </tbody>
 </table>

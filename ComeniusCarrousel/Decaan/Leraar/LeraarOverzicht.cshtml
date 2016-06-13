@@ -10,13 +10,14 @@
     List<LeraarRepo.Leraar> leraren = LeraarRepo.GetLeraren(); // Geeft het ID en username van alle decanen mee
 }
 
-<a class="btn btn-default" href="~/Decaan/Leraar/LeraarToevoegen">
-    <span class="glyphicon glyphicon-pencil"></span> Nieuwe leraar aanmaken
+<h2>Lerarenoverzicht</h2>
+
+<a class="btn btn-success" href="~/Decaan/Leraar/LeraarToevoegen">
+    <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe leraar aanmaken
 </a>
 
-<table class="table">
-    @foreach (LeraarRepo.Leraar leraar in leraren)
-    {
+<table class="table" style="margin-top: 16px;">
+    <thead>
         <tr>
             <td>
                 <a href="~/Decaan/Leraar/LeraarWijzigen?id=@leraar.UserId" class="btn btn-default">
@@ -25,5 +26,15 @@
             </td>
             <td>@leraar.Voornaam</td> <td>@leraar.Achternaam</td>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (LeraarRepo.Leraar leraar in leraren)
+        {
+        <tr>
+            <td>@leraar.Voornaam</td>
+            <td>@leraar.Achternaam</td>
+            <td><a href="~/Decaan/Leraar/LeraarWijzigen?id=@leraar.UserId">Wijzig</a></td>
+        </tr>
+        }
+    </tbody>
 </table>
