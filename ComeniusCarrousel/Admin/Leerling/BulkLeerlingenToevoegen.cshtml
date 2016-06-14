@@ -114,6 +114,14 @@
                                 db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
                                 db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau.ToUpper(), leerlingnummer, instroomleerling, vak, "False");
                                 Roles.AddUserToRole(mail, "Leerling");
+                                if (niveau.ToLower() == "vwo")
+                                {
+                                    List<VakRepo.Vak> vakken = VakRepo.GetVakken(niveau, vak);
+                                    foreach (VakRepo.Vak keuzeVak in vakken)
+                                    {
+                                        KeuzeRepo.InsertKeuze(dataId.UserId, keuzeVak, 1);
+                                    }
+                                }
                                 db.Close();
                                 db2.Close();
                             }

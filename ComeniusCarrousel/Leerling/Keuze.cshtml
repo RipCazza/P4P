@@ -10,6 +10,11 @@
     int id = WebSecurity.CurrentUserId;
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 
+    if (leerling.Niveau.ToLower() != "havo")
+    {
+        Response.Redirect("~/");
+    }
+
     List<VakRepo.Vak> vakken = VakRepo.GetVakken(leerling.Niveau, leerling.TalentstroomVak); // Haalt alle vakken van het niveau van de leerling, minus zijn talenstroom vak.
     int error = 0;
     
