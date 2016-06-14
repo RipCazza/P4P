@@ -1,0 +1,18 @@
+﻿@{
+    Page.Title= "Rooster";
+    Layout = "~/_Layout.cshtml";
+
+    if (!User.IsInRole("Leerling"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = WebSecurity.CurrentUserId;
+    LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
+    List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetStudentRooster(id);
+}
+
+@foreach (VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
+{
+    <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
+}

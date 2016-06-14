@@ -59,11 +59,11 @@
             get
             {
                 var db = Database.Open(App.DataBase);
-                var data = db.QuerySingle("SELECT Voornaam FROM Voorlichting INNER JOIN Gebruiker ON Gebruiker.UserId = Voorlichting.UserId WHERE VoorlichtingId = @0", voorlichtingId);
+                var data = db.QuerySingle("SELECT Voornaam, Achternaam FROM Voorlichting INNER JOIN Gebruiker ON Gebruiker.UserId = Voorlichting.UserId WHERE VoorlichtingId = @0", voorlichtingId);
                 if(data != null)
                 {
                     db.Close();
-                    return data.Voornaam;
+                    return data.Voornaam + " " + data.Achternaam;
                 }
                 db.Close();
                 return null;
@@ -132,6 +132,19 @@
         }
         db.Close();
         return null;
+    }
+
+    public static List<Voorlichting> GetStudentRooster(int userId)
+    {
+        List<Voorlichting> voorlichtingen = new List<Voorlichting>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Rooster INNER JOIN Voorlichting ON Rooster.VoorlichtingId = Voorlichting.VoorlichtingId WHERE Rooster.UserId = @0 ORDER BY DateTime DESC", userId);
+        foreach (var row in data)
+        {
+            voorlichtingen.Add(new Voorlichting(row.VoorlichtingId, row.VakId, row.UserId, row.LokaalId, row.DateTime, row.Niveau));
+        }
+        db.Close();
+        return voorlichtingen;
     }
 
     public static void MakeVoorlichting(int vakId, int userId, int lokaalId, DateTime dateTime, string niveau)

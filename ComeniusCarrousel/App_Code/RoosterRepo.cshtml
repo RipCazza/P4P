@@ -26,9 +26,8 @@
     public static bool ValidateRooster(int voorlichtingId, int userId)
     {
         var db = Database.Open(App.DataBase);
-        var insertCommand = "SELECT * FROM Rooster Where VoorlichtingId = @0 AND UserId = @1";
-        var validation = db.QuerySingle(insertCommand, voorlichtingId, userId);
-        if (validation == null)
+        var data = db.QuerySingle("SELECT * FROM Rooster Where VoorlichtingId = @0 AND UserId = @1", voorlichtingId, userId);
+        if (data == null)
         {
             db.Close();
             return false;
