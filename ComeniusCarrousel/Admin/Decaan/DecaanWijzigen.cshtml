@@ -27,32 +27,23 @@
     {
         if (WebMatrix.WebData.WebSecurity.UserExists(user))
         {
-            var userRoles = Roles.GetRolesForUser(user);
-            if (userRoles.Count() > 0)
-            {
-                Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
-            }
-            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
-            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
+            DecaanRepo.DeleteDecaan(id, user);
         }
         Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
     }
 }
 
 @Html.ValidationSummary()
-
-<h2>Decaan verwijderen</h2>
-
 @if (decaan != null)
 {
     <p>
         <span>Gebruiker:</span>
-        <span><b>@user</b></span>
+        <span>@user</span>
     </p>
 
-    <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#verwijderDecaanWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
 
-    <div id="verwijderWarning" class="modal fade" role="dialog">
+    <div id="verwijderDecaanWarning" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <div class="modal-content">
@@ -61,12 +52,12 @@
                     <h4 class="modal-title">Waarschuwing</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Weet je zeker dat je gebruiker <b>@user</b> wilt verwijderen?</p>
+                    <p>Weet je zeker dat je <b>@user</b> wil verwijderen?</p>
                 </div>
                 <div class="modal-footer">
                     <form method="post" class="form-inline">
                     <button type="submit" id="submit" name="delete" class="btn btn-danger">
-            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
+            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder
         </button>       
                     <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
                         </form>
