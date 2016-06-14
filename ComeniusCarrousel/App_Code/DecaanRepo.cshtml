@@ -33,10 +33,10 @@
     public static void DeleteDecaan(int id, string user)
     {
         var userDb = Database.Open(App.AuthDataBase);
-        var roleData = userDb.Query("SELECT RoleName FROM webpages_UsersInRoles INNER JOIN webpages_Roles ON webpages_Roles.RoleId = webpages_UsersInRoles.RoleId WHERE UserId = @0", id);
-        if (roleData != null)
+        var userRoles = Roles.GetRolesForUser(user);
+        if (userRoles.Count() > 0)
         {
-            Roles.RemoveUserFromRoles(user, roleData.RoleName); // deletes records from webpages_UsersInRoles table
+            Roles.RemoveUserFromRoles(user, userRoles); // deletes records from webpages_UsersInRoles table
         }
         ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user); // deletes record from webpages_Membership table
         ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
