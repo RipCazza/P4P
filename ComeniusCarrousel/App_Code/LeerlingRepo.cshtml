@@ -143,9 +143,11 @@
         }
         if(data != null)
         {
+            var authDb = Database.Open(App.AuthDataBase);
             foreach (var row in data)
             {
-                leerlingen.Add(new Leerling(row.UserId,  null, row.Voornaam, row.Achternaam,
+                var mailData = authDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", row.UserId);
+                leerlingen.Add(new Leerling(row.UserId,  mailData.UserName, row.Voornaam, row.Achternaam,
                     row.KlasId, row.Niveau, row.Leerlingnummer, row.InstroomLeerling,
                     row.MailVerzorger, row.TalentstroomVak, row.Aangemeld));
             }
