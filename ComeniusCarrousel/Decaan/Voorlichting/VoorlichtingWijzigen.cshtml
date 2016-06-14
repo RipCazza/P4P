@@ -41,9 +41,12 @@
 @Html.ValidationSummary()
 @if (voorlichting != null)
 {
+
+    <h2>Voorlichting verwijderen</h2>
+
     <p>
         <span>Voorlichting:</span>
-        <span>@voorlichting.Vak (@voorlichting.Niveau) van @voorlichting.Leraar. @string.Format("{0:d/M/yyyy HH:mm}", voorlichting.DateTime) in @voorlichting.Lokaal</span>
+        <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
     </p>
 
 
@@ -69,9 +72,31 @@
         </button>
     </form>
 
-    <form method="post" class="form-inline">
-        <button type="submit" id="submit" name="delete" class="btn btn-danger">
-            <span class="glyphicon glyphicon-remove"></span> Verwijderen
-        </button>
-    </form>
+        <p>^-- Moet dit niet weg als er 'verwijder' staat in het overzicht?</p>// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+    <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
+
+    <div id="verwijderWarning" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Waarschuwing</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Weet je zeker dat je de voorlichting "<b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>" wilt verwijderen?</p>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" class="form-inline">
+                    <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
+        </button>       
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                        </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 }

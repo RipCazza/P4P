@@ -34,15 +34,38 @@
  }
 
 @Html.ValidationSummary()
+
+<h2>Leraar verwijderen</h2>
+
 @if (leraar != null)
 {
     <p>
         <span>Gebruiker:</span>
-        <span>@user</span>
+        <span><b>@user</b></span>
     </p>
-    <form method="post" class="form-inline">
-        <button type="submit" id="submit" name="delete" class="btn btn-danger">
-            <span class="glyphicon glyphicon-remove"></span> Verwijderen
-        </button>
-    </form>
+    <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
+
+    <div id="verwijderWarning" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Waarschuwing</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Weet je zeker dat je leraar <b>@user</b> wilt verwijderen?</p>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" class="form-inline">
+                    <button type="submit" id="submit" name="delete" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
+        </button>       
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                        </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 }
