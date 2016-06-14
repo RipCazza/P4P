@@ -42,4 +42,33 @@
         ((SimpleMembershipProvider)Membership.Provider).DeleteUser(user, true); // deletes record from UserProfile table
         userDb.Close();
     }
+
+    public static void MakeDecaan(string userName, string password)
+    {
+        var db = Database.Open(App.AuthDataBase);
+
+            var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+            if(user == null)
+            {
+                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
+
+                try
+                {
+                    var token = WebSecurity.CreateAccount(userName, password, false);
+                    Roles.AddUserToRole(userName, "Decaan");
+                    db.Close();
+                    Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
+                }
+                catch(System.Web.Security.MembershipCreateUserException e)
+                {
+                    db.Close();
+                    ModelState.AddFormError(e.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("Gebruiker bestaat al");
+            }
+            db.Close();
+    }
 }

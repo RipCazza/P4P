@@ -84,4 +84,39 @@
         db.Close();
         userDb.Close();
     }
+
+    public static void MakeLeraar(string userName, string password, string voornaam, string achternaam, string vak)
+    {
+        var db = Database.Open(App.AuthDataBase);
+            var db2 = Database.Open(App.DataBase);
+            var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+            if(user == null)
+            {
+                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
+                
+                try
+                {
+                    var token = WebSecurity.CreateAccount(userName, password, false);
+                    var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
+                    db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
+                    db2.Execute("INSERT INTO Leraar (VoorlichtingVak, UserId) VALUES (@0,@1)", vak, dataId.UserId);
+                    Roles.AddUserToRole(userName, "Leraar");
+                    db.Close();
+                    db2.Close();
+                    Response.Redirect("~/Decaan/Leraar/LeraarOverzicht");
+                }
+                catch(System.Web.Security.MembershipCreateUserException e)
+                {
+                    db.Close();
+                    db2.Close();
+                    ModelState.AddFormError(e.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddFormError("Gebruiker bestaat al");
+            }
+            db.Close();
+            db2.Close();
+    }
 }

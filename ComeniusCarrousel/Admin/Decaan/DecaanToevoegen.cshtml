@@ -36,31 +36,7 @@
 
         if(Validation.IsValid())
         {
-            var db = Database.Open(App.AuthDataBase);
-
-            var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
-            if(user == null)
-            {
-                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
-
-                try
-                {
-                    var token = WebSecurity.CreateAccount(userName, password, false);
-                    Roles.AddUserToRole(userName, "Decaan");
-                    db.Close();
-                    Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
-                }
-                catch(System.Web.Security.MembershipCreateUserException e)
-                {
-                    db.Close();
-                    ModelState.AddFormError(e.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddFormError("Gebruiker bestaat al");
-            }
-            db.Close();
+            DecaanRepo.MakeDecaan(userName, password);
         }
     }
 }
@@ -71,6 +47,7 @@
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
+        <fieldset>
             <div class="form-group">
                 <label for="userName">Email adres</label>
                 <input type="text" id="userName" name="userName" value="@userName" class="form-control">
@@ -89,5 +66,6 @@
             <div class="from-group" id="floatRight">
                 <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen</button>
             </div>
+        </fieldset>
     </form>
 </div>

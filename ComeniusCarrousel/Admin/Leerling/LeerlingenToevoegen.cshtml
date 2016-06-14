@@ -100,44 +100,7 @@
 
                     if (Validation.IsValid())
                     {
-                        var db = Database.Open(App.AuthDataBase);
-                        var db2 = Database.Open(App.DataBase);
-                        var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
-                        if(user == null)
-                        {
-                            db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", mail);
-                
-                            try
-                            {
-                                var token = WebSecurity.CreateAccount(mail, wachtwoord, false);
-                                var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", mail);
-                                db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
-                                db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau.ToUpper(), leerlingnummer, instroomleerling, vak, "False");
-                                Roles.AddUserToRole(mail, "Leerling");
-                                if (niveau.ToLower() == "vwo")
-                                {
-                                    List<VakRepo.Vak> vakken = VakRepo.GetVakken(niveau, vak);
-                                    foreach (VakRepo.Vak keuzeVak in vakken)
-                                    {
-                                        KeuzeRepo.InsertKeuze(dataId.UserId, keuzeVak.VakId, 1);
-                                    }
-                                }
-                                db.Close();
-                                db2.Close();
-                            }
-                            catch(System.Web.Security.MembershipCreateUserException e)
-                            {
-                                db.Close();
-                                db2.Close();
-                                ModelState.AddFormError(e.Message);
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddFormError("Gebruiker " + (i+1) + " bestaat al");
-                        }
-                        db.Close();
-                        db2.Close();
+                        LeerlingRepo.MakeLeerling(mail, wachtwoord, voornaam, achternaam, klasId, niveau, leerlingnummer, instroomleerling, vak, i);
                     }
                 }
             }
