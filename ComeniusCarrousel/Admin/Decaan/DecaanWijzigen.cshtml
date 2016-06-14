@@ -34,16 +34,19 @@
 }
 
 @Html.ValidationSummary()
+
+<h2>Decaan verwijderen</h2>
+
 @if (decaan != null)
 {
     <p>
         <span>Gebruiker:</span>
-        <span>@user</span>
+        <span><b>@user</b></span>
     </p>
 
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#verwijderDecaanWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
+    <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
 
-    <div id="verwijderDecaanWarning" class="modal fade" role="dialog">
+    <div id="verwijderWarning" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <div class="modal-content">
