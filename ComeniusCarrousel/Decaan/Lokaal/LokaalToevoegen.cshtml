@@ -16,19 +16,31 @@
 
         if(Request.Form["lokaalNaam"] != null) {lokaalNaam = Request.Form["lokaalNaam"];}
         if(Request.Form["capaciteit"] != "") {capaciteit = Convert.ToInt16(Request.Form["capaciteit"]);}
-    
+
         if(Validation.IsValid())
         {
             LokaalRepo.MakeLokaal(lokaalNaam, capaciteit);
+            Response.Redirect("~/Decaan/Lokaal/LokaalOverzicht");
         }
     }
 }
 
-<form method="post" class="form-inline">
-    @Html.ValidationSummary()
-    <input type="text" name="lokaalNaam"><br>
-    <input type="number" name="capaciteit" min="1" value="30"><br>
-    <button type="submit" id="submit" name="lokaalToevoegen" class="btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span> Toevoegen
-    </button>
-</form>
+<h2>Nieuw lokaal aanmaken</h2>
+
+<div class="col-md-12">
+    <form method="post">
+        @Html.ValidationSummary()
+        <div class="form-group">
+            <label for="lokaalNaam">Naam lokaal</label>
+            <input class="form-control" type="text" name="lokaalNaam">
+        </div>
+        <div class="form-group">
+            <label for="capaciteit">Capaciteit</label>
+            <input class="form-control" type="number" name="capaciteit" min="1" value="30">
+        </div>
+
+        <button type="submit" id="submit" name="lokaalToevoegen" class="btn btn-success" style="float: right;">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen
+        </button>
+    </form>
+</div>

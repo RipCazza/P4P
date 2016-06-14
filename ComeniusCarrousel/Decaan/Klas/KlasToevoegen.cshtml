@@ -13,18 +13,26 @@
         Validation.RequireField("klasNaam", "Geef een klasnaam op");
 
         if(Request.Form["klasNaam"] != null) {klasNaam = Request.Form["klasNaam"];}
-    
+
         if(Validation.IsValid())
         {
             KlasRepo.MakeKlas(klasNaam);
+            Response.Redirect("~/Decaan/Klas/KlasOverzicht");
         }
     }
 }
 
-<form method="post" class="form-inline">
-    @Html.ValidationSummary()
-    <input type="text" name="klasNaam"><br>
-    <button type="submit" id="submit" name="klasToevoegen" class="btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span> Toevoegen
-    </button>
-</form>
+<h2>Nieuwe klas aanmaken</h2>
+
+<div class="col-md-12">
+    <form method="post">
+        @Html.ValidationSummary()
+        <div class="form-group">
+            <label for="klasNaam">Klas</label>
+            <input class="form-control" type="text" name="klasNaam">
+        </div>
+        <button type="submit" id="submit" name="klasToevoegen" class="btn btn-success" style="float: right;">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen
+        </button>
+    </form>
+</div>
