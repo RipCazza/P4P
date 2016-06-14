@@ -18,7 +18,7 @@
         int userId = -1;
         string niveau = "";
         DateTime dateTime = new DateTime();
-        
+
         if(Request.Form["vakId"] != null && Request.Form["vakId"] != "-") {vakId = Convert.ToInt16(Request.Form["vakId"]);}
         if(Request.Form["lokaalId"] != null && Request.Form["lokaalId"] != "-") {lokaalId = Convert.ToInt16(Request.Form["lokaalId"]);}
         if(Request.Form["userId"] != null && Request.Form["userId"] != "-") {userId = Convert.ToInt16(Request.Form["userId"]);}
@@ -52,49 +52,63 @@
                 Validation.AddFormError("Het voorlichting vak van de gekozen leraar komt niet overeen met het gekozen vak.");
             }
         }
-        
+
         if(Validation.IsValid())
         {
             VoorlichtingRepo.MakeVoorlichting(vakId, userId, lokaalId, dateTime, niveau);
+            Response.Redirect("~/Decaan/Voorlichting/VoorlichtingOverzicht");
         }
     }
 }
 
-<form method="post" class="form-inline">
-    @Html.ValidationSummary()
+<h2>Nieuwe voorlichting aanmaken</h2>
 
-    <select name="vakId" class="form-control">
-        <option value="-"></option>
-        @foreach (VakRepo.Vak vak in vakken)
-        {
-            <option value="@vak.VakId">@vak.VakNaam (@vak.Niveau)</option>
-        }
-    </select><br>
-
-    <select name="lokaalId" class="form-control">
-        <option value="-"></option>
-        @foreach (LokaalRepo.Lokaal lokaal in lokalen)
-        {
-            <option value="@lokaal.LokaalId">@lokaal.LokaalNaam</option>
-        }
-    </select><br>
-
-    <select name="userId" class="form-control">
-        <option value="-"></option>
-        @foreach (LeraarRepo.Leraar leraar in leraren)
-        {
-            <option value="@leraar.UserId">@leraar.Voornaam @leraar.Achternaam (@leraar.VoorlichtingVak)</option>
-        }
-    </select><br>
-
-    <select name="niveau" class="form-control">
-        <option value="HAVO">HAVO</option>
-        <option value="VWO">VWO</option>
-    </select><br>
-
-    <input type="datetime" name="dateTime"> <span>Voer getalwijs in als jaar-maand-dagTuur:minuten (YYYY-MM-DDThh:mm / 2016-06-09T10:59)</span><br>
-
-    <button type="submit" id="submit" name="voorlichtingToevoegen" class="btn btn-success">
-        <span class="glyphicon glyphicon-plus"></span> Toevoegen
-    </button>
-</form>
+<div class="col-md-12">
+    <form method="post">
+        @Html.ValidationSummary()
+        <div class="form-group">
+            <label for="vakId">Vak</label>
+            <select name="vakId" class="form-control">
+                <option value="-"></option>
+                @foreach (VakRepo.Vak vak in vakken)
+                {
+                    <option value="@vak.VakId">@vak.VakNaam (@vak.Niveau)</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lokaalId">Lokaal</label>
+            <select name="lokaalId" class="form-control">
+                <option value="-"></option>
+                @foreach (LokaalRepo.Lokaal lokaal in lokalen)
+                {
+                    <option value="@lokaal.LokaalId">@lokaal.LokaalNaam</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="userId">Leraar</label>
+            <select name="userId" class="form-control">
+                <option value="-"></option>
+                @foreach (LeraarRepo.Leraar leraar in leraren)
+                {
+                    <option value="@leraar.UserId">@leraar.Voornaam @leraar.Achternaam (@leraar.VoorlichtingVak)</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="niveau">Niveau</label>
+            <select name="niveau" class="form-control">
+                <option value="HAVO">HAVO</option>
+                <option value="VWO">VWO</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dateTime">Datum (dd-mm-jjjj --:--)</label>
+            <input class="form-control" type="datetime-local" name="dateTime">
+        </div>
+        <button type="submit" id="submit" name="voorlichtingToevoegen" class="btn btn-success" style="float: right">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen
+        </button>
+    </form>
+</div>

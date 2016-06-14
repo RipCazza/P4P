@@ -78,12 +78,12 @@
     }
 }
 
+<h2>Nieuwe leraar aanmaken</h2>
+
 <div class="col-md-12">
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
-        <fieldset>
-            <h2>Register a new account</h2>
             <div class="form-group">
                 <label for="userName">Email adres</label>
                 <input type="text" id="userName" name="userName" value="@userName" class="form-control">
@@ -109,9 +109,9 @@
                 <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
                 @Html.ValidationMessage("confirmPassword")
             </div>
-            <div>
+            <div class="form-group">
             <label>Selecteer te geven vak</label>
-            <select name="vak">
+            <select name="vak" class="form-control">
                 <option value="-"></option>
                 @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
                 {
@@ -119,9 +119,9 @@
                 }
             </select>
             </div>
-            <div class="from-group">
-                <button type="submit" class="btn btn-default">Toevoegen</button>
+            
+            <div class="from-group" id="floatRight">
+                <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen</button>
             </div>
-        </fieldset>
     </form>
 </div>
