@@ -22,6 +22,8 @@
     }
 }
 
+<h2>Nieuwe klas aanmaken</h2>
+
 <div class="col-md-12">
     <form method="post">
         @Html.ValidationSummary()
@@ -29,7 +31,7 @@
             <label for="klasNaam">Klas</label>
             <input class="form-control" type="text" name="klasNaam">
         </div>
-        <button type="submit" id="submit" name="klasToevoegen" class="btn btn-success">
+        <button type="submit" id="submit" name="klasToevoegen" class="btn btn-success" style="float: right;">
             <span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen
         </button>
     </form>
