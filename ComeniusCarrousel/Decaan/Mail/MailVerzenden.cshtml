@@ -46,11 +46,16 @@
     <p><label for="onderwerp">Onderwerp:</label>
          <input type="text" name="onderwerp" value="@onderwerp" />
     </p>
-
-    <div>
-        Aan:
-        <input type="text" name="ontvanger" />
-    </div>
+    <p>
+        <b>Versturen aan: </b>
+        <input type="checkbox" name="aangemeld" value="Aangemeld">Aangemelde Leerlingen
+        <input type="checkbox" name="nietAangemeld" value="NietAangemeld">Niet Aangemelde Leerlingen
+        <input type="checkbox" name="leerlingen" value="Leerlingen">Alle Leerlingen
+        <input type="checkbox" name="leraren" value="Leraren">Leraren
+        <input type="checkbox" name="vwoLeerling" value="VwoLeerling">VWO
+        <input type="checkbox" name="havoLeerling" value="HavoLeerling">HAVO
+        <input type="checkbox" name="instroomleerling" value="Instroomleerling">Instroomleering
+    </p>
 
     <p><label for="inhoud">Inhoud:</label>
          <input type="text" name="inhoud" value="@inhoud" />
