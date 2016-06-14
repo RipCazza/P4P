@@ -62,9 +62,9 @@
                     }
 
                     string wachtwoord = leerling[4];
-                    if (wachtwoord.Length < 8)
+                    if (wachtwoord.Length < 6)
                     {
-                        Validation.AddFormError("Het wachtwoord van leerling " + (i+1) + " is te kort. (min 8)");
+                        Validation.AddFormError("Het wachtwoord van leerling " + (i+1) + " is te kort. (min 6)");
                     }
 
                     string niveau = leerling[6];
@@ -87,12 +87,12 @@
 
                     string vak = leerling[7];
                     bool validateVak = VakRepo.ValidateVak(vak, niveau);
+
+                    string instroomleerling = leerling[8];
                     if (validateVak == false && instroomleerling.ToLower() == "false")
                     {
                         Validation.AddFormError("Het vak van leerling " + (i+1) + " klopt niet.");
                     }
-
-                    string instroomleerling = leerling[8];
                     if (!(instroomleerling.ToLower() == "false" || instroomleerling.ToLower() == "true"))
                     {
                         Validation.AddFormError("De waarde bij instroomleerling van leerling " + (i+1) + " is onjuist.");
@@ -119,7 +119,7 @@
                                     List<VakRepo.Vak> vakken = VakRepo.GetVakken(niveau, vak);
                                     foreach (VakRepo.Vak keuzeVak in vakken)
                                     {
-                                        KeuzeRepo.InsertKeuze(dataId.UserId, keuzeVak, 1);
+                                        KeuzeRepo.InsertKeuze(dataId.UserId, keuzeVak.VakId, 1);
                                     }
                                 }
                                 db.Close();
