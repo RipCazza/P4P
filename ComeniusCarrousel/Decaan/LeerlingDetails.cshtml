@@ -1,4 +1,11 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan(gedeeltelijk)
+    Te berijken van: Default(Decaan/_Decaan)
+    Roept aan: Leerling/_LeerlingDetails
+    Linkt door naar: [Alleen admin]: Admin/Leerling/LeerlingWijzigen?id=[ID]
+    Beschrijving: Geeft de details van een leerling weer
+*@
+@{
     Page.Title= "Keuze";
     Layout = "~/_Layout.cshtml";
     int id = Convert.ToInt16(Request.QueryString["id"]);
@@ -8,7 +15,7 @@
     }
 }
 
-@RenderPage("~/Leerling/_LeerlingDetails.cshtml")
+@RenderPage("~/Leerling/_LeerlingDetails")
 
 @if (User.IsInRole("Admin"))
 {

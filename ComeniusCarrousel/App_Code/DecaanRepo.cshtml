@@ -1,4 +1,5 @@
 ﻿@functions{
+    // Geeft een lijst terug met alle decanen waar decanen[i].item1 = userId en decanen[i].item2 = userName
     public static List<Tuple<int, string>> GetDecanen()
     {
         List<Tuple<int, string>> decanen = new List<Tuple<int, string>>{};
@@ -12,6 +13,7 @@
         return decanen;
     }
 
+    // Geeft een decaan die de gegeven id matcht waar decaan.item1 = userId en decaan.item2 = userName
     public static Tuple<int, string> GetDecaan(int id)
     {
         Tuple<int, string> decaan;
@@ -30,6 +32,7 @@
         }
     }
 
+    // delete een decaan uit de database met een bepaalde userId en userName
     public static void DeleteDecaan(int id, string user)
     {
         var userDb = Database.Open(App.AuthDataBase);
@@ -43,6 +46,7 @@
         userDb.Close();
     }
 
+    // maakt een decaan aan in de database met een bepaalde userName en password
     public static void MakeDecaan(string userName, string password)
     {
         var db = Database.Open(App.AuthDataBase);

@@ -1,4 +1,9 @@
-﻿@*Wordt aangeroepen in Leerling/_Leerling en Decaan/LeerlingDetails*@
+﻿@*
+    Permissies: Leerling, Admin, Decaan
+    Wordt aangeroepen in: Leerling/_Leerling, Decaan/LeerlingDetails
+    Linkt door naar: ~
+    Beschrijving: Geeft de details van een leerling weer
+*@
 @{
     if (!(User.IsInRole("Admin") || User.IsInRole("Decaan") || User.IsInRole("Leerling")))
     {

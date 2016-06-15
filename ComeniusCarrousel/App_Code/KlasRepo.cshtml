@@ -1,4 +1,5 @@
 ﻿@functions{
+    // class representatie van de database tabel Klas
     public class Klas
     {
         private const string table = "Klas";
@@ -26,6 +27,7 @@
         }
     }
 
+    // geeft alle klassen uit de database terug
     public static List<Klas> GetKlassen()
     {
         List<Klas> klassen = new List<Klas>();
@@ -44,6 +46,7 @@
         return null;
     }
 
+    // geeft een klas terug die de gegeven id matcht
     public static Klas GetKlas(int id)
     {
         var db = Database.Open(App.DataBase);
@@ -58,6 +61,7 @@
         return null;
     }
 
+    // geeft de klasId van een klas terug die de gegeven klasNaam matcht
     public static int GetKlasId(string klasNaam)
     {
         var db = Database.Open(App.DataBase);
@@ -70,6 +74,7 @@
         return -1;
     }
 
+    // voegt een klas toe aan de database met id, keuzevak en aantalPersonen
     public static void MakeKlas(string klasNaam)
     {
         var db = Database.Open(App.DataBase);
@@ -78,6 +83,7 @@
         db.Close();
     }
 
+    // geeft een true of false statement terug wanneer een klas met de gegeven klasNaam in de database staat of niet
     public static bool ValidateKlas(string klasNaam)
     {
         var db = Database.Open(App.DataBase);
@@ -87,6 +93,7 @@
         else{return true;}
     }
 
+    // delete een klas en alle children (mailOntvanger, Leerling) uit de database die de gegeven id matcht
     public static void DeleteKlas(int id)
     {
         var db = Database.Open(App.DataBase);

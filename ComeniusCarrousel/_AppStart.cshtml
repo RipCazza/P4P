@@ -1,4 +1,7 @@
-﻿@{
+﻿@*
+    Initialiser van de databases en mail server
+*@
+@{
     WebSecurity.InitializeDatabaseConnection("authenticationData", "UserProfile", "UserId", "UserName", autoCreateTables: true);
 
     App.Name = "Vakkencarrousel";
@@ -15,17 +18,15 @@
     db.Execute("DELETE FROM .. WHERE ..")*/;
 
     // Initialize WebMail helper
-        WebMail.SmtpServer = "127.0.0.1";
-        WebMail.SmtpPort = 25;
-        WebMail.UserName = "Sev7n";
-        WebMail.EnableSsl = false;
-        WebMail.Password = "David";
-        WebMail.From = "user@domain.com";
-        /* Commenius Gegevens
-            smtp.Host = "ex2013.csg-comenius.nl";
-            smtp.Port = 578;
-            Username  = "profielkeuze@csg-comenius.nl";
-            Password  = "Blaatschaap10";
-
-        */
+    WebMail.SmtpServer = "127.0.0.1";
+    WebMail.SmtpPort = 25;
+    WebMail.UserName = "Sev7n";
+    WebMail.EnableSsl = false;
+    WebMail.Password = "David";
+    WebMail.From = "user@domain.com";
+    /* Commenius Gegevens
+        smtp.Host = "ex2013.csg-comenius.nl";
+        smtp.Port = 578;
+        Username  = "profielkeuze@csg-comenius.nl";
+        Password  = "Blaatschaap10"; */
 }

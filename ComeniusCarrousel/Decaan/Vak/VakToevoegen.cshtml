@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te berijken van: Decaan/Vak/VakOverzicht
+    Linkt door naar: Decaan/Vak/VakOverzicht
+    Beschrijving: Vraagt om een vaknaam en niveau en voegt hiermee een vak toe aan de database
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Vak toevoegen";
 
@@ -16,7 +22,7 @@
 
         if(Request.Form["vakNaam"] != null) {vakNaam = Request.Form["vakNaam"];}
         if(Request.Form["niveau"] != null) {niveau = Request.Form["niveau"];}
-
+    
         if(Validation.IsValid())
         {
             VakRepo.MakeVak(vakNaam, niveau);

@@ -1,4 +1,5 @@
 ﻿@functions{
+    // class representatie van de database tabel Vak
     public class Vak
     {
         private const string table = "Vak";
@@ -35,6 +36,7 @@
         }
     }
 
+    // geeft alle vakken uit de database terug op het (optionele argument) talentstroomVak na (wordt het optionele argument niveau ingevuld dan worden alleen de vakken waar deze matcht met de gegeven waarde gegeven)
     public static List<Vak> GetVakken(string niveau = "Default", string talentstroomVak = "")
     {
         List<Vak> vakken = new List<Vak>();
@@ -53,6 +55,7 @@
         return vakken;
     }
 
+    // geeft een vak terug die de gegeven id matcht
     public static Vak GetVak(int id)
     {
         var db = Database.Open(App.DataBase);
@@ -67,6 +70,7 @@
         return null;
     }
 
+    // voegt een vak toe aan de database met vakNaam en niveau
     public static void MakeVak(string vakNaam, string niveau)
     {
         var db = Database.Open(App.DataBase);
@@ -75,12 +79,15 @@
         db.Close();
     }
 
+    // delete een vak en alle children (keuze, voorlichting) uit de database die de gegeven id matcht
     public static void DeleteVak(int id)
     {
         var db = Database.Open(App.DataBase);
         var deleteCommand = "DELETE FROM Vak WHERE VakId = @0";
         var deleteKeuzeCommand = "DELETE FROM Keuze WHERE VakId = @0";
         var voorlichtingData = db.Query("SELECT VoorlichtingId FROM Voorlichting Where VakId = @0", id);
+        var updateCommand = "UPDATE Leerling INNER JOIN Vak ON Vak.VakNaam = Leerling.TalentstroomVak SET TalentstroomVak = null where VakId = @0";
+        db.Execute(updateCommand, id);
         db.Execute(deleteCommand, id);
         db.Execute(deleteKeuzeCommand, id);
         foreach (var row in voorlichtingData)
@@ -90,6 +97,7 @@
         db.Close();
     }
 
+    // geeft een true of false statement terug wanneer een vak met de gegeven vakNaam en niveau in de database staat of niet
     public static bool ValidateVak(string vakNaam, string niveau)
     {
         var db = Database.Open(App.DataBase);

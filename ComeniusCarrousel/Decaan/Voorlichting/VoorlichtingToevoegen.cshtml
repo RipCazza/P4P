@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te berijken van: Decaan/Voorlichting/VoorlichtingOverzicht
+    Linkt door naar: Decaan/Voorlichting/VoorlichtingOverzicht
+    Beschrijving: Vraagt om een vak, lokaal, leraar, niveau en tijdstrip en voegt hiermee een voorlichting toe aan de database
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Voorlichting toevoegen";
 
@@ -18,7 +24,7 @@
         int userId = -1;
         string niveau = "";
         DateTime dateTime = new DateTime();
-
+        
         if(Request.Form["vakId"] != null && Request.Form["vakId"] != "-") {vakId = Convert.ToInt16(Request.Form["vakId"]);}
         if(Request.Form["lokaalId"] != null && Request.Form["lokaalId"] != "-") {lokaalId = Convert.ToInt16(Request.Form["lokaalId"]);}
         if(Request.Form["userId"] != null && Request.Form["userId"] != "-") {userId = Convert.ToInt16(Request.Form["userId"]);}
@@ -52,7 +58,7 @@
                 Validation.AddFormError("Het voorlichting vak van de gekozen leraar komt niet overeen met het gekozen vak.");
             }
         }
-
+        
         if(Validation.IsValid())
         {
             VoorlichtingRepo.MakeVoorlichting(vakId, userId, lokaalId, dateTime, niveau);

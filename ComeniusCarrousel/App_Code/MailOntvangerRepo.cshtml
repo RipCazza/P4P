@@ -1,5 +1,5 @@
 ﻿@functions{
-    // mailId, userId, Niveau, roleId, aangemeld, klasId
+    // voegt een mailOntvanger toe aan de database met optionele argumenten waarop users geselecteerd kunnen worden
     public static void InsertMailOntvanger (int mailId, string aangemeld = "", string niveau = "", string klasId = "", string roleId= "", string userId = "")
     {
         var db = Database.Open(App.DataBase);
@@ -8,7 +8,9 @@
                    klasId != "" ? klasId : null, roleId != "" ? roleId : null, userId != "" ? userId : null);
         db.Close();
     }
-    public static List<int> GetMailOntvangers (int mailId) //roleId werkt niet
+
+    // Geeft een lijst terug met alle userIds die een connectie hebben met de rows in MailOntvanger
+    public static List<int> GetMailOntvangers (int mailId)
     {
         List<int> userIds = new List<int>();
         var db = Database.Open(App.DataBase);

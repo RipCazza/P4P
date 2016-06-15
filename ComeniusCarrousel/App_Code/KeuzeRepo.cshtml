@@ -1,4 +1,17 @@
 ﻿@functions{
+    public static int GetAantalMensen(int vakId, int userId)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT AantalPersonen FROM Keuze WHERE VakId = @0 AND UserId = @1", vakId, userId);
+        if (data != null)
+        {
+            return data.AantalPersonen;
+        }
+        db.Close();
+        return -1;
+    }
+
+    // delete een keuze uit de database die de gegeven id en vak matcht
     public static void DeleteKeuze(int id, int keuzeVak)
     {
         var db = Database.Open(App.DataBase);
@@ -6,6 +19,7 @@
         db.Execute(deleteCommand, id, keuzeVak);
         db.Close();
     }
+    // update een keuze in de database met nieuw keuzevak en aantalMensen die het gegeven oude vak en id matcht
     public static void UpdateKeuze(int nieuweKeuze, int aantalMensen, int keuzeVak, int id)
     {
         var db = Database.Open(App.DataBase);
@@ -13,6 +27,8 @@
         db.Execute(updateCommand, nieuweKeuze, aantalMensen, keuzeVak, id);
         db.Close();
     }
+
+    // voegt een keuze toe aan de database met userId, keuzevak en aantalPersonen
     public static void InsertKeuze(int id, int keuzeVak, int aantalMensen)
     {
         var db = Database.Open(App.DataBase);

@@ -1,10 +1,16 @@
-﻿@*Wordt aangeroepen in default*@
+﻿@*
+    Permissies: Leerling
+    Wordt aangeroepen in: Default
+    Roept aan: Leerling/_LeerlingDetails
+    Linkt door naar: Leerling/Keuze, Leerling/EigenRooster
+    Beschrijving: Hoofd pagina van leerling. Geeft de details van een leerling weer
+*@
 @{
     int id = User.IsInRole("Leerling") == true ? WebSecurity.CurrentUserId : -1;
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 }
 
-@RenderPage("~/Leerling/_LeerlingDetails.cshtml")
+@RenderPage("~/Leerling/_LeerlingDetails")
 
 @if (leerling.Niveau.ToLower() == "havo")
 {

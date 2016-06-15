@@ -1,4 +1,5 @@
 ﻿@functions{
+    // werkt niet
     public static class CRUD {
         public static void doSimpleIdUpdate(String table, String column, String value, String idName, int id) {
             var db = Database.Open(App.Database);
@@ -7,12 +8,14 @@
         }
     }
 
+    // geeft een string array terug van een string gesplit op lijnen
     public static string[] SplitLeerlingen(string leerlingInvoer)
     {
         string[] leerlingen = leerlingInvoer.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
         return leerlingen;
     }
-
+    
+    // geeft een string array terug van een string gesplitst op leerling argumenten
     public static string[] SplitLeerling(string leerling)
     {
         char[] splitter = {'|'};

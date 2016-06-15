@@ -1,4 +1,5 @@
 ﻿@functions{
+    // delete een rooster uit de database die de gegeven voorlichtingId en userId matcht
     public static void DeleteRooster(int voorlichtingId, int userId)
     {
         var db = Database.Open(App.DataBase);
@@ -7,6 +8,7 @@
         db.Close();
     }
 
+    // delete een rooster uit de database die de gegeven voorlichtingId matcht
     public static void DeleteRoosters(int voorlichtingId)
     {
         var db = Database.Open(App.DataBase);
@@ -15,6 +17,7 @@
         db.Close();
     }
 
+    // voegt een rooster toe aan de database met voorlichtingId en userId
     public static void InsertRooster(int voorlichtingId, int userId)
     {
         var db = Database.Open(App.DataBase);
@@ -23,6 +26,7 @@
         db.Close();
     }
 
+    // geeft een true of false statement terug wanneer een rooster met de gegeven voorlchtingId en userId in de database staat of niet
     public static bool ValidateRooster(int voorlichtingId, int userId)
     {
         var db = Database.Open(App.DataBase);

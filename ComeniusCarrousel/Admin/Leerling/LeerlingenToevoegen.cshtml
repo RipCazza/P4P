@@ -1,4 +1,12 @@
-﻿@{
+﻿@*
+    Permissies: Admin
+    Te berijken van: Default(Decaan/_Decaan)
+    Linkt door naar: ~
+    Beschrijving: Geeft een text veldt om leerling details in te verwerken omgebruikers toe te voegen aan de database met leerling permissies
+        leerlingen worden ingevuld in gegeven volgorde met: 
+        Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Leerlingen toevoegen";
 
@@ -8,23 +16,6 @@
     }
 
     var leerlingenInvoer = "";
-        /*var userName = "";
-        var password = "";
-
-        Validation.RequireField("userName", "U moet een gebruikersnaam invullen.");
-        Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
-        Validation.RequireField("confirmPassword", "Bevestegings wachtwoord mag niet leeg zijn.");
-        Validation.Add("confirmPassword",
-            Validator.EqualsTo("password", "Bevestegings wachtwoord komt niet overeen met het wachtwoord."));
-        Validation.Add("password",
-            Validator.StringLength(
-                maxLength: Int32.MaxValue,
-                minLength: 6,
-                errorMessage: "Wachtwoord moet minstens 6 tekens bevatten"));
-        Validation.Add("userName",
-            Validator.StringLength(
-                maxLength: 400,
-                errorMessage: "Uw e mail kan niet meer dan 400 tekens bevatten"));*/
 
     if(IsPost && Request.Form["leerlingenToevoegen"] != null)
     {
@@ -36,10 +27,11 @@
         else
         {
             string[] leerlingen = Repository.SplitLeerlingen(leerlingenInvoer);
+            // bij iedere leerling wordt elke input gevalideerd voordat de leerling aangemaakt wordt. Treedt er een fout op dan gaat hij daarna wel door met de volgende leerling.
             for(int i = 0; i < leerlingen.Length; i++)
             {
                 string[] leerling = Repository.SplitLeerling(leerlingen[i]);
-                if (leerling.Length != 9) //Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
+                if (leerling.Length != 9)
                 {
                     Validation.AddFormError("Het aantal waardes bij leerling " + (i+1) + " is onjuist.");
                 }

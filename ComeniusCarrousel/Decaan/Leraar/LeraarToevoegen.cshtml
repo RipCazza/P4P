@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te berijken van: Decaan/Leraar/LeraarOverzicht
+    Linkt door naar: Decaan/Leraar/LeraarOverzicht
+    Beschrijving: Vraagt om een mail, voornaam, achternaam en wachtwoord en voegt hiermee een gebruiker toe aan de database met leraar permissies
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Leraar toevoegen";
     var userName = "";
@@ -44,6 +50,7 @@
         if(Validation.IsValid())
         {
             LeraarRepo.MakeLeraar(userName, password, voornaam, achternaam, vak);
+            Response.Redirect("~/Decaan/Leraar/LeraarOverzicht");
         }
     }
 }

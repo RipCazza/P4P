@@ -1,4 +1,5 @@
 ﻿@functions{
+    // class representatie van de database tabel Lokaal
     public class Lokaal
     {
         private const string table = "Lokaal";
@@ -35,6 +36,7 @@
         }
     }
 
+    // Geeft een lijst terug met alle lokalen
     public static List<Lokaal> GetLokalen()
     {
         List<Lokaal> lokalen = new List<Lokaal>();
@@ -53,6 +55,7 @@
         return null;
     }
 
+    // geeft een lokaal terug die de gegeven id matcht
     public static Lokaal GetLokaal(int id)
     {
         var db = Database.Open(App.DataBase);
@@ -67,6 +70,7 @@
         return null;
     }
 
+    // voegt een lokaal toe aan de database met een bepaalde lokaalName en capaciteit
     public static void MakeLokaal(string lokaalNaam, int capaciteit)
     {
         var db = Database.Open(App.DataBase);
@@ -75,6 +79,7 @@
         db.Close();
     }
 
+    // delete een lokaal en alle children (voorlichting) uit de database die de gegeven lokaalId matcht
     public static void DeleteLokaal(int id)
     {
         var db = Database.Open(App.DataBase);

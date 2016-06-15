@@ -1,4 +1,5 @@
 ﻿@functions{
+    // class representatie van de database tabel Leerling. Inherit van Gebruiker
     public class Leerling : GebruikerRepo.Gebruiker
     {
         private const string table = "Leerling";
@@ -24,8 +25,7 @@
             this.aangemeld = aangemeld;
         }
 
-        
-
+        // // Geeft de keuzeVakken behorend aan de leerling waar keuzeVakken[i].item1 = vakNaam en keuzeVakken[i].item2 = vakId
         public List<Tuple<string, int>> KeuzeVakken()
         {
             List<Tuple<string, int>> keuzeVakken = new List<Tuple<string, int>>();
@@ -38,6 +38,7 @@
             return keuzeVakken;
         }
 
+        // geeft de klasNaam bijbehorend aan de klasId van de leerling
         public string Klas
         {
             get
@@ -111,6 +112,7 @@
         }
     }
 
+    // geeft een leerling terug die de gegeven id matcht
     public static Leerling GetLeerling(int id)
     {
         var db = Database.Open(App.DataBase);
@@ -132,6 +134,8 @@
         return null;
     }
 
+    // Geeft een lijst terug met alle leerlingen (wanneer een van de optionele argumenten ingevuld wordt geeft het alleen de
+    // leerlingen waar de bijbehorende waarde uit Keuze(vakId)/Rooster(voorlichtingId) matcht met de gegeven waarde)
     public static List<Leerling> GetLeerlingen(int vakId = -1, int voorlichtingId = -1)
     {
         List<Leerling> leerlingen = new List<Leerling>();
@@ -162,6 +166,7 @@
         return null;
     }
 
+    // delete een leerling en alle children (mailOntvanger, keuze, rooster) uit de database die de gegeven userId en userName matcht
     public static void DeleteLeerlingen(int userId, string user)
     {
         var db = Database.Open(App.DataBase);
@@ -187,6 +192,7 @@
         userDb.Close();
     }
 
+    // voegt een leerling toe aan de database met alle gegeven argumenten (optioneel argument i verandert alleen de error message wanneer deze wordt ingevuld)
     public static void MakeLeerling(string mail, string wachtwoord, string voornaam, string achternaam, int klasId, string niveau, int leerlingnummer, string instroomleerling, string vak, int i = -1)
     {
         var db = Database.Open(App.AuthDataBase);

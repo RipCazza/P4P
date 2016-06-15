@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te berijken van: Decaan/Voorlichting/VoorlichtingOverzicht
+    Linkt door naar: Decaan/Voorlichting/VoorlichtingOverzicht
+    Beschrijving: Voegt leerlingen in het rooster toe aan de voorlichting of verwijdert een vak
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Voorlichting wijzigen";
 
@@ -9,8 +15,15 @@
 
     int id = Convert.ToInt16(Request.QueryString["id"]);
     VoorlichtingRepo.Voorlichting voorlichting = VoorlichtingRepo.GetVoorlichting(id);
+    LokaalRepo.Lokaal lokaal = LokaalRepo.GetLokaal(voorlichting.LokaalId);
 
     List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(voorlichting.VakId);
+
+    var capaciteitGebruik = 0;
+    foreach (LeerlingRepo.Leerling leerling in leerlingen)
+    {
+         capaciteitGebruik += KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId);
+    }
 
     if (voorlichting == null)
     {
@@ -47,6 +60,9 @@
     <p>
         <span>Voorlichting:</span>
         <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
+    </p>
+    <p>
+        Capaciteit: @(lokaal.Capaciteit - capaciteitGebruik) van @lokaal.Capaciteit
     </p>
 
 

@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te berijken van: Decaan/Lokaal/LokaalOverzicht
+    Linkt door naar: Decaan/Lokaal/LokaalOverzicht
+    Beschrijving: Vraagt om een lokaalnaam en capaciteit en voegt hiermee een lokaal toe aan de database
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Lokaal toevoegen";
 
@@ -16,7 +22,7 @@
 
         if(Request.Form["lokaalNaam"] != null) {lokaalNaam = Request.Form["lokaalNaam"];}
         if(Request.Form["capaciteit"] != "") {capaciteit = Convert.ToInt16(Request.Form["capaciteit"]);}
-
+    
         if(Validation.IsValid())
         {
             LokaalRepo.MakeLokaal(lokaalNaam, capaciteit);

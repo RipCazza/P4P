@@ -1,13 +1,22 @@
-﻿@*Wordt aangeroepen in default*@
+﻿@*
+    Permissies: Admin, Decaan(gedeeltelijk)
+    Wordt aangeroepen in: Default
+    Linkt door naar: Rooster, Decaan/LeerlingDetails?Id=[ID], [Alleen admin]: Admin/Leerling/LeerlingenToevoegen
+    Beschrijving: Hoofd pagina van decaan. Geeft een overzicht van alle leerlingen
+        Zoekveld werkt voor: voornaam, achternaam, leerlingnummer, niveau, keuzevakken, klas, aangemeld(true/false), mail, mail verzorger
+*@
 @{
    int id = WebSecurity.CurrentUserId;
    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen();
 }
 <h2>Leerlingenoverzicht</h2>
 
-<a class="btn btn-success" href="~/Admin/Leerling/LeerlingenToevoegen">
-    <span class="glyphicon glyphicon-plus"></span>&nbsp; Leerlingen aanmaken
-</a>
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-success" href="~/Admin/Leerling/LeerlingenToevoegen">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp; Leerlingen aanmaken
+    </a>
+}
 <a class="btn btn-success" href="~/Rooster">
     <span class="glyphicon glyphicon-user"></span>&nbsp; Volledig rooster
 </a>
@@ -52,6 +61,7 @@
     </tbody>
 </table>
 
+@*zoek filter*@
 <script>
     var $rows = $('#table tr');
     $('#search').keyup(function() {

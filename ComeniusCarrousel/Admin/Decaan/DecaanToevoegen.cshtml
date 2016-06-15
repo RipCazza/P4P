@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: Admin
+    Te berijken van: Admin/Decaan/DecaanOverzicht
+    Linkt door naar: Admin/Decaan/DecaanOverzicht
+    Beschrijving: Vraagt om een mail en wachtwoord en voegt hiermee een gebruiker toe aan de database met decaan permissies
+*@
+@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Decaan toevoegen";
 
@@ -37,6 +43,7 @@
         if(Validation.IsValid())
         {
             DecaanRepo.MakeDecaan(userName, password);
+            Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
         }
     }
 }
