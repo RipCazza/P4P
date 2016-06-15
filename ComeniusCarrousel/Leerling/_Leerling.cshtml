@@ -10,7 +10,7 @@
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 }
 
-@RenderPage("~/Leerling/_LeerlingDetails")
+@RenderPage("~/Leerling/_LeerlingDetails.cshtml")
 
 @if (leerling.Niveau.ToLower() == "havo")
 {
