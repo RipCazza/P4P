@@ -47,6 +47,11 @@
             vak = Request.Form["vak"];
         }
         
+        if (!(userName.Contains("@") && userName.Substring(userName.IndexOf("@") + 2).Contains(".")))
+        {
+            Validation.AddFormError("De mail kan niet juist zijn.");
+        }
+
         if(Validation.IsValid())
         {
             LeraarRepo.MakeLeraar(userName, password, voornaam, achternaam, vak);

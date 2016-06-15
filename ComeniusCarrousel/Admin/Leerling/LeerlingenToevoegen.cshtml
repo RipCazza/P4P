@@ -48,7 +48,7 @@
                     }
 
                     string mail = leerling[3];
-                    if (!(mail.Contains("@") || mail.Substring(mail.IndexOf("@") + 2).Contains(".")) || mail.Length > 400)
+                    if (!(mail.Contains("@") && mail.Substring(mail.IndexOf("@") + 2).Contains(".")) && mail.Length > 400)
                     {
                         Validation.AddFormError("De mail van leerling " + (i+1) + " kan niet juist zijn.");
                     }
