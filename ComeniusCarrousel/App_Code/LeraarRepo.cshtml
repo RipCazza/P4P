@@ -68,17 +68,17 @@
     {
         var db = Database.Open(App.DataBase);
         var userDb = Database.Open(App.AuthDataBase);
+        var data = db.Query("SELECT * FROM Voorlichting Voor INNER JOIN Leraar Lera ON Voor.UserId = Lera.UserId");
+        foreach(var row in data)
+        {
+            VoorlichtingRepo.DeleteVoorlichting(row.VoorlichtingId);
+        }
         var deleteCommand = "DELETE FROM Gebruiker WHERE UserId = @0";
         var deleteLeraar = "DELETE FROM Leraar WHERE UserId = @0";
         var deleteMailontvanger = "DELETE FROM MailOntvanger WHERE UserId = @0";
         db.Execute(deleteCommand, id);
         db.Execute(deleteLeraar, id);
         db.Execute(deleteMailontvanger);
-        var data = db.Query("SELECT * FROM Voorlichting Voor INNER JOIN Leraar Lera ON Voor.UserId = Lera.UserId");
-        foreach(var row in data)
-        {
-            VoorlichtingRepo.DeleteVoorlichting(row.VoorlichtingId);
-        }
         var userRoles = Roles.GetRolesForUser(user);
         if (userRoles.Count() > 0)
         {

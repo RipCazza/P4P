@@ -86,8 +86,6 @@
         var deleteCommand = "DELETE FROM Vak WHERE VakId = @0";
         var deleteKeuzeCommand = "DELETE FROM Keuze WHERE VakId = @0";
         var voorlichtingData = db.Query("SELECT VoorlichtingId FROM Voorlichting Where VakId = @0", id);
-        var updateCommand = "UPDATE Leerling INNER JOIN Vak ON Vak.VakNaam = Leerling.TalentstroomVak SET TalentstroomVak = null where VakId = @0";
-        db.Execute(updateCommand, id);
         db.Execute(deleteCommand, id);
         db.Execute(deleteKeuzeCommand, id);
         foreach (var row in voorlichtingData)
