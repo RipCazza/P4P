@@ -1,5 +1,11 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
+
+    
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
     
     var onderwerp = "";
     var inhoud = "";
