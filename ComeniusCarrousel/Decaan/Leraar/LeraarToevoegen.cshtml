@@ -55,50 +55,50 @@
     }
 }
 
+ - <h2>Nieuwe leraar aanmaken</h2>
+
 <div class="col-md-12">
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Account creatie is mislukt, verhelp de fouten en probeer het opnieuw.", excludeFieldErrors: true, htmlAttributes: null)
-        <fieldset>
-            <h2>Register a new account</h2>
-            <div class="form-group">
-                <label for="userName">Email adres</label>
-                <input type="text" id="userName" name="userName" value="@userName" class="form-control">
-                @Html.ValidationMessage("userName")
-            </div>
-            <div class="form-group">
-                <label for="userName">Voornaam</label>
-                <input type="text" id="voornaam" name="voornaam" value="@voornaam" class="form-control">
-                @Html.ValidationMessage("voornaam")
-            </div>
-            <div class="form-group">
-                <label for="userName">Achternaam</label>
-                <input type="text" id="achternaam" name="achternaam" value="@achternaam" class="form-control">
-                @Html.ValidationMessage("achternaam")
-            </div>
-            <div class="form-group">
-                <label for="password">Wachtwoord</label>
-                <input type="password" id="password" name="password" value="@password" class="form-control">
-                @Html.ValidationMessage("password")
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Bevestig wachtwoord</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
-                @Html.ValidationMessage("confirmPassword")
-            </div>
-            <div>
-            <label>Selecteer te geven vak</label>
-            <select name="vak">
-                <option value="-"></option>
-                @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
-                {
-                    <option value="@v.VakNaam">@v.VakNaam</option>
-                }
-            </select>
-            </div>
-            <div class="from-group">
-                <button type="submit" class="btn btn-default">Toevoegen</button>
-            </div>
-        </fieldset>
+        <div class="form-group">
+            <label for="userName">Email adres</label>
+            <input type="text" id="userName" name="userName" value="@userName" class="form-control">
+            @Html.ValidationMessage("userName")
+        </div>
+        <div class="form-group">
+            <label for="userName">Voornaam</label>
+            <input type="text" id="voornaam" name="voornaam" value="@voornaam" class="form-control">
+            @Html.ValidationMessage("voornaam")
+        </div>
+        <div class="form-group">
+            <label for="userName">Achternaam</label>
+            <input type="text" id="achternaam" name="achternaam" value="@achternaam" class="form-control">
+            @Html.ValidationMessage("achternaam")
+        </div>
+        <div class="form-group">
+            <label for="password">Wachtwoord</label>
+            <input type="password" id="password" name="password" value="@password" class="form-control">
+            @Html.ValidationMessage("password")
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Bevestig wachtwoord</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
+            @Html.ValidationMessage("confirmPassword")
+        </div>
+        <div class="form-group">
+        <label>Selecteer te geven vak</label>
+        <select name="vak" class="form-control">
+            <option value="-"></option>
+            @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
+            {
+                <option value="@v.VakNaam">@v.VakNaam</option>
+            }
+        </select>
+        </div>
+            
+        <div class="from-group" id="floatRight">
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen</button>
+        </div>
     </form>
 </div>
