@@ -40,6 +40,10 @@
         password = Request.Form["password"];
         confirmPassword = Request.Form["confirmPassword"];
 
+        if (!(userName.Contains("@") && userName.Substring(userName.IndexOf("@") + 2).Contains(".")))
+        {
+            Validation.AddFormError("De mail kan niet juist zijn.");
+        }
         if(Validation.IsValid())
         {
             DecaanRepo.MakeDecaan(userName, password);

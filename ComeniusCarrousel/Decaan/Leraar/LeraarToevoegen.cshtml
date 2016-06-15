@@ -13,7 +13,7 @@
     var password = "";
     var confirmPassword = "";
     var vak = "";
-    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+    List<string> vakken = VakRepo.GetDistinctVakken();
 
     Validation.RequireField("userName", "U moet een gebruiker invullen.");
     Validation.RequireField("voornaam", "U moet een voornaam invullen.");
@@ -95,9 +95,9 @@
         <label>Selecteer te geven vak</label>
         <select name="vak" class="form-control">
             <option value="-"></option>
-            @foreach(VakRepo.Vak v in vakken) // maakt een keuzemenu met alle mogelijke vakken
+            @foreach(string v in vakken) // maakt een keuzemenu met alle mogelijke vakken
             {
-                <option value="@v.VakNaam">@v.VakNaam</option>
+                <option value="@v">@v</option>
             }
         </select>
         </div>

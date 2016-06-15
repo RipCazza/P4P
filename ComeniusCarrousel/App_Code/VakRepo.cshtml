@@ -55,6 +55,19 @@
         return vakken;
     }
 
+    public static List<string> GetDistinctVakken()
+    {
+        List<string> vakken = new List<string>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT Distinct VakNaam FROM Vak");
+        foreach(var row in data)
+        {
+            vakken.Add(row.VakNaam);
+        }
+        db.Close();
+        return vakken;
+    }
+
     // geeft een vak terug die de gegeven id matcht
     public static Vak GetVak(int id)
     {
