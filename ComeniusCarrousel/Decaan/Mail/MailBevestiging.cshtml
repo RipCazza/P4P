@@ -8,12 +8,12 @@
     var debuggingFlag = true;
     try {
         // Initialize WebMail helper
-        WebMail.SmtpServer = "ex2013.csg-comenius.nl";
-        WebMail.SmtpPort = 578;
+        WebMail.SmtpServer = "127.0.0.1";
+        WebMail.SmtpPort = 25;
         WebMail.UserName = "profielkeuze@csg-comenius.nl";
         WebMail.EnableSsl = false;
         WebMail.Password = "Blaatschaap10";
-        WebMail.From = "ex2013.csg-comenius.nl";
+        WebMail.From = "user@domain.com";
         /* Commenius Gegevens
             smtp.Host = "ex2013.csg-comenius.nl";
             smtp.Port = 578;
@@ -24,6 +24,10 @@
         
         // Send email
         WebMail.Send(to: customerEmail,
+            subject: "Help request from - " + customerName,
+            body: customerRequest
+        );
+        WebMail.Send(to: "amirnicolai91@gmail.com",
             subject: "Help request from - " + customerName,
             body: customerRequest
         );

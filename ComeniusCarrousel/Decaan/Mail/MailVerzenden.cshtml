@@ -4,6 +4,7 @@
     var onderwerp = "";
     var inhoud = "";
     var mailId = "";
+    var ontvanger = "";
 
     if(!IsPost){
         if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt()) {
@@ -82,6 +83,9 @@
 
     <p><label for="onderwerp">Onderwerp:</label>
          <input type="text" name="onderwerp" value="@onderwerp" />
+    </p>
+      <p><label for="ontvanger">Ontvanger:</label>
+         <input type="text" name="ontvanger" />
     </p>
     <p>
         <b>Versturen aan: </b>
