@@ -1,4 +1,5 @@
 ﻿@functions{
+    // geeft het aantalMensen van een keuze terug die de gegeven vakId en userId matcht
     public static int GetAantalMensen(int vakId, int userId)
     {
         var db = Database.Open(App.DataBase);
@@ -8,7 +9,7 @@
             return data.AantalPersonen;
         }
         db.Close();
-        return -1;
+        return 0;
     }
 
     // delete een keuze uit de database die de gegeven id en vak matcht
