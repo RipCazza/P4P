@@ -140,14 +140,14 @@
     {
         List<Leerling> leerlingen = new List<Leerling>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId");
+        var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId ORDER BY Achternaam ASC");
         if (voorlichtingId != -1)
         {
-            data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId INNER JOIN Rooster Roos ON Gebr.UserId = Roos.UserId WHERE Roos.VoorlichtingId = @0", voorlichtingId);
+            data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId INNER JOIN Rooster Roos ON Gebr.UserId = Roos.UserId WHERE Roos.VoorlichtingId = @0 ORDER BY Achternaam ASC", voorlichtingId);
         }
         else if (vakId != -1)
         {
-            data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId INNER JOIN Keuze Keuz ON Gebr.UserId = Keuz.UserId WHERE Keuz.VakId = @0", vakId);
+            data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leerling Leerl ON Gebr.UserId = Leerl.UserId INNER JOIN Keuze Keuz ON Gebr.UserId = Keuz.UserId WHERE Keuz.VakId = @0 ORDER BY Achternaam ASC", vakId);
         }
         if(data != null)
         {
