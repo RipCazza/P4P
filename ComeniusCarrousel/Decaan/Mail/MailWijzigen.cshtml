@@ -64,10 +64,15 @@
       <p><label for="onderwerp">Onderwerp:</label>
          <input type="text" name="onderwerp" value="@onderwerp" /></p>
 
-      <p><label for="inhoud">Inhoud:</label>
-         <input type="text" name="inhoud" value="@inhoud" /></p>
+      <p><label for="inhoud">Inhoud</label>
+         
+      
+      <textarea style="width: 100%; resize: none; padding: 0px" name="inhoud" class="form-control" rows="20"
+                  
+                  maxlength="4000">@inhoud</textarea>
 
       <input type="hidden" name="mailid" value="@mailId" />
+          </p>
 
       <p><input type="submit" name="buttonSubmit" value="Mail Veranderingen opslaan" /></p>
       <p><input type="submit" name="buttonDelete" value="Mail Verwijderen" /></p>

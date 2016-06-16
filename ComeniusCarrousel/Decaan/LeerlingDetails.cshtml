@@ -19,7 +19,7 @@
 
 @if (User.IsInRole("Admin"))
 {
-    <a href="~/Admin/Leerling/LeerlingWijzigen?id=@id" class="btn btn-default">
-        <span class="glyphicon glyphicon-pencil"></span> Verwijderen
+    <a href="~/Admin/Leerling/LeerlingWijzigen?id=@id" class="btn btn-danger" id="floatRight">
+        <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
     </a>
 }
