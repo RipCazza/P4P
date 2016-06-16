@@ -21,7 +21,10 @@
 <a class="btn btn-success" href="~/Decaan/Voorlichting/VoorlichtingToevoegen">
     <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe voorlichting aanmaken
 </a>
-
+</br>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
 <table class="table" style="margin-top: 16px;">
     <thead>
         <tr>
@@ -33,7 +36,7 @@
             <th>Details</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="table">
     @foreach (VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
     {
         <tr>
