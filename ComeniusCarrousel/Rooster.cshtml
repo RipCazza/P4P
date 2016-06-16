@@ -16,12 +16,45 @@
     List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetVoorlichtingen();
 }
 
-@foreach (VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
-{
-    <h3><span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span></h3>
-    List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(voorlichtingId:voorlichting.VoorlichtingId);
-    foreach (LeerlingRepo.Leerling leerling in leerlingen)
-    {
-        <p>@leerling.Leerlingnummer: @leerling.Voornaam @leerling.Achternaam (@leerling.UserName)</p>
-    }
-}
+<h2>Rooster</h2>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
+<table class="table" style="margin-top: 16px;">
+    <thead>
+    <tr>
+        <th>Leerlingen</th>
+        <th>Vak</th>
+        <th>Leraar</th>
+        <th>Datum</th>
+        <th>Lokaal</th>
+
+    </tr>
+    </thead>
+    <tbody id="table">
+        @for(int i = 0; i < voorlichtingen.Count; i++)
+        {
+            List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(voorlichtingId:voorlichtingen[i].VoorlichtingId);
+            <tr>
+                <td>
+                    <div class="dropdown">
+                        <button  type="button" id="dropdownMenu_@i" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0px; background-color: #fff; border: 0px;">
+                            Leerlingen
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu_@i" style="width: max-content;">
+                            @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+                            {
+                                <li style="white-space: nowrap;">@leerling.Leerlingnummer: @leerling.Voornaam @leerling.Achternaam (@leerling.UserName)</li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+                <td>@voorlichtingen[i].Vak (@voorlichtingen[i].Niveau)</td>
+                <td>@voorlichtingen[i].Leraar</td>
+                <td>@string.Format("{0:d/M/yyyy HH:mm}", voorlichtingen[i].DateTime)</td>
+                <td>@voorlichtingen[i].Lokaal</td>
+            </tr>
+        }
+    </tbody>
+</table>

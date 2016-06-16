@@ -36,26 +36,35 @@
     </tr>
     </thead>
     <tbody id="table">
-        @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+        @for (int i = 0; i < leerlingen.Count; i++)
         {
             <tr>
-                <td>@leerling.Voornaam</td>
-                <td>@leerling.Achternaam</td>
-                <td>@leerling.Leerlingnummer</td>
-                <td>@leerling.Niveau</td>
+                <td>@leerlingen[i].Voornaam</td>
+                <td>@leerlingen[i].Achternaam</td>
+                <td>@leerlingen[i].Leerlingnummer</td>
+                <td>@leerlingen[i].Niveau</td>
+
                 <td>
-                @foreach (Tuple<string,int> vak in leerling.KeuzeVakken())
-                {
-                    @vak.Item1<br>
-                }
+                    <div class="dropdown">
+                        <button  type="button" id="dropdownMenu_@i" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0px; background-color: #fff; border: 0px;">
+                            Vakken
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu_@i" style="width: max-content;">
+                            @foreach (Tuple<string,int> vak in leerlingen[i].KeuzeVakken())
+                            {
+                                <li style="white-space: nowrap;">@vak.Item1</li>
+                            }
+                        </ul>
+                    </div>
                 </td>
                 <td>
-                    <a href="~/Decaan/LeerlingDetails?Id=@leerling.UserId">Bekijken</a>
+                    <a href="~/Decaan/LeerlingDetails?Id=@leerlingen[i].UserId">Bekijken</a>
                 </td>
-                <td style="display:none;">@leerling.Klas</td>
-                <td style="display:none;">@leerling.Aangemeld</td>
-                <td style="display:none;">@leerling.UserName</td>
-                <td style="display:none;">@leerling.MailVerzorger</td>
+                <td style="display:none;">@leerlingen[i].Klas</td>
+                <td style="display:none;">@leerlingen[i].Aangemeld</td>
+                <td style="display:none;">@leerlingen[i].UserName</td>
+                <td style="display:none;">@leerlingen[i].MailVerzorger</td>
             </tr>
         }
     </tbody>
