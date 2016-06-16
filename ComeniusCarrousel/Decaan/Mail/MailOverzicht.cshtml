@@ -28,14 +28,17 @@
     <span class="glyphicon glyphicon-wrench"></span>&nbsp; E-mail Account Gegevens
 </a>
 
-
+</br>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
 <table class="table" style="margin-top: 16px;">
     <thead>
     <tr>
         <th colspan="3">Onderwerp</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="table">
         @foreach (MailRepo.Mail mail in mails)
         {
         <tr>

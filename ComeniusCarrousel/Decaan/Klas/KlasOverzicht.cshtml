@@ -24,21 +24,25 @@
         <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuwe klas aanmaken
     </a>
 }
-
+</br>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
 <table class="table" style="margin-top: 16px">
     <thead>
-        <tr>
-            <th>Klas</th>
-            @if (User.IsInRole("Admin"))
-            {
+    <tr>
+        <th>Klas</th>
+        @if (User.IsInRole("Admin"))
+        {
             <th>Details</th>
-            }
-        </tr>
+        }
+    </tr>
     </thead>
-    @foreach (KlasRepo.Klas klas in klassen)
-    {
+    <tbody id="table">
+        @foreach (KlasRepo.Klas klas in klassen)
+        {
         <tr>
-            
+
             <td>@klas.KlasNaam</td>
             @if (User.IsInRole("Admin"))
             {
@@ -48,4 +52,5 @@
             }
         </tr>
     }
+        </tbody>
 </table>
