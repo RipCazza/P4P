@@ -1,4 +1,12 @@
-﻿@{
+﻿@*
+    Permissies: Admin, Decaan
+    Te bereiken van: _Layout
+    Linkt door naar: Decaan/Mail/MailOverzicht
+    Beschrijving: Deze pagina is gemaakt om mails te kunnen wijzigen, zowel het onderwerp als de inhoud. 
+    Het idee was om MailWijzigen in deze pagina te mergen.
+*@
+
+@{
     Layout = "~/_Layout.cshtml";
 
     
@@ -77,7 +85,8 @@
       <input type="hidden" name="mailid" value="@mailId" />
           </p>
 
-      <p><input type="submit" name="buttonSubmit" value="Mail Veranderingen opslaan" /></p>
+      <button type="submit" id="submit" name="buttonSubmit" class="btn btn-success" style="float: right;">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Wijzigen
+        </button>
   </form>
-  <p><a href="~/Decaan/Mail/MailOverzicht.cshtml">Terug naar MailOverzicht</a></p>
 </body>

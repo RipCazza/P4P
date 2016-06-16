@@ -7,6 +7,15 @@
 
 @{
     Layout = "~/_Layout.cshtml";
+    Page.Title = "Mail verzenden";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int id = Convert.ToInt16(Request.QueryString["id"]);
+    MailOntvangerRepo.MailOntvanger userInts = MailOntvangerRepo.GetMailOntvanger(id);
     
     var onderwerp = "";
     var inhoud = "";
@@ -43,44 +52,7 @@
         inhoud = Request.Form["Inhoud"];
         mailId = Request.Form["MailId"];
         }
-        if(Validation.IsValid())
-        {
-            var db = Database.Open(App.AuthDataBase);
-            var db2 = Database.Open(App.DataBase);
-            bool verstuurAan = false;
-            
-            
-
-            /*var user = db.QuerySingle("SELECT UserName FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
-            if(user == null)
-            {
-                db.Execute("INSERT INTO UserProfile (UserName) VALUES (LOWER(@0))", userName);
-                
-                try
-                {
-                    var token = WebSecurity.CreateAccount(userName, password, false);
-                    var dataId = db.QuerySingle("SELECT UserId FROM UserProfile WHERE LOWER(UserName) = LOWER(@0)", userName);
-                    db2.Execute("INSERT INTO Gebruiker (Voornaam, Achternaam, UserId) VALUES (@0,@1,@2)",voornaam, achternaam, dataId.UserId);
-                    db2.Execute("INSERT INTO Leerling (UserId, KlasId, Niveau, Leerlingnummer, InstroomLeerling, TalentstroomVak, Aangemeld ) VALUES (@0,@1,@2,@3,@4,@5,@6)",dataId.UserId, klasId, niveau, nummer, "False", talentstroomvak, "False");
-                    Roles.AddUserToRole(userName, "Leerling");
-                    db.Close();
-                    db2.Close();
-                    Response.Redirect("~/");
-                }
-                catch(System.Web.Security.MembershipCreateUserException e)
-                {
-                    db.Close();
-                    db2.Close();
-                    ModelState.AddFormError(e.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddFormError("Gebruiker bestaat al");
-            }*/
-            db.Close();
-            db2.Close();
-        }
+        
 }
 
 
