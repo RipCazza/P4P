@@ -78,7 +78,7 @@
     public static void MakeKlas(string klasNaam)
     {
         var db = Database.Open(App.DataBase);
-        var insertCommand = "INSERT INTO Klas (KlasNaam) VALUES(@0)";
+        var insertCommand = "INSERT INTO Klas (KlasNaam) VALUES(UPPER(@0))";
         db.Execute(insertCommand, klasNaam);
         db.Close();
     }
