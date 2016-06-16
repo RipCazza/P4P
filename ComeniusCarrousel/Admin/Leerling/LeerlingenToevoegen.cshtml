@@ -65,7 +65,7 @@
                         Validation.AddFormError("Het niveau van leerling " + (i+1) + " bestaat niet.");
                     }
 
-                    string klas = leerling[5];
+                    string klas = leerling[5].ToUpper();
                     int klasId = -1;
                     bool validateKlas = KlasRepo.ValidateKlas(klas);
                     if (validateKlas == false)
