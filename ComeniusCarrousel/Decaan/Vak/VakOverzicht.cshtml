@@ -21,7 +21,10 @@
 <a class="btn btn-success" href="~/Decaan/Vak/VakToevoegen">
     <span class="glyphicon glyphicon-plus"></span>&nbsp; Nieuw vak aanmaken
 </a>
-
+</br>
+<div class="input-group" id="floatRight">
+    <input type="text" class="form-control" id="search" placeholder="Gegevens zoeken" style="margin: 4px 4px 4px 4px;">
+</div>
 <table class="table" style="margin-top: 16px;">
     <thead>
         <tr>
@@ -30,7 +33,7 @@
             <th>Details</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="table">
         @foreach (VakRepo.Vak vak in vakken)
         {
         <tr>

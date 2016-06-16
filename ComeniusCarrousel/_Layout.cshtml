@@ -21,7 +21,7 @@
     string navMailActive = "";
     string navManageActive = "";
     string navKlasActive = "";
-    
+
     if ((Request.Url.AbsolutePath == "/") || (Request.Url.AbsolutePath == "/Admin/Leerling/LeerlingToevoegen") || (Request.Url.AbsolutePath == "/Admin/Leerling/LeerlingToevoegen") || (Request.Url.AbsolutePath == "/Decaan/LeerlingDetails"))
     {
         navHomeActive = "active";
@@ -78,13 +78,13 @@
         <link href="~/css/bootstrap-theme.css" rel="stylesheet" type="text/css">
         <link href="~/css/mainstyle.css" rel="stylesheet" type="text/css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </head>
     <body style="font-size: 16px;">
         <div class="page-header">
             <div class="container">
                 <div id="floatLeft">
-                    <img src="~/Logo Comenius SVG Grayscale.svg" alt="Comenius Logo" style="width: 320px; margin-top: 24px;"/>
+                    <img src="~/Logo Comenius SVG Grayscale.svg" alt="Comenius Logo" style="width: 320px; margin-top: 24px;" />
                 </div>
                 <div id="floatRight">
                     <a href="~/" style="color: #fff;">
@@ -98,9 +98,9 @@
                         <a href="~/User_Management/Logout?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                             <span class="glyphicon glyphicon-log-out" style="color:#fff"></span>&nbsp; Log out&nbsp;
                         </a>
-                    }
-                    else
-                    {
+}
+else
+{
                         <a href="~/User_Management/Login?ReturnUrl=~@Request.Url.AbsolutePath" style="color: #fff;">
                             <span class="glyphicon glyphicon-log-in" style="color:#fff"></span>&nbsp; Log in&nbsp;
                         </a>
@@ -112,28 +112,28 @@
         <div class="container" id="content">
             @if(WebSecurity.IsAuthenticated)
             {
-            <ul class="nav nav-tabs">
-            <li class="@navHomeActive"><a href="~/"><span class="glyphicon glyphicon-home"></span>&nbsp; Home</a></li>
-            @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
-            {      
-                    <li class="@dropdownOverzichtActive">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span>&nbsp; Overzichten<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            @if (User.IsInRole("Admin"))
-                            {
+                <ul class="nav nav-tabs">
+                    <li class="@navHomeActive"><a href="~/"><span class="glyphicon glyphicon-home"></span>&nbsp; Home</a></li>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Decaan"))
+                    {      
+                        <li class="@dropdownOverzichtActive">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span>&nbsp; Overzichten<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @if (User.IsInRole("Admin"))
+                                {
                                     <li class="@navDecaanActive"><a href="~/Admin/Decaan/DecaanOverzicht">Decaan overzicht</a></li>
-                            }
+                                }
                                 <li class="@navLokaalActive"><a href="~/Decaan/Lokaal/LokaalOverzicht">Lokaal overzicht</a></li>
                                 <li class="@navVakActive"><a href="~/Decaan/Vak/VakOverzicht">Vak overzicht</a></li>
                                 <li class="@navLeraarActive"><a href="~/Decaan/Leraar/LeraarOverzicht">Leraar overzicht</a></li>
                                 <li class="@navVoorlichtingActive"><a href="~/Decaan/Voorlichting/VoorlichtingOverzicht">Voorlichting overzicht</a></li>
                                 <li class="@navMailActive"><a href="~/Decaan/Mail/MailOverzicht">E-mail overzicht</a></li>
                                 <li class="@navKlasActive"><a href="~/Decaan/Klas/KlasOverzicht">Klas overzicht</a></li>
-                        </ul>
-                    </li>
-            }
-            <li class="@navManageActive"><a href="~/User_Management/Manage"><span class="glyphicon glyphicon-user"></span>&nbsp; Account Beheren</a></li>
-            </ul>
+                            </ul>
+                        </li>
+                    }
+                    <li class="@navManageActive"><a href="~/User_Management/Manage"><span class="glyphicon glyphicon-user"></span>&nbsp; Account Beheren</a></li>
+                </ul>
             }
             @RenderBody()
         </div>
@@ -153,5 +153,6 @@
                 </div>
             </div>
         </footer>
+        <script src="~/js/script.js"></script>
     </body>
 </html>
