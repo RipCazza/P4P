@@ -51,7 +51,22 @@
         onderwerp = Request.Form["Onderwerp"];
         inhoud = Request.Form["Inhoud"];
         mailId = Request.Form["MailId"];
+
+        foreach(UserId x in MailOntvangers){
+            if(RoleId == cbLeerlingen ||RoleId == Decanen ||RoleId == cbDocenten ||Niveau == cbVwoLeerling || Niveau == cbHavoLeerling || Aangemeld == cbAangemeld || Aangemeld == cbNietAangemeld){
+                if(RoleID == 4){
+                    if(MailVerzorger != null){
+                        WebMail.Send(to: MailVerzorger,
+                        subject: onderwerp,
+                        body: inhoud);
+                    }
+                }
+                WebMail.Send(to: UserName,
+                        subject: onderwerp,
+                        body: inhoud);
+            }
         }
+    }
         
 }
 
@@ -73,8 +88,8 @@
         <input type="checkbox" name="cbLeerlingen" value="Leerlingen">Alle Leerlingen
         <input type="checkbox" name="cbDocenten" value="Docenten">Docenten
         <input type="checkbox" name="cbDecanen" value="Decanen">Decanen
-        <input type="checkbox" name="cbVwoLeerling" value="VwoLeerling">VWO
-        <input type="checkbox" name="cbHavoLeerling" value="HavoLeerling">HAVO
+        <input type="checkbox" name="cbVwoLeerling" value="VWO">VWO
+        <input type="checkbox" name="cbHavoLeerling" value="HAVO">HAVO
         <input type="checkbox" name="cbInstroomleerling" value="Instroomleerling">Instroomleering
     </p>
 
