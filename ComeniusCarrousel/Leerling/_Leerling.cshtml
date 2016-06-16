@@ -12,12 +12,10 @@
 
 @RenderPage("~/Leerling/_LeerlingDetails.cshtml")
 
-@if (leerling.Niveau.ToLower() == "havo")
-{
-    <a href="~/Leerling/Keuze" class="btn btn-default" role="button" id="floatRight">
-        <span class="glyphicon glyphicon-pencil"></span>&nbsp; Voer keuzevakken in
-    </a>
-}
+
+<a href="~/Leerling/Keuze" class="btn btn-default" role="button" id="floatRight">
+    <span class="glyphicon glyphicon-pencil"></span>&nbsp; Voer keuzevakken in
+</a>
 <a href="~/Leerling/EigenRooster" class="btn btn-default" role="button" id="floatLeft">
     <span class="glyphicon glyphicon-pencil"></span>&nbsp; Rooster
 </a>

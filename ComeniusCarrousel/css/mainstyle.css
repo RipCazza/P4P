@@ -82,7 +82,7 @@ a:focus {
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
-    color: #969696;
+    color: #474747;
     background-color: #eeeeee;
     background-image: none;
     border: none;
@@ -111,6 +111,7 @@ a:focus {
     border-color: #C7D41B;
     width: 1000px;
     margin-top: 4%;
+    margin-bottom: 100px;
     text-align: justify;
     padding-bottom: 15px;
     padding-top: 15px;
@@ -263,6 +264,65 @@ a:focus {
 
 .modal-content {
     border-radius: 0px;
+}
+
+.bs-callout {
+    padding: 20px;
+    margin: 15px;
+    border: 1px solid #eee;
+    border-left-width: 4px;
+    border-radius: 3px;
+    text-align: justify;
+    font-size: 14px;
+}
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code {
+    border-radius: 3px;
+}
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+.bs-callout-default {
+    border-left-color: #0085BC;
+}
+.bs-callout-default h4 {
+    color: #0085BC;
+}
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+.bs-callout-info h4 {
+    color: #5bc0de;
 }
 
 /*.head { background-color: #969696; font-weight: bold; color: #FFF; }
