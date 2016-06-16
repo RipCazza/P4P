@@ -1,4 +1,10 @@
-﻿@{
+﻿@*
+    Permissies: ~
+    Wordt aangeroepen in: _Layout
+    Linkt door naar: ~
+    Beschrijving: Het wachtwoord veranderen van de huidige gebruiker
+*@
+@{
     if(!WebSecurity.IsAuthenticated)
     {
         Response.Redirect("~/");
