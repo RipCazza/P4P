@@ -45,13 +45,15 @@
             var db = Database.Open("ComeniusCarrousel");
             var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1 WHERE MailId=@2";
             db.Execute(updateCommand, onderwerp, inhoud, mailId);
+            db.Close();
             Response.Redirect("~/Decaan/Mail/Mailoverzicht.cshtml");
         }
 
         if(IsPost && !Request["buttonDelete"].IsEmpty()){
             var db = Database.Open("ComeniusCarrousel");
-            var deleteCommand = "DELETE FROM Mail WHERE MailId = @2";
+            var deleteCommand = "DELETE FROM Mail WHERE MailId = @0";
             db.Execute(deleteCommand, mailId);
+            db.Close();
             Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
         }
     }
