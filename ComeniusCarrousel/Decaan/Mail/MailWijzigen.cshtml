@@ -32,7 +32,7 @@
         }
     }
 
-    if(IsPost){
+    if(IsPost && !Request["buttonSubmit"].IsEmpty()){
         Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
         Validation.RequireField("inhoud", "Inhoud is vereist");
         Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
@@ -41,7 +41,7 @@
         inhoud = Request.Form["Inhoud"];
         mailId = Request.Form["MailId"];
 
-        if(Validation.IsValid()){
+        if(Validation.IsValid() ){
             var db = Database.Open("ComeniusCarrousel");
             var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1 WHERE MailId=@2";
             db.Execute(updateCommand, onderwerp, inhoud, mailId);
@@ -49,9 +49,10 @@
             Response.Redirect("~/Decaan/Mail/Mailoverzicht.cshtml");
         }
 
-        if(IsPost && !Request["buttonDelete"].IsEmpty()){
+    if(IsPost && !Request["buttonDelete"].IsEmpty()){
+
             var db = Database.Open("ComeniusCarrousel");
-            var deleteCommand = "DELETE FROM Mail WHERE MailId = @0";
+            var deleteCommand = "DELETE FROM Mail WHERE MailId = @2";
             db.Execute(deleteCommand, mailId);
             db.Close();
             Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
@@ -69,7 +70,7 @@
       <p><label for="inhoud">Inhoud</label>
          
       
-      <textarea style="width: 100%; resize: none; padding: 0px" name="inhoud" class="form-control" rows="20"
+      <textarea style="width: 100%; resize: none;" name="inhoud" class="form-control" rows="20"
                   
                   maxlength="4000">@inhoud</textarea>
 

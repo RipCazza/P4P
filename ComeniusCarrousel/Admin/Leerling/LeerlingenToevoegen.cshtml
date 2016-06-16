@@ -100,16 +100,48 @@
     }
 }
 
-<div class="col-md-12">
+<h2>Leerlingen toevoegen</h2>
+
+<div class="bs-callout bs-callout-default">
+    <h4>Let op!</h4>
+    Iedere leerling dient PER regel worden ingevoerd volgens de volgende structuur:<br>
+    <i>Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)</i><br><br>
+    Voorbeeld: Johan|de Wit|301812|johandewit@provider.com|Password3451|H3A|HAVO|Wiskunde|False<br><br>
+    <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; Sla altijd de invoer op in een tekstbestand voor het toevoegen!
+</div>
+
+<div class="col-md-12" style="margin-top: 16px;">
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Er is iets mislukt, voer zo nodig de leerlingen met problemen opniew in in en probeer het nog een keer.", excludeFieldErrors: true, htmlAttributes: null)
-        <textarea style="width: 100%; resize: none; margin: 0 5px; padding: 0px" name="leerlingenInvoer" class="form-control col-md-12" rows="20"
-                  placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)"
-                  maxlength="4000"></textarea>
-        <button type="submit" id="submit" name="leerlingenToevoegen" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span> Toevoegen
-        </button>
+        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="leerlingenInvoer" class="form-control col-md-12" rows="20" placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)" maxlength="4000"></textarea>
+
+
+        <button type="button" class="btn btn-success" id="floatRight" data-toggle="modal" data-target="#toevoegWarning"><span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen</button>
+
+        <div id="toevoegWarning" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Waarschuwing</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Weet je zeker dat je deze leerlingen wilt toevoegen?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" class="form-inline">
+                            <button type="submit" id="submit" name="leerlingenToevoegen" class="btn btn-success">
+                                <span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </form>
 </div>
 
