@@ -20,10 +20,6 @@
     List<LeerlingRepo.Leerling> leerlingen = LeerlingRepo.GetLeerlingen(voorlichting.VakId);
 
     var capaciteitGebruik = 0;
-    foreach (LeerlingRepo.Leerling leerling in leerlingen)
-    {
-         capaciteitGebruik += KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId);
-    }
 
     if (voorlichting == null)
     {
@@ -55,14 +51,22 @@
 @if (voorlichting != null)
 {
 
-    <h2>Voorlichting verwijderen</h2>
+    <h2>Voorlichting wijzigen</h2>
 
     <p>
         <span>Voorlichting:</span>
         <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
     </p>
     <p>
-        Capaciteit: @(lokaal.Capaciteit - capaciteitGebruik) van @lokaal.Capaciteit
+        Capaciteit: @foreach (LeerlingRepo.Leerling leerling in leerlingen)
+                    {
+                        bool check = RoosterRepo.ValidateRooster(voorlichting.VoorlichtingId, leerling.UserId);
+                        if (check)
+                        {
+                            capaciteitGebruik += KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId);
+                        }
+                    }
+                    @(lokaal.Capaciteit - capaciteitGebruik) van @lokaal.Capaciteit
     </p>
 
 
@@ -75,11 +79,11 @@
                 bool check = RoosterRepo.ValidateRooster(voorlichting.VoorlichtingId, leerling.UserId);
                 if (check)
                 {
-                    <option value="@leerling.UserId" selected>@leerling.Voornaam @leerling.Achternaam (@leerling.Leerlingnummer)</option>
+                    <option value="@leerling.UserId" selected>@leerling.Leerlingnummer: @leerling.Voornaam @leerling.Achternaam, @KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId) pers.</option>
                 }
                 else
                 {
-                    <option value="@leerling.UserId">@leerling.Voornaam @leerling.Achternaam (@leerling.Leerlingnummer)</option>
+                    <option value="@leerling.UserId">@leerling.Leerlingnummer: @leerling.Voornaam @leerling.Achternaam, @KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId) pers.</option>
                 }
             }
         </select>

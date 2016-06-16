@@ -132,7 +132,7 @@
     public static Voorlichting GetVoorlichting(int id)
     {
         var db = Database.Open(App.DataBase);
-        var data = db.QuerySingle("SELECT * FROM Voorlichting WHERE VoorlichtingId = @0", id);
+        var data = db.QuerySingle("SELECT * FROM Voorlichting WHERE VoorlichtingId = @0 ORDER BY DateTime ASC", id);
         if(data != null)
         {
             Voorlichting voorlichting = new Voorlichting(id, data.VakId, data.UserId, data.LokaalId, data.DateTime, data.Niveau);
@@ -148,7 +148,7 @@
     {
         List<Voorlichting> voorlichtingen = new List<Voorlichting>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Rooster INNER JOIN Voorlichting ON Rooster.VoorlichtingId = Voorlichting.VoorlichtingId WHERE Rooster.UserId = @0 ORDER BY DateTime DESC", userId);
+        var data = db.Query("SELECT * FROM Rooster INNER JOIN Voorlichting ON Rooster.VoorlichtingId = Voorlichting.VoorlichtingId WHERE Rooster.UserId = @0 ORDER BY DateTime ASC", userId);
         foreach (var row in data)
         {
             voorlichtingen.Add(new Voorlichting(row.VoorlichtingId, row.VakId, row.UserId, row.LokaalId, row.DateTime, row.Niveau));
