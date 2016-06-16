@@ -52,7 +52,7 @@
     if(IsPost && !Request["buttonDelete"].IsEmpty()){
 
             var db = Database.Open("ComeniusCarrousel");
-            var deleteCommand = "DELETE FROM Mail WHERE MailId = @2";
+            var deleteCommand = "DELETE FROM Mail WHERE MailId = @0";
             db.Execute(deleteCommand, mailId);
             db.Close();
             Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
@@ -70,7 +70,7 @@
       <p><label for="inhoud">Inhoud</label>
          
       
-      <textarea style="width: 100%; resize: none;" name="inhoud" class="form-control" rows="20"
+      <textarea style="width: 100%; resize: none; padding: 0px" name="inhoud" class="form-control" rows="20"
                   
                   maxlength="4000">@inhoud</textarea>
 
@@ -78,7 +78,6 @@
           </p>
 
       <p><input type="submit" name="buttonSubmit" value="Mail Veranderingen opslaan" /></p>
-      <p><input type="submit" name="buttonDelete" value="Mail Verwijderen" /></p>
   </form>
   <p><a href="~/Decaan/Mail/MailOverzicht.cshtml">Terug naar MailOverzicht</a></p>
 </body>
