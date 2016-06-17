@@ -10,12 +10,12 @@
     }
 
     // Geeft een lijst terug met alle userIds die een connectie hebben met de rows in MailOntvanger
-    public static List<int> GetMailOntvangers (int mailId)
+    public static List<int> GetMailOntvangerIds (int mailId)
     {
         List<int> userIds = new List<int>();
         var db = Database.Open(App.DataBase);
-        var gebruikerData = db.Query("SELECT UserId FROM Gebruiker INNER JOIN MailOntvanger WHERE MailId = @0 AND Gebruiker.UserId = MailOntvanger.UserId", mailId);
-        var leerlingData = db.Query("SELECT UserId FROM Leerling INNER JOIN MailOntvanger WHERE MailId = @0 AND (Leerling.Niveau = MailOntvanger.Niveau OR Leerling.Aangemeld = MailOntvanger.Aangemeld OR Leerling.KlasId = MailOntvanger.KlasId)", mailId);
+        var gebruikerData = db.Query("SELECT Gebruiker.UserId FROM Gebruiker INNER JOIN MailOntvanger ON Gebruiker.UserId = MailOntvanger.UserId WHERE MailId = @0", mailId);
+        var leerlingData = db.Query("SELECT Leerling.UserId FROM Leerling INNER JOIN MailOntvanger ON Leerling.Niveau = MailOntvanger.Niveau WHERE MailId = @0 UNION SELECT Leerling.UserId FROM Leerling INNER JOIN MailOntvanger ON Leerling.Aangemeld = MailOntvanger.Aangemeld WHERE MailId = @0 UNION SELECT Leerling.UserId FROM Leerling INNER JOIN MailOntvanger ON Leerling.KlasId = MailOntvanger.KlasId WHERE MailId = @0", mailId);
         var roleData = db.Query("SELECT RoleId FROM MailOntvanger WHERE MailId = @0", mailId);
 
         foreach (var row in leerlingData)
@@ -35,12 +35,15 @@
             var authDb = Database.Open(App.AuthDataBase);
             foreach (var row in roleData)
             {
-                var moreRoleData = db.Query("SELECT UserId FROM webpages_UsersInRoles INNER JOIN webpages_Roles WHERE RoleId = @0", row.RoleId);
-                foreach (var r in moreRoleData)
+                if (row.RoleId != null)
                 {
-                    if (!userIds.Contains(r.UserId))
+                    var moreRoleData = authDb.Query("SELECT UserId FROM webpages_UsersInRoles INNER JOIN webpages_Roles ON webpages_UsersInRoles.RoleId = webpages_Roles.RoleId WHERE webpages_UsersInRoles.RoleId = @0", row.RoleId);
+                    foreach (var r in moreRoleData)
                     {
-                        userIds.Add(r.UserId);
+                        if (!userIds.Contains(r.UserId))
+                        {
+                            userIds.Add(r.UserId);
+                        }
                     }
                 }
             }
@@ -48,5 +51,28 @@
         }
         db.Close();
         return userIds;
+    }
+
+    public static List<string> GetMailOntvangers (List<int> userIds)
+    {
+        List<string> mails = new List<string>{};
+        var db = Database.Open(App.DataBase);
+        var authDb = Database.Open(App.AuthDataBase);
+        foreach (int userId in userIds)
+        {
+            var data = authDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", userId);
+            if (data != null)
+            {
+                mails.Add(data.UserName);
+                var leerlingData = db.QuerySingle("SELECT MailVerzorger FROM Leerling WHERE UserId = @0", userId);
+                if (leerlingData != null)
+                {
+                    mails.Add(leerlingData.UserName);
+                }
+            }
+        }
+        db.Close();
+        authDb.Close();
+        return mails;
     }
 }

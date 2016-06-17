@@ -14,72 +14,66 @@
         Response.Redirect("~/");
     }
 
-    int id = Convert.ToInt16(Request.QueryString["id"]);
-    MailOntvangerRepo.MailOntvanger userInts = MailOntvangerRepo.GetMailOntvanger(id);
-    
+    int mailId = -1;
     var onderwerp = "";
     var inhoud = "";
-    var mailId = "";
-    var ontvanger = "";
+    List<int> userIds = new List<int>{};
+    List<string> mails = new List<string>{};
 
-    if(!IsPost){
-        if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt()) {
-            mailId = Request.QueryString["MailId"];
-            var db = Database.Open("ComeniusCarrousel");
-            var dbCommand = "SELECT * FROM Mail WHERE MailId = @0";
-            var row = db.QuerySingle(dbCommand, mailId);
+    if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt())
+    {
+        mailId = Convert.ToInt16(Request.QueryString["MailId"]);
+            
+        var db = Database.Open(App.DataBase);
+        var dbCommand = "SELECT * FROM Mail WHERE MailId = @0";
+        var data = db.QuerySingle(dbCommand, mailId);
 
-            if(row != null) {
-                onderwerp = row.Onderwerp;
-                inhoud = row.Inhoud;
-
-            }
-            else{
-                Validation.AddFormError("Er was geen mail concept geselecteerd");
-            }
+        if(data != null)
+        {
+            userIds = MailOntvangerRepo.GetMailOntvangerIds(mailId);
+            mails = MailOntvangerRepo.GetMailOntvangers(userIds);
+            
+            onderwerp = data.Onderwerp;
+            inhoud = data.Inhoud;
         }
-        else{
+        else
+        {
             Validation.AddFormError("Er was geen mail concept geselecteerd");
         }
     }
+    else
+    {
+        Validation.AddFormError("Er was geen mail concept geselecteerd");
+    }
 
-    if(IsPost){
+    if(IsPost)
+    {
         Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
         Validation.RequireField("inhoud", "Inhoud is vereist");
         Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
 
         onderwerp = Request.Form["Onderwerp"];
         inhoud = Request.Form["Inhoud"];
-        mailId = Request.Form["MailId"];
+        mailId = Convert.ToInt16(Request.Form["MailId"]);
 
-        foreach(UserId x in MailOntvangers){
-            if(RoleId == cbLeerlingen ||RoleId == Decanen ||RoleId == cbDocenten ||Niveau == cbVwoLeerling || Niveau == cbHavoLeerling || Aangemeld == cbAangemeld || Aangemeld == cbNietAangemeld){
-                if(RoleID == 4){
-                    if(MailVerzorger != null){
-                        WebMail.Send(to: MailVerzorger,
-                        subject: onderwerp,
-                        body: inhoud);
-                    }
-                }
-                WebMail.Send(to: UserName,
-                        subject: onderwerp,
-                        body: inhoud);
-            }
+        foreach(string mail in mails)
+        {
+            WebMail.Send(to: mail,
+            subject: onderwerp,
+            body: inhoud);
         }
     }
         
 }
-
-
-<!DOCTYPE html>
-<body>
-  <form method="post" action="MailBevestiging.cshtml">
-
-    <p><label for="onderwerp">Onderwerp:</label>
-         <input type="text" name="onderwerp" value="@onderwerp" />
+@Html.ValidationSummary()
+<form method="post" @*action="MailBevestiging.cshtml"*@>
+    <p>
+        <label for="onderwerp">Onderwerp:</label>
+        <input type="text" name="onderwerp" value="@onderwerp"></input>
     </p>
-      <p><label for="ontvanger">Ontvanger:</label>
-         <input type="text" name="ontvanger" />
+    <p>
+        <label for="ontvanger">Ontvanger:</label>
+        <input type="text" name="ontvanger"></input>
     </p>
     <p>
         <b>Versturen aan: </b>
@@ -93,12 +87,12 @@
         <input type="checkbox" name="cbInstroomleerling" value="Instroomleerling">Instroomleering
     </p>
 
-    <p><label for="inhoud">Inhoud:</label>
-         <input type="text" name="inhoud" value="@inhoud" />
+    <p>
+        <label for="inhoud">Inhoud:</label>
+        <input type="text" name="inhoud" value="@inhoud" />
     </p>
 
     <div>
         <input type="submit" value="Submit" />
     </div>
-  </form>
-</body>
+</form>
