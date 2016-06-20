@@ -6,7 +6,7 @@
     Beschrijving: Geeft de details van een leerling weer
 *@
 @{
-    Page.Title= "Keuze";
+    Page.Title= "Details";
     Layout = "~/_Layout.cshtml";
     int id = Convert.ToInt16(Request.QueryString["id"]);
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))

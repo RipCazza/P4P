@@ -9,6 +9,8 @@
 @{
     Layout = "~/_Layout.cshtml";
 
+    Page.Title = "E-Mail wijzigen";
+
     
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {

@@ -6,6 +6,8 @@
     Beschrijving: Hoofd pagina van leerling. Geeft de details van een leerling weer
 *@
 @{
+    Page.Title = "Home";    
+
     int id = User.IsInRole("Leerling") == true ? WebSecurity.CurrentUserId : -1;
     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(id);
 }

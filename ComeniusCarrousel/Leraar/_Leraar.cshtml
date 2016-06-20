@@ -10,6 +10,8 @@
         Response.Redirect("~/");
     }
 
+    Page.Title = "Home";
+
     int id = WebSecurity.CurrentUserId;
     LeraarRepo.Leraar leraar = LeraarRepo.GetLeraar(id);
 }
