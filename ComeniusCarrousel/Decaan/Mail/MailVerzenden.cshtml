@@ -19,6 +19,8 @@
     var inhoud = "";
     List<int> userIds = new List<int>{};
     List<string> mails = new List<string>{};
+    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+    List<GebruikerRepo.Gebruiker> gebruikers = GebruikerRepo.GetGebruikers();
 
     if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt())
     {
@@ -46,7 +48,7 @@
         Validation.AddFormError("Er was geen mail concept geselecteerd");
     }
 
-    if(IsPost)
+    if(IsPost && Request.Form["sendMail"] != null)
     {
         Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
         Validation.RequireField("inhoud", "Inhoud is vereist");
@@ -63,7 +65,39 @@
             body: inhoud);
         }
     }
-        
+    
+    if(IsPost && Request.Form["addOntvanger"] != null)
+    {
+        int vak = -1;
+        int user = -1;
+        string niveau = "";
+        string role = "";
+        string aangemeld = "";
+
+        if (Request.Form["vak"] != "-")
+        {
+            vak = Convert.ToInt16(Request.Form["vak"]);
+        }
+        if (Request.Form["user"] != "-")
+        {
+            user = Convert.ToInt16(Request.Form["user"]);
+        }
+        if (Request.Form["niveau"] != "-")
+        {
+            niveau = Request.Form["niveau"];
+        }
+        if (Request.Form["role"] != "-")
+        {
+            role = Request.Form["role"];
+        }
+        if (Request.Form["aangemeld"] != "-")
+        {
+            aangemeld = Request.Form["aangemeld"];
+        }
+
+        if (vak == -1 && user == -1 && niveau == "" && role == "" && aangemeld == "")
+        {}
+    }
 }
 @Html.ValidationSummary()
 <form method="post" @*action="MailBevestiging.cshtml"*@>
@@ -72,27 +106,46 @@
         <input type="text" name="onderwerp" value="@onderwerp"></input>
     </p>
     <p>
-        <label for="ontvanger">Ontvanger:</label>
-        <input type="text" name="ontvanger"></input>
-    </p>
-    <p>
-        <b>Versturen aan: </b>
-        <input type="checkbox" name="cbAangemeld" value="Aangemeld">Aangemelde Leerlingen
-        <input type="checkbox" name="cbNietAangemeld" value="NietAangemeld">Niet Aangemelde Leerlingen
-        <input type="checkbox" name="cbLeerlingen" value="Leerlingen">Alle Leerlingen
-        <input type="checkbox" name="cbDocenten" value="Docenten">Docenten
-        <input type="checkbox" name="cbDecanen" value="Decanen">Decanen
-        <input type="checkbox" name="cbVwoLeerling" value="VWO">VWO
-        <input type="checkbox" name="cbHavoLeerling" value="HAVO">HAVO
-        <input type="checkbox" name="cbInstroomleerling" value="Instroomleerling">Instroomleering
-    </p>
-
-    <p>
         <label for="inhoud">Inhoud:</label>
-        <input type="text" name="inhoud" value="@inhoud" />
+        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="leerlingenInvoer" class="form-control col-md-12" rows="10" placeholder="@inhoud" maxlength="4000"></textarea>
     </p>
 
-    <div>
-        <input type="submit" value="Submit" />
-    </div>
+    <button type="submit" id="submit" name="sendMail" class="btn btn-success" style="float: right;">
+        <span class="glyphicon glyphicon-envelope"></span>&nbsp; Send
+    </button>
+</form>
+
+<form method="post">
+    <select name="vak" class="form-control">
+        <option value="-"></option>
+        @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
+        {
+            <option value="@vak.VakId">@vak.VakNaam</option>
+        }
+    </select>
+    <select name="user" class="form-control">
+        <option value="-"></option>
+        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke vakken
+        {
+            <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
+        }
+    </select>
+    <select name="niveau" class="form-control">
+        <option value="-"></option>
+        <option value="HAVO">HAVO</option>
+        <option value="VWO">VWO</option>
+    </select>
+    <select name="role" class="form-control">
+        <option value="-"></option>
+        <option value="4">Leerlingen</option>
+        <option value="3">Leraren</option>
+    </select>
+    <select name="aangemeld" class="form-control">
+        <option value="-"></option>
+        <option value="True">Aangemeld</option>
+        <option value="False">Niet aangemeld</option>
+    </select>
+    <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
+            <span class="glyphicon glyphicon-envelope"></span>&nbsp; Voeg ontvangers toe
+    </button>
 </form>

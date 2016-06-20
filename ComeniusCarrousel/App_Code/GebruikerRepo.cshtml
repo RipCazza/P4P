@@ -18,25 +18,6 @@
             this.achternaam = achternaam;
         }
 
-        // geeft een gebruiker terug die de gegeven id matcht
-        public static Gebruiker GetGebruiker(int id)
-        {
-            var db = Database.Open(App.DataBase);
-            var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
-            var userDb = Database.Open(App.AuthDataBase);
-            var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", id);
-            if(data != null && userData != null)
-            {
-                Gebruiker gebruiker = new Gebruiker(id, userData.UserName, data.Voornaam, data.Achternaam);
-                db.Close();
-                userDb.Close();
-                return gebruiker;
-            }
-            db.Close();
-            userDb.Close();
-            return null;
-        }
-
         public int UserId
         {
             get{return userId;}
@@ -64,5 +45,40 @@
                 db.Close();
             }
         }
+    }
+
+    // geeft een gebruiker terug die de gegeven id matcht
+    public static Gebruiker GetGebruiker(int id)
+    {
+        var db = Database.Open(App.DataBase);
+        var data = db.QuerySingle("SELECT * FROM Gebruiker WHERE UserId = @0", id);
+        var userDb = Database.Open(App.AuthDataBase);
+        var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", id);
+        if(data != null && userData != null)
+        {
+            Gebruiker gebruiker = new Gebruiker(id, userData.UserName, data.Voornaam, data.Achternaam);
+            db.Close();
+            userDb.Close();
+            return gebruiker;
+        }
+        db.Close();
+        userDb.Close();
+        return null;
+    }
+
+    public static List<Gebruiker> GetGebruikers()
+    {
+        List<Gebruiker> gebruikers = new List<Gebruiker>{};
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Gebruiker");
+        var userDb = Database.Open(App.AuthDataBase);
+        foreach (var row in data)
+        {
+            var userData = userDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", row.UserId);
+            gebruikers.Add(new Gebruiker(row.UserId, userData.UserName, row.Voornaam, row.Achternaam));
+        }
+        db.Close();
+        userDb.Close();
+        return gebruikers;
     }
 }

@@ -157,19 +157,19 @@
                 {
                     <td>
                         <select name="keuzevak_@i" class="form-control">
-                        <option value="-"></option>
-                        @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
-                        {
-                            // Als het vak overeen komt met het keuzevak, zet deze als default.
-                            if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
+                            <option value="-"></option>
+                            @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
                             {
-                                <option value="@vak.VakId" selected>@vak.VakNaam</option>
+                                // Als het vak overeen komt met het keuzevak, zet deze als default.
+                                if (keuzeVakken[i] != -1 && vak.VakId == keuzeVakken[i])
+                                {
+                                    <option value="@vak.VakId" selected>@vak.VakNaam</option>
+                                }
+                                else
+                                {
+                                    <option value="@vak.VakId">@vak.VakNaam</option>
+                                }
                             }
-                            else
-                            {
-                                <option value="@vak.VakId">@vak.VakNaam</option>
-                            }
-                        }
                         </select>
                     </td>
                 }
