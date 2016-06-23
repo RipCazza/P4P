@@ -19,29 +19,29 @@
     var inhoud = "";
     List<int> userIds = new List<int>{};
     List<string> mails = new List<string>{};
+    List<string> ontvangers = new List<string>{};
     List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
     List<GebruikerRepo.Gebruiker> gebruikers = GebruikerRepo.GetGebruikers();
 
     if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt())
     {
         mailId = Convert.ToInt16(Request.QueryString["MailId"]);
-            
-        var db = Database.Open(App.DataBase);
-        var dbCommand = "SELECT * FROM Mail WHERE MailId = @0";
-        var data = db.QuerySingle(dbCommand, mailId);
-
-        if(data != null)
+        
+        MailRepo.Mail mailDetails = MailRepo.GetMail(mailId);
+        if (mailDetails != null)
         {
             userIds = MailOntvangerRepo.GetMailOntvangerIds(mailId);
-            mails = MailOntvangerRepo.GetMailOntvangers(userIds);
+            mails = MailOntvangerRepo.GetMailUsers(userIds);
             
-            onderwerp = data.Onderwerp;
-            inhoud = data.Inhoud;
+            onderwerp = mailDetails.Onderwerp;
+            inhoud = mailDetails.Inhoud;
         }
         else
         {
             Validation.AddFormError("Er was geen mail concept geselecteerd");
         }
+
+        ontvangers = MailOntvangerRepo.GetMailOntvangerStrings(mailId);
     }
     else
     {
@@ -54,8 +54,8 @@
         Validation.RequireField("inhoud", "Inhoud is vereist");
         Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
 
-        onderwerp = Request.Form["Onderwerp"];
-        inhoud = Request.Form["Inhoud"];
+        onderwerp = Request.Form["onderwerp"];
+        inhoud = Request.Form["inhoud"];
         mailId = Convert.ToInt16(Request.Form["MailId"]);
 
         foreach(string mail in mails)
@@ -99,17 +99,27 @@
         {
             MailOntvangerRepo.InsertMailOntvanger(mailId, aangemeld, niveau, klas, role, user);
         }
+        else
+        {
+            Validation.AddFormError("Geef minimaal 1 ontvanger op om toe te voegen.");
+        }
     }
 }
 @Html.ValidationSummary()
-<form method="post" @*action="MailBevestiging.cshtml"*@>
+<p><b>Ontvangers:</b></p>
+@foreach (string ontvanger in ontvangers)
+{
+    <p>@ontvanger</p>
+}
+<br>
+<form method="post">
     <p>
         <label for="onderwerp">Onderwerp:</label>
         <input type="text" name="onderwerp" value="@onderwerp"></input>
     </p>
     <p>
         <label for="inhoud">Inhoud:</label>
-        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="leerlingenInvoer" class="form-control col-md-12" rows="10" placeholder="@inhoud" maxlength="4000"></textarea>
+        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="inhoud" class="form-control col-md-12" rows="10" maxlength="4000">@inhoud</textarea>
     </p>
 
     <button type="submit" id="submit" name="sendMail" class="btn btn-success" style="float: right;">

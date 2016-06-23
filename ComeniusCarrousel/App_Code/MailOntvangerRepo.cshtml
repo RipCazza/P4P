@@ -53,7 +53,8 @@
         return userIds;
     }
 
-    public static List<string> GetMailOntvangers (List<int> userIds)
+    // geeft een lijst van userNames(mail addressen) terug van de gegeven users
+    public static List<string> GetMailUsers (List<int> userIds)
     {
         List<string> mails = new List<string>{};
         var db = Database.Open(App.DataBase);
@@ -67,12 +68,88 @@
                 var leerlingData = db.QuerySingle("SELECT MailVerzorger FROM Leerling WHERE UserId = @0", userId);
                 if (leerlingData != null)
                 {
-                    mails.Add(leerlingData.UserName);
+                    mails.Add(leerlingData.MailVerzorger);
                 }
             }
         }
         db.Close();
         authDb.Close();
         return mails;
+    }
+
+    public static List<string> GetMailOntvangerStrings (int mailId)
+    {
+        List<string> ontvangers = new List<string>{};
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM MailOntvanger WHERE MailId = @0", mailId);
+        foreach (var row in data)
+        {
+            string ontvanger = "";
+            if (row.UserId != null)
+            {
+                var userData = db.QuerySingle("SELECT Voornaam, Achternaam FROM Gebruiker WHERE UserId = @0", row.UserId);
+                if (userData != null)
+                {
+                    ontvanger += userData.Voornaam + " " + userData.Achternaam;
+                }
+            }
+            if (row.KlasId != null)
+            {
+                var klasData = db.QuerySingle("SELECT KlasNaam FROM Klas WHERE KlasId = @0", row.KlasId);
+                if (klasData != null)
+                {
+                    if (ontvanger != "")
+                    {
+                        ontvanger += " & ";
+                    }
+
+                    ontvanger += klasData.KlasNaam;
+                }
+            }
+            if (row.Niveau != null)
+            {
+                if (ontvanger != "")
+                {
+                    ontvanger += " & ";
+                }
+
+                ontvanger += row.Niveau;
+            }
+            if (row.Aangemeld != null)
+            {
+                if (ontvanger != "")
+                {
+                    ontvanger += " & ";
+                }
+
+                if (row.Aangemeld == true)
+                {
+                    ontvanger += "aangemelde leerlingen";
+                }
+                else
+                {
+                    ontvanger += "onaangemelde leerlingen";
+                }
+            }
+            if (row.RoleId != null)
+            {
+                var authDb = Database.Open(App.AuthDataBase);
+                var roleData = authDb.QuerySingle("SELECT RoleName FROM webpages_Roles WHERE RoleId = @0", row.RoleId);
+                if (roleData != null)
+                {
+                    if (ontvanger != "")
+                    {
+                        ontvanger += " & ";
+                    }
+
+                    ontvanger += roleData.RoleName;
+                }
+                authDb.Close();
+            }
+
+            ontvangers.Add(ontvanger);
+        }
+        db.Close();
+        return ontvangers;
     }
 }
