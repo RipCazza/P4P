@@ -19,7 +19,7 @@
     var inhoud = "";
     List<int> userIds = new List<int>{};
     List<string> mails = new List<string>{};
-    List<VakRepo.Vak> vakken = VakRepo.GetVakken();
+    List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
     List<GebruikerRepo.Gebruiker> gebruikers = GebruikerRepo.GetGebruikers();
 
     if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt())
@@ -68,19 +68,19 @@
     
     if(IsPost && Request.Form["addOntvanger"] != null)
     {
-        int vak = -1;
-        int user = -1;
+        string klas = "";
+        string user = "";
         string niveau = "";
         string role = "";
         string aangemeld = "";
 
-        if (Request.Form["vak"] != "-")
+        if (Request.Form["klas"] != "-")
         {
-            vak = Convert.ToInt16(Request.Form["vak"]);
+            klas = Request.Form["klas"];
         }
         if (Request.Form["user"] != "-")
         {
-            user = Convert.ToInt16(Request.Form["user"]);
+            user = Request.Form["user"];
         }
         if (Request.Form["niveau"] != "-")
         {
@@ -95,8 +95,10 @@
             aangemeld = Request.Form["aangemeld"];
         }
 
-        if (vak == -1 && user == -1 && niveau == "" && role == "" && aangemeld == "")
-        {}
+        if (!(klas == "" && user == "" && niveau == "" && role == "" && aangemeld == ""))
+        {
+            MailOntvangerRepo.InsertMailOntvanger(mailId, aangemeld, niveau, klas, role, user);
+        }
     }
 }
 @Html.ValidationSummary()
@@ -116,16 +118,16 @@
 </form>
 
 <form method="post">
-    <select name="vak" class="form-control">
+    <select name="klas" class="form-control">
         <option value="-"></option>
-        @foreach(VakRepo.Vak vak in vakken) // maakt een keuzemenu met alle mogelijke vakken
+        @foreach(KlasRepo.Klas klas in klassen) // maakt een keuzemenu met alle mogelijke klassen
         {
-            <option value="@vak.VakId">@vak.VakNaam</option>
+            <option value="@klas.KlasId">@klas.KlasNaam</option>
         }
     </select>
     <select name="user" class="form-control">
         <option value="-"></option>
-        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke vakken
+        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke gebruikers
         {
             <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
         }
