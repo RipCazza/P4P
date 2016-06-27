@@ -68,7 +68,7 @@
     {
         var db = Database.Open(App.DataBase);
         var userDb = Database.Open(App.AuthDataBase);
-        var data = db.Query("SELECT * FROM Voorlichting Voor INNER JOIN Leraar Lera ON Voor.UserId = Lera.UserId");
+        var data = db.Query("SELECT * FROM Voorlichting WHERE UserId = @0", id);
         foreach(var row in data)
         {
             VoorlichtingRepo.DeleteVoorlichting(row.VoorlichtingId);
