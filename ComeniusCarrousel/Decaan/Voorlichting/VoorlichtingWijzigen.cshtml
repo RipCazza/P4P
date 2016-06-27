@@ -45,11 +45,16 @@
         VoorlichtingRepo.DeleteVoorlichting(id);
         Response.Redirect("~/Decaan/Voorlichting/VoorlichtingOverzicht");
     }
+
+    
+
 }
 
 @Html.ValidationSummary()
 @if (voorlichting != null)
 {
+
+    
 
     <h2>Voorlichting wijzigen</h2>
 
@@ -57,7 +62,7 @@
         <span>Voorlichting:</span>
         <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
     </p>
-    <p>
+    <div>
         Capaciteit: @foreach (LeerlingRepo.Leerling leerling in leerlingen)
                     {
                         bool check = RoosterRepo.ValidateRooster(voorlichting.VoorlichtingId, leerling.UserId);
@@ -67,12 +72,24 @@
                         }
                     }
                     @(lokaal.Capaciteit - capaciteitGebruik) van @lokaal.Capaciteit
-    </p>
+    </div>
+    
+    double progressPercentage = Convert.ToDouble(capaciteitGebruik)/ Convert.ToDouble(lokaal.Capaciteit) * 100;
+    
+    var progressClass = "progress-bar";
 
+    if (progressPercentage < 50){
+       pro
+    }
 
+    <div class="progress">
+        <div class="@progressClass" role="progressbar" style="width:@progressPercentage%">
+            &nbsp; @progressPercentage%
+        </div>
+    </div>
 
-    <form method="post" class="form-inline">
-        <select class="form-control" id="sel1" name="leerlingenInvoer" multiple>
+    <form method="post">
+        <select class="form-control" id="sel1" name="leerlingenInvoer" style="width: 100%; height: 200px; margin-bottom: 16px;" multiple>
             <option value="-"></option>
             @foreach(LeerlingRepo.Leerling leerling in leerlingen)
             {
@@ -91,7 +108,6 @@
             <span class="glyphicon glyphicon-plus"></span> Kies
         </button>
     </form>
-
     <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
 
     <div id="verwijderWarning" class="modal fade" role="dialog">
