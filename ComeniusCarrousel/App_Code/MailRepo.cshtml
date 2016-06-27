@@ -84,4 +84,12 @@
         db.Execute(deleteOntvangerCommand, id);
         db.Close();
     }
+
+    public static void UpdateMail(int id, string onderwerp, string inhoud)
+    {
+        var db = Database.Open("ComeniusCarrousel");
+        var updateCommand = "UPDATE Mail SET Onderwerp=@0, Inhoud=@1 WHERE MailId=@2";
+        db.Execute(updateCommand, onderwerp, inhoud, id);
+        db.Close();
+    }
 }

@@ -35,13 +35,13 @@
             
             onderwerp = mailDetails.Onderwerp;
             inhoud = mailDetails.Inhoud;
+
+            ontvangers = MailOntvangerRepo.GetMailOntvangerStrings(mailId);
         }
         else
         {
             Validation.AddFormError("Er was geen mail concept geselecteerd");
         }
-
-        ontvangers = MailOntvangerRepo.GetMailOntvangerStrings(mailId);
     }
     else
     {
@@ -56,53 +56,40 @@
 
         onderwerp = Request.Form["onderwerp"];
         inhoud = Request.Form["inhoud"];
-        mailId = Convert.ToInt16(Request.Form["MailId"]);
 
-        foreach(string mail in mails)
+        if (Validation.IsValid())
         {
-            WebMail.Send(to: mail,
-            subject: onderwerp,
-            body: inhoud);
+            MailRepo.UpdateMail(mailId, onderwerp, inhoud);
+
+            foreach(string mail in mails)
+            {
+                WebMail.Send(to: mail,
+                subject: onderwerp,
+                body: inhoud);
+            }
+            Response.Redirect("~/Decaan/Mail/MailOverzicht");
         }
     }
-    
-    if(IsPost && Request.Form["addOntvanger"] != null)
+
+    if(IsPost && Request.Form["wijzigMail"] != null)
     {
-        string klas = "";
-        string user = "";
-        string niveau = "";
-        string role = "";
-        string aangemeld = "";
+        Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
+        Validation.RequireField("inhoud", "Inhoud is vereist");
+        Validation.RequireField("mailId", "Er is geen mailId doorgestuurd");
 
-        if (Request.Form["klas"] != "-")
-        {
-            klas = Request.Form["klas"];
-        }
-        if (Request.Form["user"] != "-")
-        {
-            user = Request.Form["user"];
-        }
-        if (Request.Form["niveau"] != "-")
-        {
-            niveau = Request.Form["niveau"];
-        }
-        if (Request.Form["role"] != "-")
-        {
-            role = Request.Form["role"];
-        }
-        if (Request.Form["aangemeld"] != "-")
-        {
-            aangemeld = Request.Form["aangemeld"];
-        }
+        onderwerp = Request.Form["Onderwerp"];
+        inhoud = Request.Form["Inhoud"];
 
-        if (!(klas == "" && user == "" && niveau == "" && role == "" && aangemeld == ""))
+        if(Validation.IsValid())
         {
-            MailOntvangerRepo.InsertMailOntvanger(mailId, aangemeld, niveau, klas, role, user);
+            MailRepo.UpdateMail(mailId, onderwerp, inhoud);
         }
-        else
-        {
-            Validation.AddFormError("Geef minimaal 1 ontvanger op om toe te voegen.");
-        }
+    }
+
+    if(IsPost && Request.Form["deleteMail"] != null)
+    {
+        MailRepo.DeleteMail(mailId);
+        Response.Redirect("~/Decaan/Mail/MailOverzicht.cshtml");
     }
 }
 @Html.ValidationSummary()
@@ -112,6 +99,7 @@
     <p>@ontvanger</p>
 }
 <br>
+
 <form method="post">
     <p>
         <label for="onderwerp">Onderwerp:</label>
@@ -122,42 +110,17 @@
         <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="inhoud" class="form-control col-md-12" rows="10" maxlength="4000">@inhoud</textarea>
     </p>
 
-    <button type="submit" id="submit" name="sendMail" class="btn btn-success" style="float: right;">
-        <span class="glyphicon glyphicon-envelope"></span>&nbsp; Send
-    </button>
-</form>
+    <a href="~/Decaan/Mail/OntvangersToevoegen?MailId=@mailId" class="btn btn-default" role="button">
+        <span class="glyphicon glyphicon-plus"></span>&nbsp; Voeg ontvangers toe
+    </a>
 
-<form method="post">
-    <select name="klas" class="form-control">
-        <option value="-"></option>
-        @foreach(KlasRepo.Klas klas in klassen) // maakt een keuzemenu met alle mogelijke klassen
-        {
-            <option value="@klas.KlasId">@klas.KlasNaam</option>
-        }
-    </select>
-    <select name="user" class="form-control">
-        <option value="-"></option>
-        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke gebruikers
-        {
-            <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
-        }
-    </select>
-    <select name="niveau" class="form-control">
-        <option value="-"></option>
-        <option value="HAVO">HAVO</option>
-        <option value="VWO">VWO</option>
-    </select>
-    <select name="role" class="form-control">
-        <option value="-"></option>
-        <option value="4">Leerlingen</option>
-        <option value="3">Leraren</option>
-    </select>
-    <select name="aangemeld" class="form-control">
-        <option value="-"></option>
-        <option value="True">Aangemeld</option>
-        <option value="False">Niet aangemeld</option>
-    </select>
-    <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
-            <span class="glyphicon glyphicon-envelope"></span>&nbsp; Voeg ontvangers toe
+    <button type="submit" id="submit" name="sendMail" class="btn btn-success" style="float: right;">
+        <span class="glyphicon glyphicon-envelope"></span>&nbsp; Verzend
+    </button>
+    <button type="submit" id="submit" name="wijzigMail" class="btn btn-default" style="float: right;">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp; Wijzig
+    </button>
+    <button type="submit" id="submit" name="deleteMail" class="btn btn-danger" style="float: right;">
+        <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder
     </button>
 </form>

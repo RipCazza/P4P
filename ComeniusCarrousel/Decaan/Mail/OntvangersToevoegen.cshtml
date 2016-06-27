@@ -1,0 +1,120 @@
+﻿@{
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "E-Mail verzenden";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
+    int mailId = -1;
+    List<int> userIds = new List<int>{};
+    List<string> ontvangers = new List<string>{};
+    List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
+    List<GebruikerRepo.Gebruiker> gebruikers = GebruikerRepo.GetGebruikers();
+
+    if(!Request.QueryString["MailId"].IsEmpty() && Request.QueryString["MailId"].IsInt())
+    {
+        mailId = Convert.ToInt16(Request.QueryString["MailId"]);
+        
+        MailRepo.Mail mailDetails = MailRepo.GetMail(mailId);
+        if (mailDetails != null)
+        {
+            ontvangers = MailOntvangerRepo.GetMailOntvangerStrings(mailId);
+        }
+        else
+        {
+            Validation.AddFormError("Er was geen mail concept geselecteerd");
+        }
+    }
+    else
+    {
+        Validation.AddFormError("Er was geen mail concept geselecteerd");
+    }
+
+    if(IsPost && Request.Form["addOntvanger"] != null)
+    {
+        string klas = "";
+        string user = "";
+        string niveau = "";
+        string role = "";
+        string aangemeld = "";
+
+        if (Request.Form["klas"] != "-")
+        {
+            klas = Request.Form["klas"];
+        }
+        if (Request.Form["user"] != "-")
+        {
+            user = Request.Form["user"];
+        }
+        if (Request.Form["niveau"] != "-")
+        {
+            niveau = Request.Form["niveau"];
+        }
+        if (Request.Form["role"] != "-")
+        {
+            role = Request.Form["role"];
+        }
+        if (Request.Form["aangemeld"] != "-")
+        {
+            aangemeld = Request.Form["aangemeld"];
+        }
+
+        if (!(klas == "" && user == "" && niveau == "" && role == "" && aangemeld == ""))
+        {
+            if (Validation.IsValid())
+            {
+                MailOntvangerRepo.InsertMailOntvanger(mailId, aangemeld, niveau, klas, role, user);
+                Response.Redirect(string.Format("~/Decaan/Mail/MailVerzenden?MailId={0}", mailId));
+            }
+        }
+        else
+        {
+            Validation.AddFormError("Geef minimaal 1 ontvanger op om toe te voegen.");
+        }
+        
+    }
+}
+@Html.ValidationSummary()
+<p><b>Ontvangers:</b></p>
+@foreach (string ontvanger in ontvangers)
+{
+    <p>@ontvanger</p>
+}
+<br>
+
+<form method="post">
+    <select name="klas" class="form-control">
+        <option value="-"></option>
+        @foreach(KlasRepo.Klas klas in klassen) // maakt een keuzemenu met alle mogelijke klassen
+        {
+            <option value="@klas.KlasId">@klas.KlasNaam</option>
+        }
+    </select>
+    <select name="user" class="form-control">
+        <option value="-"></option>
+        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke gebruikers
+        {
+            <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
+        }
+    </select>
+    <select name="niveau" class="form-control">
+        <option value="-"></option>
+        <option value="HAVO">HAVO</option>
+        <option value="VWO">VWO</option>
+    </select>
+    <select name="role" class="form-control">
+        <option value="-"></option>
+        <option value="4">Leerlingen</option>
+        <option value="3">Leraren</option>
+    </select>
+    <select name="aangemeld" class="form-control">
+        <option value="-"></option>
+        <option value="True">Aangemeld</option>
+        <option value="False">Niet aangemeld</option>
+    </select>
+    <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
+            <span class="glyphicon glyphicon-envelope"></span>&nbsp; Voeg ontvangers toe
+    </button>
+</form>
