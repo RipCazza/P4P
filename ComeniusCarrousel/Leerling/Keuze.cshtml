@@ -45,10 +45,10 @@
         // Alle nieuw gekozen keuzevakken.
         string[] nieuweVakken = new string[4] {Request.Form["keuzevak_0"], Request.Form["keuzevak_1"],
                                               Request.Form["keuzevak_2"], Request.Form["keuzevak_3"]};
-        // Het aantal mensen voor elk keuzevak.
+        // Het aantal personen voor elk keuzevak.
         int[] aantalMensen = new int[4] {Convert.ToInt16(Request.Form["aantalMensen_0"]), Convert.ToInt16(Request.Form["aantalMensen_1"]),
                                             Convert.ToInt16(Request.Form["aantalMensen_2"]), Convert.ToInt16(Request.Form["aantalMensen_3"])};
-        // Mail van de verzorger/ouder.
+        // Mail van de ouder/verzorger.
         string mailVerzorger = Request.Form["mailVerzorger"];
 
         if(Validation.IsValid())
@@ -70,7 +70,7 @@
                 }
             }
 
-            // Gooit een error als het aantal mensen buiten de marges valt.
+            // Gooit een error als het aantal personen buiten de marges valt.
             foreach(int aantal in aantalMensen)
             {
                 if (aantal > 3 || aantal < 1)
@@ -132,7 +132,7 @@
     <table class="table" id="table-nostripes">
         <tr>
             <td>Vak</td>
-            <td>Aantal mensen</td>
+            <td>Aantal personen</td>
         </tr>
         @for(int i = 0; i < keuzeVakken.Length; i++) // Geeft het aantal keuzes
         {
