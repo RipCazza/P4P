@@ -89,14 +89,14 @@
                         rooster += voorlichting.Vak + " (" + voorlichting.Niveau + ") van " + voorlichting.Leraar + " op datum: " + string.Format("{0:d/M/yyyy}", voorlichting.DateTime) + " om tijdstip: " + string.Format("{0:HH:mm}", voorlichting.DateTime) + " in lokaal " + voorlichting.Lokaal + "." + System.Environment.NewLine;
                     }
 
-                    nieuweInhoud.Replace("[voornaam]", leerling.Voornaam);
-                    nieuweInhoud.Replace("[achternaam]", leerling.Achternaam);
-                    nieuweInhoud.Replace("[klas]", leerling.Klas);
-                    nieuweInhoud.Replace("[leerlingnummer]", Convert.ToString(leerling.Leerlingnummer));
-                    nieuweInhoud.Replace("[niveau]", leerling.Niveau);
-                    nieuweInhoud.Replace("[talentstroomvak]", leerling.TalentstroomVak);
-                    nieuweInhoud.Replace("[keuzevakken]", keuzevakken);
-                    nieuweInhoud.Replace("[rooster]", rooster);
+                    nieuweInhoud = nieuweInhoud.Replace("[voornaam]", leerling.Voornaam);
+                    nieuweInhoud = nieuweInhoud.Replace("[achternaam]", leerling.Achternaam);
+                    nieuweInhoud = nieuweInhoud.Replace("[klas]", leerling.Klas);
+                    nieuweInhoud = nieuweInhoud.Replace("[leerlingnummer]", Convert.ToString(leerling.Leerlingnummer));
+                    nieuweInhoud = nieuweInhoud.Replace("[niveau]", leerling.Niveau);
+                    nieuweInhoud = nieuweInhoud.Replace("[talentstroomvak]", leerling.TalentstroomVak);
+                    nieuweInhoud = nieuweInhoud.Replace("[keuzevakken]", keuzevakken);
+                    nieuweInhoud = nieuweInhoud.Replace("[rooster]", rooster);
                 }
 
                 if (Roles.IsUserInRole(mailUser.Item2, "Leraar"))
@@ -110,11 +110,13 @@
                         rooster += voorlichting.Vak + " (" + voorlichting.Niveau + ") op datum: " + string.Format("{0:d/M/yyyy}", voorlichting.DateTime) + " om tijdstip: " + string.Format("{0:HH:mm}", voorlichting.DateTime) + " in lokaal " + voorlichting.Lokaal + "." + System.Environment.NewLine;
                     }
 
-                    nieuweInhoud.Replace("[voornaam]", leraar.Voornaam);
-                    nieuweInhoud.Replace("[achternaam]", leraar.Achternaam);
-                    nieuweInhoud.Replace("[vak]", leraar.VoorlichtingVak);
-                    nieuweInhoud.Replace("[rooster]", rooster);
+                    nieuweInhoud = nieuweInhoud.Replace("[voornaam]", leraar.Voornaam);
+                    nieuweInhoud = nieuweInhoud.Replace("[achternaam]", leraar.Achternaam);
+                    nieuweInhoud = nieuweInhoud.Replace("[vak]", leraar.VoorlichtingVak);
+                    nieuweInhoud = nieuweInhoud.Replace("[rooster]", rooster);
                 }
+                
+                nieuweInhoud = nieuweInhoud.Replace(System.Environment.NewLine, "<br>");
 
                 WebMail.Send(to: mailUser.Item2,
                 subject: onderwerp,
