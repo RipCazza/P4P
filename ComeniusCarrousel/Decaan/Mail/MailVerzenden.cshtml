@@ -64,6 +64,7 @@
             foreach(Tuple<int, string> mailUser in mailUsers)
             {
                 string nieuweInhoud = inhoud;
+                string mailVerzorger = "";
 
                 if (Roles.IsUserInRole(mailUser.Item2, "Leerling"))
                 {
@@ -87,6 +88,11 @@
                     foreach(VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
                     {
                         rooster += voorlichting.Vak + " (" + voorlichting.Niveau + ") van " + voorlichting.Leraar + " op datum: " + string.Format("{0:d/M/yyyy}", voorlichting.DateTime) + " om tijdstip: " + string.Format("{0:HH:mm}", voorlichting.DateTime) + " in lokaal " + voorlichting.Lokaal + "." + System.Environment.NewLine;
+                    }
+                    
+                    if (leerling.MailVerzorger != null)
+                    {
+                        mailVerzorger = leerling.MailVerzorger;
                     }
 
                     nieuweInhoud = nieuweInhoud.Replace("[voornaam]", leerling.Voornaam);
@@ -121,6 +127,13 @@
                 WebMail.Send(to: mailUser.Item2,
                 subject: onderwerp,
                 body: nieuweInhoud);
+
+                if (mailVerzorger != "")
+                {
+                    WebMail.Send(to: mailVerzorger,
+                    subject: onderwerp,
+                    body: nieuweInhoud);
+                }
             }
             Response.Redirect("~/Decaan/Mail/MailOverzicht");
         }
