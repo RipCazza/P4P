@@ -66,7 +66,7 @@
             {
                 mailUsers.Add(new Tuple<int, string> (userId, data.UserName));
                 var leerlingData = db.QuerySingle("SELECT MailVerzorger FROM Leerling WHERE UserId = @0", userId);
-                if (leerlingData != null)
+                if (leerlingData.MailVerzorger != null)
                 {
                     mailUsers.Add(new Tuple<int, string> (userId, leerlingData.MailVerzorger));
                 }
