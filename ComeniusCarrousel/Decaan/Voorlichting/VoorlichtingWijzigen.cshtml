@@ -29,13 +29,16 @@
     if (IsPost && Request.Form["manage"] != null)
     {
         RoosterRepo.DeleteRoosters(voorlichting.VoorlichtingId);
-        foreach (string leerling in Request.Form.GetValues("leerlingenInvoer"))
+        if(Request.Form.GetValues("leerlingenInvoer") != null)
         {
-            if (leerling == "-")
-            {}
-            else
+            foreach (string leerling in Request.Form.GetValues("leerlingenInvoer"))
             {
-            RoosterRepo.InsertRooster(voorlichting.VoorlichtingId, Convert.ToInt16(leerling));
+                if (leerling == "-")
+                {}
+                else
+                {
+                RoosterRepo.InsertRooster(voorlichting.VoorlichtingId, Convert.ToInt16(leerling));
+                }
             }
         }
     }
