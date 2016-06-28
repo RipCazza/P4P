@@ -54,9 +54,9 @@
     }
 
     // geeft een lijst van userNames(mail addressen) terug van de gegeven users
-    public static List<string> GetMailUsers (List<int> userIds)
+    public static List<Tuple<int, string>> GetMailUsers (List<int> userIds)
     {
-        List<string> mails = new List<string>{};
+        List<Tuple<int, string>> mailUsers = new List<Tuple<int, string>>{};
         var db = Database.Open(App.DataBase);
         var authDb = Database.Open(App.AuthDataBase);
         foreach (int userId in userIds)
@@ -64,17 +64,17 @@
             var data = authDb.QuerySingle("SELECT UserName FROM UserProfile WHERE UserId = @0", userId);
             if (data != null)
             {
-                mails.Add(data.UserName);
+                mailUsers.Add(new Tuple<int, string> (userId, data.UserName));
                 var leerlingData = db.QuerySingle("SELECT MailVerzorger FROM Leerling WHERE UserId = @0", userId);
                 if (leerlingData != null)
                 {
-                    mails.Add(leerlingData.MailVerzorger);
+                    mailUsers.Add(new Tuple<int, string> (userId, leerlingData.MailVerzorger));
                 }
             }
         }
         db.Close();
         authDb.Close();
-        return mails;
+        return mailUsers;
     }
 
     public static List<string> GetMailOntvangerStrings (int mailId)

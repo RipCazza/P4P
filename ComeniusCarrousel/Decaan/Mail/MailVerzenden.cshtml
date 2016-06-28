@@ -18,7 +18,7 @@
     var onderwerp = "";
     var inhoud = "";
     List<int> userIds = new List<int>{};
-    List<string> mails = new List<string>{};
+    List<Tuple<int, string>> mailUsers = new List<Tuple<int, string>>{};
     List<string> ontvangers = new List<string>{};
     List<KlasRepo.Klas> klassen = KlasRepo.GetKlassen();
     List<GebruikerRepo.Gebruiker> gebruikers = GebruikerRepo.GetGebruikers();
@@ -31,7 +31,7 @@
         if (mailDetails != null)
         {
             userIds = MailOntvangerRepo.GetMailOntvangerIds(mailId);
-            mails = MailOntvangerRepo.GetMailUsers(userIds);
+            mailUsers = MailOntvangerRepo.GetMailUsers(userIds);
             
             onderwerp = mailDetails.Onderwerp;
             inhoud = mailDetails.Inhoud;
@@ -61,11 +61,64 @@
         {
             MailRepo.UpdateMail(mailId, onderwerp, inhoud);
 
-            foreach(string mail in mails)
+            foreach(Tuple<int, string> mailUser in mailUsers)
             {
-                WebMail.Send(to: mail,
+                string nieuweInhoud = inhoud;
+
+                if (Roles.IsUserInRole(mailUser.Item2, "Leerling"))
+                {
+                    LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(mailUser.Item1);
+
+                    string keuzevakken = "";
+                    foreach(Tuple<string, int> keuzevak in leerling.KeuzeVakken())
+                    {
+                        if (keuzevakken != "")
+                        {
+                            keuzevakken += ", " + keuzevak.Item1;
+                        }
+                        else
+                        {
+                            keuzevakken += keuzevak.Item1;
+                        }
+                    }
+
+                    string rooster = "";
+                    List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetStudentRooster(mailUser.Item1);
+                    foreach(VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
+                    {
+                        rooster += voorlichting.Vak + " (" + voorlichting.Niveau + ") van " + voorlichting.Leraar + " op datum: " + string.Format("{0:d/M/yyyy}", voorlichting.DateTime) + " om tijdstip: " + string.Format("{0:HH:mm}", voorlichting.DateTime) + " in lokaal " + voorlichting.Lokaal + "." + System.Environment.NewLine;
+                    }
+
+                    nieuweInhoud.Replace("[voornaam]", leerling.Voornaam);
+                    nieuweInhoud.Replace("[achternaam]", leerling.Achternaam);
+                    nieuweInhoud.Replace("[klas]", leerling.Klas);
+                    nieuweInhoud.Replace("[leerlingnummer]", Convert.ToString(leerling.Leerlingnummer));
+                    nieuweInhoud.Replace("[niveau]", leerling.Niveau);
+                    nieuweInhoud.Replace("[talentstroomvak]", leerling.TalentstroomVak);
+                    nieuweInhoud.Replace("[keuzevakken]", keuzevakken);
+                    nieuweInhoud.Replace("[rooster]", rooster);
+                }
+
+                if (Roles.IsUserInRole(mailUser.Item2, "Leraar"))
+                {
+                    LeraarRepo.Leraar leraar = LeraarRepo.GetLeraar(mailUser.Item1);
+
+                    string rooster = "";
+                    List<VoorlichtingRepo.Voorlichting> voorlichtingen = VoorlichtingRepo.GetLeraarRooster(mailUser.Item1);
+                    foreach(VoorlichtingRepo.Voorlichting voorlichting in voorlichtingen)
+                    {
+                        rooster += voorlichting.Vak + " (" + voorlichting.Niveau + ") op datum: " + string.Format("{0:d/M/yyyy}", voorlichting.DateTime) + " om tijdstip: " + string.Format("{0:HH:mm}", voorlichting.DateTime) + " in lokaal " + voorlichting.Lokaal + "." + System.Environment.NewLine;
+                    }
+
+                    nieuweInhoud.Replace("[voornaam]", leraar.Voornaam);
+                    nieuweInhoud.Replace("[achternaam]", leraar.Achternaam);
+                    nieuweInhoud.Replace("[vak]", leraar.VoorlichtingVak);
+                    nieuweInhoud.Replace("[rooster]", rooster);
+                }
+
+                WebMail.Send(to: mailUser.Item2,
                 subject: onderwerp,
-                body: inhoud);
+                body: nieuweInhoud);
             }
             Response.Redirect("~/Decaan/Mail/MailOverzicht");
         }

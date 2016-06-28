@@ -157,6 +157,20 @@
         return voorlichtingen;
     }
 
+    // geeft alle voorlichtingen terug van een leraar die de gegeven userId matcht
+    public static List<Voorlichting> GetLeraarRooster(int userId)
+    {
+        List<Voorlichting> voorlichtingen = new List<Voorlichting>();
+        var db = Database.Open(App.DataBase);
+        var data = db.Query("SELECT * FROM Voorlichting WHERE UserId = @0 ORDER BY DateTime ASC", userId);
+        foreach (var row in data)
+        {
+            voorlichtingen.Add(new Voorlichting(row.VoorlichtingId, row.VakId, row.UserId, row.LokaalId, row.DateTime, row.Niveau));
+        }
+        db.Close();
+        return voorlichtingen;
+    }
+
     // voegt een voorlichting toe aan de database met alle gegeven argumenten
     public static void MakeVoorlichting(int vakId, int userId, int lokaalId, DateTime dateTime, string niveau)
     {
