@@ -90,6 +90,7 @@
     }
 }
 @Html.ValidationSummary()
+<h2>E-Mail ontvangers toevoegen</h2>
 <p><b>Ontvangers:</b></p>
 @foreach (string ontvanger in ontvangers)
 {
@@ -128,6 +129,6 @@
         <option value="False">Niet aangemeld</option>
     </select>
     <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
-            <span class="glyphicon glyphicon-envelope"></span>&nbsp; Voeg ontvangers toe
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Voeg ontvangers toe
     </button>
 </form>
