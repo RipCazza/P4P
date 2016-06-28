@@ -45,19 +45,22 @@
         VoorlichtingRepo.DeleteVoorlichting(id);
         Response.Redirect("~/Decaan/Voorlichting/VoorlichtingOverzicht");
     }
+
+    
+
 }
 
 @Html.ValidationSummary()
 @if (voorlichting != null)
 {
-
     <h2>Voorlichting wijzigen</h2>
 
     <p>
         <span>Voorlichting:</span>
         <span><b>@voorlichting.Vak</b> (<b>@voorlichting.Niveau</b>) van <b>@voorlichting.Leraar</b> op datum: <b>@string.Format("{0:d/M/yyyy}", voorlichting.DateTime)</b> om tijdstip: <b>@string.Format("{0:HH:mm}", voorlichting.DateTime)</b> in lokaal <b>@voorlichting.Lokaal</b>.</span>
     </p>
-    <p>
+    
+    <div>
         Capaciteit: @foreach (LeerlingRepo.Leerling leerling in leerlingen)
                     {
                         bool check = RoosterRepo.ValidateRooster(voorlichting.VoorlichtingId, leerling.UserId);
@@ -66,13 +69,43 @@
                             capaciteitGebruik += KeuzeRepo.GetAantalMensen(voorlichting.VakId, leerling.UserId);
                         }
                     }
-                    @(lokaal.Capaciteit - capaciteitGebruik) van @lokaal.Capaciteit
-    </p>
+                    @(lokaal.Capaciteit - capaciteitGebruik) v/d @lokaal.Capaciteit plekken vrij
+    </div>
+    
+        
+    
+    double progressPercentage = Convert.ToDouble(capaciteitGebruik)/ Convert.ToDouble(lokaal.Capaciteit) * 100;
+    
+    var progressClass = "progress-bar";
+
+    if (progressPercentage <= 40) {
+       progressClass = "progress-bar progress-bar-success";
+    }
+    else if ((progressPercentage > 40) && (progressPercentage <= 60)) {
+        progressClass = "progress-bar progress-bar-info";
+    }
+    else if ((progressPercentage > 60) && (progressPercentage <= 80)) {
+        progressClass = "progress-bar progress-bar-warning";
+    }
+    else {
+        progressClass = "progress-bar progress-bar-danger";
+    }
+    
+    <div class="progress" style="margin-top: 12px;">
+        <div class="@progressClass" role="progressbar" style="width:@progressPercentage%">
+            @progressPercentage%
+        </div>
+    </div>
+
+<div class="bs-callout bs-callout-default">
+        <h4>Let op!</h4>
+        Iedere leerling dient geselecteerd te worden in de lijst d.m.v. de CTRL-toets.<br><br>
+        <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; Leerlingen dienen opnieuw geselecteerd te worden mocht de selectie opnieuw aangepast worden.
+    </div>
 
 
-
-    <form method="post" class="form-inline">
-        <select class="form-control" id="sel1" name="leerlingenInvoer" multiple>
+    <form method="post">
+        <select class="form-control" id="sel1" name="leerlingenInvoer" style="width: 100%; height: 200px; margin-bottom: 16px;" multiple>
             <option value="-"></option>
             @foreach(LeerlingRepo.Leerling leerling in leerlingen)
             {
@@ -88,10 +121,9 @@
             }
         </select>
         <button type="submit" id="submit" name="manage" class="btn btn-success">
-            <span class="glyphicon glyphicon-plus"></span> Kies
+            <span class="glyphicon glyphicon-plus"></span>&nbsp; Selecteer leerlingen
         </button>
     </form>
-
     <button type="button" class="btn btn-danger" id="floatRight" data-toggle="modal" data-target="#verwijderWarning"><span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder</button>
 
     <div id="verwijderWarning" class="modal fade" role="dialog">
@@ -108,10 +140,10 @@
                 <div class="modal-footer">
                     <form method="post" class="form-inline">
                     <button type="submit" id="submit" name="delete" class="btn btn-danger">
-            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
-        </button>       
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijderen
+                    </button>       
                     <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
-                        </form>
+                    </form>
                 </div>
             </div>
 
