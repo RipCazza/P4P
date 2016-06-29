@@ -4,7 +4,7 @@
     {
         List<Tuple<int, string>> decanen = new List<Tuple<int, string>>{};
         var db = Database.Open("authenticationData");
-        var data = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId = 2");
+        var data = db.Query("SELECT UserProfile.UserId, UserName FROM UserProfile INNER JOIN webpages_UsersInRoles ON UserProfile.UserId=webpages_UsersInRoles.UserId WHERE RoleId = 2 ORDER BY UserName ASC");
         foreach (var row in data)
         {
             decanen.Add(new Tuple<int, string> (row.UserId, row.UserName));

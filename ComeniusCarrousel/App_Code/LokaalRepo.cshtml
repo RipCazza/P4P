@@ -41,7 +41,7 @@
     {
         List<Lokaal> lokalen = new List<Lokaal>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Lokaal");
+        var data = db.Query("SELECT * FROM Lokaal ORDER BY LokaalNaam ASC");
         if(data != null)
         {
             foreach (var row in data)

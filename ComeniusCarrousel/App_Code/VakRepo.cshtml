@@ -41,7 +41,7 @@
     {
         List<Vak> vakken = new List<Vak>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query((niveau == "Default" ? "SELECT * FROM Vak" : "SELECT * FROM Vak WHERE LOWER(Niveau) = LOWER(@0)"), niveau);
+        var data = db.Query((niveau == "Default" ? "SELECT * FROM Vak ORDER BY Niveau ASC, VakNaam ASC" : "SELECT * FROM Vak WHERE LOWER(Niveau) = LOWER(@0)"), niveau);
         foreach(var row in data)
         {
             if (row.VakNaam == talentstroomVak)

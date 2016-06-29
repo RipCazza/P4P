@@ -41,7 +41,7 @@
     {
         List<Mail> mails = new List<Mail>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Mail");
+        var data = db.Query("SELECT * FROM Mail ORDER BY Onderwerp ASC");
         foreach(var row in data)
         {
             mails.Add(new Mail(row.MailId, row.Inhoud, row.Onderwerp));

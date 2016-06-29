@@ -119,7 +119,7 @@
     {
         List<Voorlichting> voorlichtingen = new List<Voorlichting>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Voorlichting");
+        var data = db.Query("SELECT * FROM Voorlichting ORDER BY DateTime ASC");
         foreach(var row in data)
         {
             voorlichtingen.Add(new Voorlichting(row.VoorlichtingId, row.VakId, row.UserId, row.LokaalId, row.DateTime, row.Niveau));

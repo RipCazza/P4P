@@ -48,7 +48,7 @@
     {
         List<Leraar> leraren = new List<Leraar>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leraar Lera ON Gebr.UserId = Lera.UserId");
+        var data = db.Query("SELECT * FROM Gebruiker Gebr INNER JOIN Leraar Lera ON Gebr.UserId = Lera.UserId ORDER BY Achternaam ASC");
         if(data != null)
         {
             foreach (var row in data)

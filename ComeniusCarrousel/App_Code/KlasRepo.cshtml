@@ -32,7 +32,7 @@
     {
         List<Klas> klassen = new List<Klas>();
         var db = Database.Open(App.DataBase);
-        var data = db.Query("SELECT * FROM Klas");
+        var data = db.Query("SELECT * FROM Klas ORDER BY KlasNaam ASC");
         if(data != null)
         {
             foreach (var row in data)
