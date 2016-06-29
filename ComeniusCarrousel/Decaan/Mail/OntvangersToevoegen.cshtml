@@ -1,6 +1,12 @@
-﻿@{
+﻿@* 
+    Permissies: Admin, Decaan
+    Te bereiken van: Decaan/Mail/MailVerzenden
+    Linkt door naar: Decaan/Mail/MailVerzenden
+    Beschrijving: Voeg ontvangers toe of verwijder de ontvangers van een mail concept
+*@
+@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "E-Mail verzenden";
+    Page.Title = "Ontvangers toevoegen";
 
     if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {
