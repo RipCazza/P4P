@@ -78,7 +78,7 @@
         var deleteMailontvanger = "DELETE FROM MailOntvanger WHERE UserId = @0";
         db.Execute(deleteCommand, id);
         db.Execute(deleteLeraar, id);
-        db.Execute(deleteMailontvanger);
+        db.Execute(deleteMailontvanger, id);
         var userRoles = Roles.GetRolesForUser(user);
         if (userRoles.Count() > 0)
         {
