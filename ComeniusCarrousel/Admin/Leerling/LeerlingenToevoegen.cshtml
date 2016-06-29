@@ -112,7 +112,7 @@
     <form method="post">
         @AntiForgery.GetHtml()
         @Html.ValidationSummary("Er is iets mislukt, voer zo nodig de leerlingen met problemen opniew in in en probeer het nog een keer.", excludeFieldErrors: true, htmlAttributes: null)
-        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="leerlingenInvoer" class="form-control col-md-12" rows="20" placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)" maxlength="4000"></textarea>
+        <textarea style="width: 100%; resize: none; margin-bottom: 16px;" name="leerlingenInvoer" class="form-control col-md-12" rows="20" placeholder="Voornaam|Achternaam|Leerlingnummer|Mail|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)" maxlength="4000"></textarea>
 
 
         <button type="button" class="btn btn-success" id="floatRight" data-toggle="modal" data-target="#toevoegWarning"><span class="glyphicon glyphicon-plus"></span>&nbsp; Toevoegen</button>
