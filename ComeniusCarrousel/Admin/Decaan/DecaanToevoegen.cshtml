@@ -41,7 +41,7 @@
 
             DecaanRepo.MakeDecaan(userName, password);
             WebMail.Send(to: userName,
-            subject: subject,
+            subject: onderwerp,
             body: inhoud);
 
             Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
