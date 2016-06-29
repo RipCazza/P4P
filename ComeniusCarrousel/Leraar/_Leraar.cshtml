@@ -16,7 +16,9 @@
     LeraarRepo.Leraar leraar = LeraarRepo.GetLeraar(id);
 }
 
-<h3>@leraar.Voornaam @leraar.Achternaam (@leraar.UserName): @leraar.VoorlichtingVak</h3><br>
-<a class="btn btn-success" href="~/Rooster.cshtml">
+<h2>Home</h2>
+
+Welkom, @leraar.Voornaam @leraar.Achternaam (@leraar.UserName), docent @leraar.VoorlichtingVak.<br><br>
+<a class="btn btn-default" href="~/Rooster.cshtml">
     <span class="glyphicon glyphicon-user"></span>&nbsp; Volledig rooster
 </a>

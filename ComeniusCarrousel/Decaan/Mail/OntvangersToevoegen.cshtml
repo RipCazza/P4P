@@ -106,41 +106,56 @@
 <br>
 
 <form method="post">
-    <select name="klas" class="form-control">
-        <option value="-"></option>
-        @foreach(KlasRepo.Klas klas in klassen) // maakt een keuzemenu met alle mogelijke klassen
-        {
-            <option value="@klas.KlasId">@klas.KlasNaam</option>
-        }
-    </select>
-    <select name="user" class="form-control">
-        <option value="-"></option>
-        @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke gebruikers
-        {
-            <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
-        }
-    </select>
-    <select name="niveau" class="form-control">
-        <option value="-"></option>
-        <option value="HAVO">HAVO</option>
-        <option value="VWO">VWO</option>
-    </select>
-    <select name="role" class="form-control">
-        <option value="-"></option>
-        <option value="4">Leerlingen</option>
-        <option value="3">Leraren</option>
-    </select>
-    <select name="aangemeld" class="form-control">
-        <option value="-"></option>
-        <option value="True">Aangemeld</option>
-        <option value="False">Niet aangemeld</option>
-    </select>
-    <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
+    <div class="form-group">
+        <label for="userName">Klas</label>
+        <select name="klas" class="form-control">
+            <option value="-"></option>
+            @foreach(KlasRepo.Klas klas in klassen) // maakt een keuzemenu met alle mogelijke klassen
+            {
+                <option value="@klas.KlasId">@klas.KlasNaam</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="userName">Leerlingen en leraren</label>
+        <select name="user" class="form-control">
+            <option value="-"></option>
+            @foreach(GebruikerRepo.Gebruiker gebruiker in gebruikers) // maakt een keuzemenu met alle mogelijke gebruikers
+            {
+                <option value="@gebruiker.UserId">@gebruiker.Voornaam @gebruiker.Achternaam (@gebruiker.UserName)</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="userName">Niveau</label>
+        <select name="niveau" class="form-control">
+            <option value="-"></option>
+            <option value="HAVO">HAVO</option>
+            <option value="VWO">VWO</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="userName">Rol</label>
+        <select name="role" class="form-control">
+            <option value="-"></option>
+            <option value="4">Leerlingen</option>
+            <option value="3">Leraren</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="userName">Aangemeld</label>
+        <select name="aangemeld" class="form-control">
+            <option value="-"></option>
+            <option value="True">Aangemeld</option>
+            <option value="False">Niet aangemeld</option>
+        </select>
+    </div>
+    <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right; margin-left: 8px; margin-top: 8px;">
             <span class="glyphicon glyphicon-plus"></span>&nbsp; Voeg ontvangers toe
     </button>
 </form>
 <form method="post">
-    <button type="submit" id="submit" name="deleteOntvanger" class="btn btn-danger" style="float: left;">
+    <button type="submit" id="submit" name="deleteOntvanger" class="btn btn-danger" style="float: left; margin-top: 8px;">
             <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder alle ontvangers
     </button>
 </form>
