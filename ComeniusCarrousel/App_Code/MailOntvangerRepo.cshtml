@@ -72,6 +72,7 @@
         return mailUsers;
     }
 
+    // geeft een lijst van strings met alle ontvangers
     public static List<string> GetMailOntvangerStrings (int mailId)
     {
         List<string> ontvangers = new List<string>{};
@@ -146,5 +147,14 @@
         }
         db.Close();
         return ontvangers;
+    }
+
+    // verwijder alle ontvangers van een bepaalde mail
+    public static void DeleteMailOntvangers(int mailId)
+    {
+        var db = Database.Open(App.DataBase);
+        var deleteCommand = "DELETE FROM MailOntvanger WHERE MailId = @0";
+        db.Execute(deleteCommand, mailId);
+        db.Close();
     }
 }

@@ -88,6 +88,13 @@
 
         Response.Redirect(string.Format("~/Decaan/Mail/MailVerzenden?MailId={0}", mailId));
     }
+
+    if(IsPost && Request.Form["deleteOntvanger"] != null)
+    {
+        MailOntvangerRepo.DeleteMailOntvangers(mailId);
+
+        Response.Redirect(string.Format("~/Decaan/Mail/MailVerzenden?MailId={0}", mailId));
+    }
 }
 @Html.ValidationSummary()
 <h2>E-Mail ontvangers toevoegen</h2>
@@ -130,5 +137,10 @@
     </select>
     <button type="submit" id="submit" name="addOntvanger" class="btn btn-success" style="float: right;">
             <span class="glyphicon glyphicon-plus"></span>&nbsp; Voeg ontvangers toe
+    </button>
+</form>
+<form method="post">
+    <button type="submit" id="submit" name="deleteOntvanger" class="btn btn-danger" style="float: left;">
+            <span class="glyphicon glyphicon-remove"></span>&nbsp; Verwijder alle ontvangers
     </button>
 </form>
