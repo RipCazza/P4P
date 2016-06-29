@@ -14,18 +14,7 @@
         Response.Redirect("~/");
     }
 
-    /*Validation.RequireField("onderwerp", "Je moet een onderwerp aan de mail even");
-    Validation.RequireField("inhoud", "Er moet een inhoud zijn");
-    Validation.Add("onderwerp",
-        Validator.StringLength(
-            maxLength: Int32.MaxValue,
-            minLength: 4,
-            errorMessage: "Onderwerp must contain at least 4 characters"));
-    Validation.Add("inhoud",
-        Validator.StringLength(
-            maxLength: 4000,
-            errorMessage: "Your email cannot contain more than 4000 characters"));*/
-
+    // voeg een mail concept toe aan de database
     if (IsPost && Request.Form["MailToevoegen"] != null)
     {
         string onderwerp = "";

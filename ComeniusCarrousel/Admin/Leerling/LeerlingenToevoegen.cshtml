@@ -4,7 +4,7 @@
     Linkt door naar: ~
     Beschrijving: Geeft een tekstveld om leerling details in te verwerken om gebruikers toe te voegen aan de database met leerling permissies
         leerlingen worden ingevuld in gegeven volgorde met: 
-        Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
+        Voornaam|Achternaam|Leerlingnummer|Mail|Klas|Niveau|Talentstroom vak|Instroomleerling(True/False)
 *@
 @{
     Layout = "~/_Layout.cshtml";
@@ -86,11 +86,19 @@
                         Validation.AddFormError("De waarde bij instroomleerling van leerling " + (i+1) + " is onjuist.");
                     }
 
-                    if (Validation.IsValid())
+                    // verstuur een mail met de inlog gegevens en voeg een leerling toe aan de database
+                    if (!WebMatrix.WebData.WebSecurity.UserExists(mail))
                     {
-                        Repository.AccountMail(mail, wachtwoord);
+                        if (Validation.IsValid())
+                        {
+                            Repository.AccountMail(mail, wachtwoord);
 
-                        LeerlingRepo.MakeLeerling(mail, wachtwoord, voornaam, achternaam, klasId, niveau, leerlingnummer, instroomleerling, vak, i);
+                            LeerlingRepo.MakeLeerling(mail, wachtwoord, voornaam, achternaam, klasId, niveau, leerlingnummer, instroomleerling, vak, i);
+                        }
+                    }
+                    else
+                    {
+                        Validation.AddFormError("De mail van leerling " + (i+1) + " is al in gebruik.");
                     }
                 }
             }

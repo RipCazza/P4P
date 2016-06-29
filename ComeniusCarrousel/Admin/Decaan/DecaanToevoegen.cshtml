@@ -23,6 +23,7 @@
             maxLength: 400,
             errorMessage: "gebruiker kan niet meer dan 400 tekens bevatten"));
 
+    // voeg een gebruiker met decaan permissies toe aan de database en verstuur een mail met de inlog gegevens
     if(IsPost)
     {
         AntiForgery.Validate();
@@ -34,12 +35,19 @@
             Validation.AddFormError("De mail kan niet juist zijn.");
         }
 
-        if(Validation.IsValid())
+        if (!WebMatrix.WebData.WebSecurity.UserExists(userName))
         {
-            Repository.AccountMail(userName, password);
+            if(Validation.IsValid())
+            {
+                Repository.AccountMail(userName, password);
 
-            DecaanRepo.MakeDecaan(userName, password);
-            Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
+                DecaanRepo.MakeDecaan(userName, password);
+                Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("Gebruiker bestaat al.");
         }
     }
 }

@@ -29,6 +29,7 @@
         MailRepo.Mail mailDetails = MailRepo.GetMail(mailId);
         if (mailDetails != null)
         {
+            // verkrijg alle userIds om naar te versturen
             userIds = MailOntvangerRepo.GetMailOntvangerIds(mailId);
             mailUsers = MailOntvangerRepo.GetMailUsers(userIds);
             
@@ -47,6 +48,7 @@
         Validation.AddFormError("Er was geen mail concept geselecteerd");
     }
 
+    // verstuur een mail aan alle bijbehorende ontvangers
     if(IsPost && Request.Form["sendMail"] != null)
     {
         Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
@@ -60,11 +62,13 @@
         {
             MailRepo.UpdateMail(mailId, onderwerp, inhoud);
 
+            // verstel de mail voor iedere gebruiker en verstuur deze naar iedere ontvanger
             foreach(Tuple<int, string> mailUser in mailUsers)
             {
                 string nieuweInhoud = inhoud;
                 string mailVerzorger = "";
 
+                // verstel alle variabelen in de mail inhoud naar de bijbehorende waarden voor leerlingen
                 if (Roles.IsUserInRole(mailUser.Item2, "Leerling"))
                 {
                     LeerlingRepo.Leerling leerling = LeerlingRepo.GetLeerling(mailUser.Item1);
@@ -104,6 +108,7 @@
                     nieuweInhoud = nieuweInhoud.Replace("[rooster]", rooster);
                 }
 
+                // verstel alle variabelen in de mail inhoud naar de bijbehorende waarden voor leraren
                 if (Roles.IsUserInRole(mailUser.Item2, "Leraar"))
                 {
                     LeraarRepo.Leraar leraar = LeraarRepo.GetLeraar(mailUser.Item1);
@@ -138,6 +143,7 @@
         }
     }
 
+    // update de mail in de database
     if(IsPost && Request.Form["wijzigMail"] != null)
     {
         Validation.RequireField("onderwerp", "De mail moet een onderwerp gegeven worden");
@@ -153,6 +159,7 @@
         }
     }
 
+    // verwijder de mail uit de database
     if(IsPost && Request.Form["deleteMail"] != null)
     {
         MailRepo.DeleteMail(mailId);

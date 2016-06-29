@@ -38,6 +38,7 @@
         Validation.AddFormError("Er was geen mail concept geselecteerd");
     }
 
+    // Voeg kenmerken toe van gebruikers om mail ontvangers te worden
     if(IsPost && Request.Form["addOntvanger"] != null)
     {
         string klas = "";
@@ -95,6 +96,7 @@
         Response.Redirect(string.Format("~/Decaan/Mail/MailVerzenden?MailId={0}", mailId));
     }
 
+    // verwijder alle ontvangers bij een bepaalde mailId
     if(IsPost && Request.Form["deleteOntvanger"] != null)
     {
         MailOntvangerRepo.DeleteMailOntvangers(mailId);
