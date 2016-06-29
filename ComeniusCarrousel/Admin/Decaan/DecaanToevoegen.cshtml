@@ -36,10 +36,13 @@
         }
         if(Validation.IsValid())
         {
+            var onderwerp = "Nieuw account Keuzecarroussel";
+            var inhoud = "Hierbij is er een account voor je aangemaakt op <a href=\"https://www.carrouselkeuze.csg-comenius.nl/User_Management/Login\">www.carrouselkeuze.csg-comenius.nl</a><br><br>Je gebruikersnaam is: " + userName + "<br>Je wachtwoord is: " + password + ".";
+
             DecaanRepo.MakeDecaan(userName, password);
             WebMail.Send(to: userName,
-            subject: "Nieuw account Keuzecarroussel",
-            body: "Hierbij is er een account voor je aangemaakt op <a href=\"https://www.carrouselkeuze.csg-comenius.nl/User_Management/Login\">www.carrouselkeuze.csg-comenius.nl</a><br><br>Je gebruikersnaam is: " + userName + "<br>Je wachtwoord is: " + password + ".");
+            subject: subject,
+            body: inhoud);
 
             Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
         }
