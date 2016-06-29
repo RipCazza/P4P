@@ -31,7 +31,7 @@
             for(int i = 0; i < leerlingen.Length; i++)
             {
                 string[] leerling = Repository.SplitLeerling(leerlingen[i]);
-                if (leerling.Length != 9)
+                if (leerling.Length != 8)
                 {
                     Validation.AddFormError("Het aantal waardes bij leerling " + (i+1) + " is onjuist.");
                 }
@@ -53,19 +53,15 @@
                         Validation.AddFormError("De mail van leerling " + (i+1) + " kan niet juist zijn.");
                     }
 
-                    string wachtwoord = leerling[4];
-                    if (wachtwoord.Length < 6)
-                    {
-                        Validation.AddFormError("Het wachtwoord van leerling " + (i+1) + " is te kort. (min 6)");
-                    }
+                    string wachtwoord = System.Web.Security.Membership.GeneratePassword(15, 1);
 
-                    string niveau = leerling[6];
+                    string niveau = leerling[5];
                     if (!(niveau.ToLower() == "havo" || niveau.ToLower() == "vwo"))
                     {
                         Validation.AddFormError("Het niveau van leerling " + (i+1) + " bestaat niet.");
                     }
 
-                    string klas = leerling[5].ToUpper();
+                    string klas = leerling[4].ToUpper();
                     int klasId = -1;
                     bool validateKlas = KlasRepo.ValidateKlas(klas);
                     if (validateKlas == false)
@@ -77,10 +73,10 @@
                         klasId = KlasRepo.GetKlasId(klas);
                     }
 
-                    string vak = leerling[7];
+                    string vak = leerling[6];
                     bool validateVak = VakRepo.ValidateVak(vak, niveau);
 
-                    string instroomleerling = leerling[8];
+                    string instroomleerling = leerling[7];
                     if (validateVak == false && instroomleerling.ToLower() == "false")
                     {
                         Validation.AddFormError("Het vak van leerling " + (i+1) + " klopt niet.");
@@ -92,6 +88,8 @@
 
                     if (Validation.IsValid())
                     {
+                        Repository.AccountMail(mail, wachtwoord);
+
                         LeerlingRepo.MakeLeerling(mail, wachtwoord, voornaam, achternaam, klasId, niveau, leerlingnummer, instroomleerling, vak, i);
                     }
                 }
@@ -105,8 +103,8 @@
 <div class="bs-callout bs-callout-default">
     <h4>Let op!</h4>
     Iedere leerling dient PER regel worden ingevoerd volgens de volgende structuur:<br>
-    <i>Voornaam|Achternaam|Leerlingnummer|Mail|Wachtwoord|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)</i><br><br>
-    Voorbeeld: Johan|de Wit|301812|johandewit@provider.com|Password3451|H3A|HAVO|Wiskunde|False<br><br>
+    <i>Voornaam|Achternaam|Leerlingnummer|Mail|Klas|Niveau|Talentstroomvak|Instroomleerling(True/False)</i><br><br>
+    Voorbeeld: Johan|de Wit|301812|johandewit@provider.com|H3A|HAVO|Wiskunde|False<br><br>
     <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; Sla altijd de invoer op in een tekstbestand voor het toevoegen!
 </div>
 
