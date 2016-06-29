@@ -7,27 +7,23 @@
 @{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Leraar toevoegen";
+
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
+    {
+        Response.Redirect("~/");
+    }
+
     var userName = "";
     var voornaam = "";
     var achternaam= "";
     var password = "";
-    var confirmPassword = "";
     var vak = "";
     List<string> vakken = VakRepo.GetDistinctVakken();
 
     Validation.RequireField("userName", "U moet een gebruiker invullen.");
     Validation.RequireField("voornaam", "U moet een voornaam invullen.");
     Validation.RequireField("achternaam", "U moet een achternaam invullen.");
-    Validation.RequireField("password", "Er moet een wachtwoord ingevuld worden.");
-    Validation.RequireField("confirmPassword", "Bevestegings wachtwoord mag niet leeg zijn.");
 
-    Validation.Add("confirmPassword",
-        Validator.EqualsTo("password", "Bevestegings wachtwoord komt niet overeen met het wachtwoord."));
-    Validation.Add("password",
-        Validator.StringLength(
-            maxLength: Int32.MaxValue,
-            minLength: 6,
-            errorMessage: "Wachtwoord moet minstens 6 tekens bevatten"));
     Validation.Add("userName",
         Validator.StringLength(
             maxLength: 400,
@@ -37,8 +33,7 @@
     {
         AntiForgery.Validate();
         userName = Request.Form["userName"];
-        password = Request.Form["password"];
-        confirmPassword = Request.Form["confirmPassword"];
+        password = System.Web.Security.Membership.GeneratePassword(15, 1);
 
         voornaam = Request.Form["voornaam"];
         achternaam = Request.Form["achternaam"];
@@ -54,6 +49,8 @@
 
         if(Validation.IsValid())
         {
+            Repository.AccountMail(userName, password);
+
             LeraarRepo.MakeLeraar(userName, password, voornaam, achternaam, vak);
             Response.Redirect("~/Decaan/Leraar/LeraarOverzicht");
         }
@@ -80,16 +77,6 @@
             <label for="userName">Achternaam</label>
             <input type="text" id="achternaam" name="achternaam" value="@achternaam" class="form-control">
             @Html.ValidationMessage("achternaam")
-        </div>
-        <div class="form-group">
-            <label for="password">Wachtwoord</label>
-            <input type="password" id="password" name="password" value="@password" class="form-control">
-            @Html.ValidationMessage("password")
-        </div>
-        <div class="form-group">
-            <label for="confirmPassword">Bevestig wachtwoord</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" value="@confirmPassword" class="form-control">
-            @Html.ValidationMessage("confirmPassword")
         </div>
         <div class="form-group">
         <label>Selecteer te geven vak</label>

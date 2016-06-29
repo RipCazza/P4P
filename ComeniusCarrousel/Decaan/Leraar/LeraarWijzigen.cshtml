@@ -8,7 +8,7 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Leraar wijzigen";
 
-    if (!User.IsInRole("Admin"))
+    if (!User.IsInRole("Admin") && !User.IsInRole("Decaan"))
     {
         Response.Redirect("~/");
     }
