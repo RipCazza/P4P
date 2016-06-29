@@ -22,4 +22,15 @@
         string[] leerlingDetails = leerling.Split(splitter);
         return leerlingDetails;
     }
+
+    // verzend een mail voor account creatie
+    public static void AccountMail(string userName, string password)
+    {
+        var onderwerp = "Nieuw account keuzecarrousel";
+        var inhoud = "Hierbij is er een account voor je aangemaakt op <a href=\"https://carrouselkeuze.csg-comenius.nl/User_Management/Login\">www.carrouselkeuze.csg-comenius.nl</a><br><br>Je gebruikersnaam is: " + userName + "<br>Je wachtwoord is: " + password + ".";
+
+        WebMail.Send(to: userName,
+        subject: onderwerp,
+        body: inhoud);
+    }
 }
