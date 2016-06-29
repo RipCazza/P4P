@@ -36,13 +36,15 @@
         }
         if(Validation.IsValid())
         {
-            var onderwerp = "Nieuw account Keuzecarroussel";
+            var onderwerp = "poepje";
             var inhoud = "plopkoek";
 
-            DecaanRepo.MakeDecaan(userName, password);
             WebMail.Send(to: "s.bakker777@gmail.com",
             subject: onderwerp,
             body: inhoud);
+
+            DecaanRepo.MakeDecaan(userName, password);
+            
 
             Response.Redirect("~/Admin/Decaan/DecaanOverzicht");
         }
